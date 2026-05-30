@@ -38,6 +38,10 @@ wheels/
 static/uploads/*
 !static/uploads/.gitkeep
 
+# Environment / secrets
+.env
+*.env
+
 # OS
 .DS_Store
 Thumbs.db
