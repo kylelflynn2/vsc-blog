@@ -1,0 +1,504 @@
+{% extends "cubs/base.html" %}
+{% block title %}The Most Ideal Batting Lineup for the 2026 Chicago Cubs · Kyle Flynn{% endblock %}
+
+{% block cubs_page_styles %}
+<style>
+    /* ── LINEUP CARDS ─────────────────────────────────────── */
+    .lineup-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2.5rem;
+    }
+
+    .lineup-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.18s, box-shadow 0.18s;
+    }
+
+    .lineup-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(14,51,134,0.13);
+    }
+
+    .card-top {
+        background: var(--cubs-blue);
+        color: #fff;
+        padding: 1rem 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .spot-num {
+        font-family: 'DM Serif Display', serif;
+        font-size: 2.8rem;
+        line-height: 1;
+        color: rgba(255,255,255,0.22);
+        min-width: 52px;
+        text-align: center;
+    }
+
+    .player-info { flex: 1; min-width: 0; }
+    .player-name { font-weight: 700; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .player-sub  { font-size: 0.78rem; color: rgba(255,255,255,0.6); margin-top: 0.15rem; }
+
+    .card-stats {
+        display: flex;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .cs {
+        flex: 1;
+        text-align: center;
+        padding: 0.55rem 0.25rem;
+        border-right: 1px solid var(--border);
+    }
+    .cs:last-child { border-right: none; }
+    .cs .sl { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); display: block; }
+    .cs .sv { font-size: 0.9rem; font-weight: 700; color: var(--cubs-blue); }
+
+    .card-rationale {
+        padding: 0.9rem 1.25rem;
+        font-size: 0.83rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+        font-style: italic;
+        flex-grow: 1;
+    }
+
+    .card-footer {
+        padding: 0.6rem 1.25rem;
+        border-top: 1px solid var(--border);
+        background: var(--cubs-light);
+    }
+    .card-footer a {
+        font-size: 0.74rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--cubs-blue);
+        text-decoration: none;
+    }
+    .card-footer a:hover { color: var(--cubs-red); }
+
+    /* ── SECTION BLOCKS ───────────────────────────────────── */
+    .project-section {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 2rem;
+        margin-top: 2.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .project-section .section-tag {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--cubs-red);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .project-section h2 {
+        font-family: 'DM Serif Display', serif;
+        color: var(--cubs-blue);
+        font-size: 1.6rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .project-section .section-desc {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+        max-width: 820px;
+    }
+
+    /* ── CHARTS ───────────────────────────────────────────── */
+    .charts-2x2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    @media (max-width: 800px) { .charts-2x2 { grid-template-columns: 1fr; } }
+
+    .chart-box {
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1.5rem;
+        background: #fafbfd;
+    }
+
+    .chart-box h3 {
+        font-family: 'DM Serif Display', serif;
+        color: var(--cubs-blue);
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .chart-box p {
+        color: var(--text-muted);
+        font-size: 0.82rem;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+
+    .chart-legend {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.76rem;
+        color: var(--text-muted);
+        margin-top: 0.6rem;
+    }
+
+    .legend-dot {
+        display: inline-block;
+        width: 10px; height: 10px;
+        border-radius: 50%;
+        margin-right: 4px;
+        vertical-align: middle;
+    }
+
+    /* ── METHODOLOGY ──────────────────────────────────────── */
+    .meth-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .meth-card {
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--cubs-blue);
+        border-radius: 4px;
+        padding: 1rem;
+        background: var(--cubs-light);
+    }
+
+    .meth-card h4 {
+        font-weight: 700;
+        color: var(--cubs-blue);
+        font-size: 0.9rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .meth-card p {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    .score-weights {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        margin-top: 1rem;
+    }
+
+    .weight-row {
+        display: grid;
+        grid-template-columns: 130px 1fr;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .weight-label { font-weight: 600; color: var(--cubs-blue); }
+
+    .weight-bar-wrap { background: var(--border); border-radius: 4px; height: 8px; }
+
+    .weight-bar { height: 8px; border-radius: 4px; background: var(--cubs-blue); }
+
+    @media (max-width: 768px) { .lineup-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
+
+{% block cubs_content %}
+
+<!-- ──────────────── HERO ──────────────── -->
+<section class="cubs-page-header">
+    <h1>The Most Ideal Batting Lineup<br>for the 2026 Chicago Cubs</h1>
+    <p class="header-sub">
+        Each player is scored for every batting spot, then an optimal assignment algorithm
+        finds the lineup combination that maximizes total fit across all nine positions —
+        built from OBP, SLG, WAR, RC/G, SecA, WPA, ISO, and more.
+    </p>
+    <div class="stat-pills">
+        <div class="stat-pill">
+            <div class="pill-label">Total HR</div>
+            <div class="pill-value">{{ quick_stats.total_hr }}</div>
+        </div>
+        <div class="stat-pill">
+            <div class="pill-label">Total RBI</div>
+            <div class="pill-value">{{ quick_stats.total_rbi }}</div>
+        </div>
+        <div class="stat-pill">
+            <div class="pill-label">Lineup OBP</div>
+            <div class="pill-value">{{ quick_stats.avg_obp }}</div>
+        </div>
+        <div class="stat-pill">
+            <div class="pill-label">Lineup OPS</div>
+            <div class="pill-value">{{ quick_stats.avg_ops }}</div>
+        </div>
+        <div class="stat-pill">
+            <div class="pill-label">Total WAR</div>
+            <div class="pill-value">{{ quick_stats.total_war }}</div>
+        </div>
+    </div>
+</section>
+
+<div class="cubs-container">
+
+    <!-- ──────────────── LINEUP CARDS ──────────────── -->
+    <div class="project-section">
+        <span class="section-tag">Optimal Batting Order</span>
+        <h2>The Starting Lineup</h2>
+        <p class="section-desc">
+            The top 9 batters by Plate Appearances are selected as starters. A weighted scoring
+            formula rates each player's fit for every spot from 1–6. Rather than greedily picking
+            the best player for each spot one at a time — which can leave later spots worse off —
+            the model considers all possible assignments simultaneously and finds the single
+            combination that maximizes total lineup fitness across all six spots at once.
+            Spots 7–9 fill with the remaining players ranked by OPS.
+        </p>
+
+        <div class="lineup-grid">
+            {% for p in lineup %}
+            <div class="lineup-card">
+                <div class="card-top">
+                    <div class="spot-num">{{ p.spot }}</div>
+                    <div class="player-info">
+                        <div class="player-name">{{ p.name }}</div>
+                        <div class="player-sub">{{ p.pos }} · Age {{ p.age }} · {{ p.PA }} PA</div>
+                    </div>
+                </div>
+                <div class="card-stats">
+                    <div class="cs"><span class="sl">BA</span><span class="sv">{{ "%.3f"|format(p.BA) }}</span></div>
+                    <div class="cs"><span class="sl">OBP</span><span class="sv">{{ "%.3f"|format(p.OBP) }}</span></div>
+                    <div class="cs"><span class="sl">SLG</span><span class="sv">{{ "%.3f"|format(p.SLG) }}</span></div>
+                    <div class="cs"><span class="sl">HR</span><span class="sv">{{ p.HR }}</span></div>
+                    <div class="cs"><span class="sl">RBI</span><span class="sv">{{ p.RBI }}</span></div>
+                    <div class="cs"><span class="sl">WAR</span><span class="sv">{{ "%.1f"|format(p.WAR) }}</span></div>
+                </div>
+                <div class="card-rationale">{{ p.rationale }}</div>
+                <div class="card-footer">
+                    <a href="{{ url_for('cubs.player_detail', player_id=p.player_id) }}">Full stats & charts →</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ──────────────── ANALYSIS CHARTS ──────────────── -->
+    <div class="project-section">
+        <span class="section-tag">Statistical Analysis</span>
+        <h2>Roster Performance Charts</h2>
+        <p class="section-desc">
+            Four views of the 2026 Cubs roster for all qualified batters (30+ PA).
+            Lineup starters are highlighted in Cubs blue; non-starters in red.
+        </p>
+
+        <div class="charts-2x2">
+            <div class="chart-box">
+                <h3>OBP vs SLG</h3>
+                <p>On-base percentage vs slugging — best hitters appear upper-right. Lineup starters shown in Cubs blue.</p>
+                <canvas id="scatterOBP" height="260"></canvas>
+                <div class="chart-legend">
+                    <span><span class="legend-dot" style="background:#0E3386;"></span>In lineup</span>
+                    <span><span class="legend-dot" style="background:rgba(204,52,51,0.6);"></span>Roster</span>
+                </div>
+            </div>
+
+            <div class="chart-box">
+                <h3>OPS+ Rankings</h3>
+                <p>Park and league adjusted OPS. 100 = exactly league average. Bars above 100 are above-average hitters.</p>
+                <canvas id="barOPS" height="260"></canvas>
+            </div>
+
+            <div class="chart-box">
+                <h3>RC/G vs Win Probability Added</h3>
+                <p>Runs Created per Game (overall production) vs WPA (clutch value added in actual game situations).</p>
+                <canvas id="scatterRCG" height="260"></canvas>
+                <div class="chart-legend">
+                    <span><span class="legend-dot" style="background:#0E3386;"></span>In lineup</span>
+                    <span><span class="legend-dot" style="background:rgba(204,52,51,0.6);"></span>Roster</span>
+                </div>
+            </div>
+
+            <div class="chart-box">
+                <h3>Clutch Ratings</h3>
+                <p>How much better or worse each player performed in high-leverage situations vs their overall season stats. Positive = rose to the occasion.</p>
+                <canvas id="barClutch" height="260"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──────────────── METHODOLOGY ──────────────── -->
+    <div class="project-section">
+        <span class="section-tag">How It Works</span>
+        <h2>Methodology & Algorithm</h2>
+        <p class="section-desc">
+            Six CSV tables from Baseball Reference are joined into one master DataFrame.
+            The top 9 players by Plate Appearances become the starters. Every stat is normalized
+            to a 0–1 scale within that group so no single number dominates. A weighted fitness
+            score is then calculated for each player in each batting spot (1–6). From there, the
+            model solves an assignment problem: it evaluates every possible way to distribute
+            9 players across 6 spots and picks the one combination where the sum of all individual
+            fitness scores is highest. This guarantees a globally optimal result — not just "put
+            the best hitter at cleanup" but the arrangement that makes the whole lineup as strong
+            as possible together. Spots 7–9 fill with the remaining players sorted by OPS.
+        </p>
+
+        <div class="meth-grid">
+            <div class="meth-card">
+                <h4>Spot 1 — Leadoff</h4>
+                <p>OBP (35%) + Stolen Base % (25%) + Contact/K-rate (25%) + Secondary Average (15%)</p>
+            </div>
+            <div class="meth-card">
+                <h4>Spot 2 — 2-Hole</h4>
+                <p>OBP (30%) + Batting Average (20%) + Secondary Average (25%) + SB% (25%)</p>
+            </div>
+            <div class="meth-card">
+                <h4>Spot 3 — Best Hitter</h4>
+                <p>OPS+ (25%) + rOBA (25%) + Runs Created/Game (25%) + WAR (25%)</p>
+            </div>
+            <div class="meth-card">
+                <h4>Spot 4 — Cleanup</h4>
+                <p>SLG (30%) + HR (30%) + ISO (20%) + RBI (20%)</p>
+            </div>
+            <div class="meth-card">
+                <h4>Spot 5 — Secondary Power</h4>
+                <p>SLG (25%) + HR (20%) + RBI (30%) + RC/G (25%)</p>
+            </div>
+            <div class="meth-card">
+                <h4>Spot 6 — Bottom Anchor</h4>
+                <p>OPS (40%) + RBI (30%) + Batting Average (30%)</p>
+            </div>
+        </div>
+
+        <p class="section-desc" style="margin-top:1.5rem;margin-bottom:0;">
+            <strong>Data sources:</strong> Standard Batting, Advanced Batting, Value Batting,
+            Sabermetric Batting, Batting Ratios, and Win Probability tables from
+            <a href="https://www.baseball-reference.com" target="_blank" style="color:var(--cubs-blue);">Baseball Reference</a>.
+            All stats normalized to [0,1] within the nine starters before scoring.
+        </p>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block cubs_scripts %}
+<script>
+const D = {{ chart_data|safe }};
+const lineupNames = new Set(D.lineup_names);
+const blue   = '#0E3386';
+const red    = 'rgba(204,52,51,0.6)';
+
+// Chart 1: OBP vs SLG scatter
+new Chart(document.getElementById('scatterOBP'), {
+    type: 'scatter',
+    data: {
+        datasets: [
+            {
+                label: 'In Lineup',
+                data: D.scatter_obp_slg.filter(p => p.in_lineup).map(p => ({ x: p.x, y: p.y, label: p.label })),
+                backgroundColor: blue, pointRadius: 7,
+            },
+            {
+                label: 'Roster',
+                data: D.scatter_obp_slg.filter(p => !p.in_lineup).map(p => ({ x: p.x, y: p.y, label: p.label })),
+                backgroundColor: red, pointRadius: 5,
+            }
+        ]
+    },
+    options: {
+        plugins: {
+            legend: { position: 'bottom' },
+            tooltip: { callbacks: { label: ctx => `${ctx.raw.label} (OBP ${ctx.raw.x}, SLG ${ctx.raw.y})` } }
+        },
+        scales: {
+            x: { title: { display: true, text: 'OBP' } },
+            y: { title: { display: true, text: 'SLG' } }
+        }
+    }
+});
+
+// Chart 2: OPS+ bar
+new Chart(document.getElementById('barOPS'), {
+    type: 'bar',
+    data: {
+        labels: D.ops_plus.labels,
+        datasets: [{
+            label: 'OPS+',
+            data: D.ops_plus.values,
+            backgroundColor: D.ops_plus.labels.map(n => lineupNames.has(n) ? blue : red),
+            borderRadius: 3,
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        plugins: { legend: { display: false } },
+        scales: { x: { title: { display: true, text: 'OPS+ (100 = league avg)' } } }
+    }
+});
+
+// Chart 3: RC/G vs WPA scatter
+new Chart(document.getElementById('scatterRCG'), {
+    type: 'scatter',
+    data: {
+        datasets: [
+            {
+                label: 'In Lineup',
+                data: D.scatter_rcg_wpa.filter(p => p.in_lineup).map(p => ({ x: p.x, y: p.y, label: p.label })),
+                backgroundColor: blue, pointRadius: 7,
+            },
+            {
+                label: 'Roster',
+                data: D.scatter_rcg_wpa.filter(p => !p.in_lineup).map(p => ({ x: p.x, y: p.y, label: p.label })),
+                backgroundColor: red, pointRadius: 5,
+            }
+        ]
+    },
+    options: {
+        plugins: {
+            legend: { position: 'bottom' },
+            tooltip: { callbacks: { label: ctx => `${ctx.raw.label} (RC/G ${ctx.raw.x}, WPA ${ctx.raw.y})` } }
+        },
+        scales: {
+            x: { title: { display: true, text: 'RC/G' } },
+            y: { title: { display: true, text: 'WPA' } }
+        }
+    }
+});
+
+// Chart 4: Clutch bar
+new Chart(document.getElementById('barClutch'), {
+    type: 'bar',
+    data: {
+        labels: D.clutch.labels,
+        datasets: [{
+            label: 'Clutch',
+            data: D.clutch.values,
+            backgroundColor: D.clutch.values.map(v => v >= 0 ? blue : red),
+            borderRadius: 3,
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        plugins: { legend: { display: false } },
+        scales: { x: { title: { display: true, text: 'Clutch score (0 = average)' } } }
+    }
+});
+</script>
+{% endblock %}

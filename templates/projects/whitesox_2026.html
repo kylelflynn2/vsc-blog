@@ -1,0 +1,651 @@
+{% extends "base.html" %}
+{% block title %}Rebuilding the 2026 Chicago White Sox · Kyle Flynn{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .project-header {
+        background: var(--navy);
+        color: var(--white);
+        padding: 4rem 2rem;
+        text-align: center;
+    }
+
+    .project-header h1 {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(2rem, 4vw, 3.25rem);
+        margin-bottom: 1rem;
+        line-height: 1.15;
+    }
+
+    .project-header .subtitle {
+        color: var(--gold-light);
+        font-size: 1.05rem;
+        letter-spacing: 0.05em;
+        max-width: 720px;
+        margin: 0 auto;
+    }
+
+    .project-container {
+        max-width: 1100px;
+        margin: 3rem auto;
+        padding: 0 2rem;
+    }
+
+    .analysis-section {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 2rem;
+        margin-bottom: 2.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .analysis-section h2 {
+        font-family: 'DM Serif Display', serif;
+        color: var(--navy);
+        font-size: 1.75rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .analysis-section .section-tag {
+        color: var(--gold);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .analysis-section .section-desc {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        max-width: 800px;
+    }
+
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+        background: var(--cream);
+        border-left: 3px solid var(--gold);
+        padding: 1rem 1.25rem;
+        border-radius: 3px;
+    }
+
+    .stat-card .stat-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+        margin-bottom: 0.35rem;
+    }
+
+    .stat-card .stat-value {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.6rem;
+        color: var(--navy);
+        line-height: 1.1;
+    }
+
+    table.data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+
+    table.data-table th {
+        background: var(--navy);
+        color: var(--white);
+        text-align: left;
+        padding: 0.65rem 0.85rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    table.data-table td {
+        padding: 0.65rem 0.85rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-dark);
+    }
+
+    table.data-table tr:hover td {
+        background: var(--cream);
+    }
+
+    table.data-table td.num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .tier-pill {
+        display: inline-block;
+        padding: 0.15rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .tier-Core        { background: #1A2744; color: #fff; }
+    .tier-Trade-Up    { background: #D4AF37; color: #1A2744; }
+    .tier-Develop     { background: #2A3F5F; color: #fff; }
+    .tier-Hold        { background: #E0E0E0; color: #1A1A1A; }
+    .tier-Cut-Replace { background: #C0392B; color: #fff; }
+
+    .rec-pill {
+        display: inline-block;
+        padding: 0.15rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+    .rec-Increase { background: #2E7D32; color: #fff; }
+    .rec-Hold     { background: #E0E0E0; color: #1A1A1A; }
+    .rec-Reduce   { background: #C0392B; color: #fff; }
+
+    .lineup-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .lineup-row {
+        display: grid;
+        grid-template-columns: 40px 1fr auto;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .lineup-row:last-child {
+        border-bottom: none;
+    }
+
+    .lineup-slot {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.6rem;
+        color: var(--gold);
+        text-align: center;
+    }
+
+    .lineup-name {
+        font-weight: 600;
+        color: var(--navy);
+    }
+
+    .lineup-meta {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .lineup-woba {
+        font-variant-numeric: tabular-nums;
+        font-weight: 600;
+        color: var(--navy);
+    }
+
+    .neg { color: #C0392B; }
+    .pos { color: #2E7D32; }
+
+    .back-link {
+        display: inline-block;
+        margin-bottom: 1.5rem;
+        color: var(--navy);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .back-link:hover { color: var(--gold); }
+
+    @media (max-width: 768px) {
+        table.data-table { font-size: 0.78rem; }
+        table.data-table th, table.data-table td { padding: 0.45rem 0.5rem; }
+        .analysis-section { padding: 1.25rem; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="project-header">
+    <h1>Rebuilding the 2026 Chicago White Sox</h1>
+    <p class="subtitle">A WAR-based valuation model — seven analyses operating on the team's 2026 batting data through 55 games.</p>
+</section>
+
+<div class="project-container">
+    <a href="/blog" class="back-link">← Back to Projects</a>
+
+    <!-- 1. SURPLUS VALUE -->
+    <section class="analysis-section">
+        <span class="section-tag">Analysis 01</span>
+        <h2>$/WAR Surplus Valuation</h2>
+        <p class="section-desc">
+            Each batter's year-to-date WAR is projected to a full season at the team's pace and
+            multiplied by the 2026 market rate ($9.0M / WAR). Surplus value is market value minus
+            estimated salary. Players are then bucketed into Core, Trade-Up, Develop, Hold, or
+            Cut/Replace tiers based on age, projected WAR, and surplus.
+        </p>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Projected WAR</div>
+                <div class="stat-value">{{ summary.total_projected_war }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Salary</div>
+                <div class="stat-value">${{ '{:,.1f}'.format(summary.total_salary / 1_000_000) }}M</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Surplus</div>
+                <div class="stat-value {% if summary.total_surplus < 0 %}neg{% else %}pos{% endif %}">
+                    ${{ '{:,.1f}'.format(summary.total_surplus / 1_000_000) }}M
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Core Players</div>
+                <div class="stat-value">{{ summary.tier_counts.Core }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Cut / Replace</div>
+                <div class="stat-value">{{ summary.tier_counts['Cut/Replace'] }}</div>
+            </div>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Pos</th>
+                    <th>Age</th>
+                    <th class="num">WAR YTD</th>
+                    <th class="num">pWAR</th>
+                    <th class="num">Salary</th>
+                    <th class="num">Market</th>
+                    <th class="num">Surplus</th>
+                    <th>Tier</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in valuations %}
+                <tr>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.position }}</td>
+                    <td>{{ p.age }}</td>
+                    <td class="num">{{ '%+.2f'|format(p.war_ytd) }}</td>
+                    <td class="num">{{ '%+.2f'|format(p.projected_war) }}</td>
+                    <td class="num">${{ '{:,.0f}'.format(p.salary) }}</td>
+                    <td class="num">${{ '{:,.0f}'.format(p.market_value) }}</td>
+                    <td class="num {% if p.surplus_value < 0 %}neg{% else %}pos{% endif %}">
+                        ${{ '{:,.0f}'.format(p.surplus_value) }}
+                    </td>
+                    <td><span class="tier-pill tier-{{ p.tier|replace('/', '-') }}">{{ p.tier }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 2. REVENUE MAXIMIZATION -->
+    <section class="analysis-section">
+        <span class="section-tag">Analysis 02</span>
+        <h2>Revenue Maximization (Wins → $)</h2>
+        <p class="section-desc">
+            Marginal revenue per win follows a Gaussian curve peaking at {{ revenue.peak_wins }} wins
+            (${{ '{:,.0f}'.format(revenue.peak_marginal) }}/win). Each additional win is worth most
+            near the playoff threshold and far less when the team is already eliminated or locked in.
+            Cumulative revenue is integrated above the 48-win replacement-team baseline.
+        </p>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">Projected Wins</div>
+                <div class="stat-value">{{ revenue.projected_wins }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Projected pWAR</div>
+                <div class="stat-value">{{ revenue.projected_pwar }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Revenue vs Replacement</div>
+                <div class="stat-value">${{ '{:,.1f}'.format(revenue.current_revenue / 1_000_000) }}M</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Peak Marginal $/Win</div>
+                <div class="stat-value">${{ '{:,.1f}'.format(revenue.peak_marginal / 1_000_000) }}M</div>
+            </div>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Added WAR</th>
+                    <th class="num">Resulting Wins</th>
+                    <th class="num">Revenue Above Replacement</th>
+                    <th class="num">Marginal $/Win at That Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in revenue.scenarios %}
+                <tr>
+                    <td>+{{ s.added_war }} WAR</td>
+                    <td class="num">{{ s.wins }}</td>
+                    <td class="num">${{ '{:,.0f}'.format(s.revenue_above_replacement) }}</td>
+                    <td class="num">${{ '{:,.0f}'.format(s.marginal_per_win) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 3. PLAYING TIME -->
+    <section class="analysis-section">
+        <span class="section-tag">Analysis 03</span>
+        <h2>Playing Time Reallocation</h2>
+        <p class="section-desc">
+            WAR per 100 PA isolates per-opportunity production from playing time. Hitters above
+            +0.40 WAR/100 are flagged for more PA; below -0.20 they're flagged for less.
+            <strong>{{ playing_time.n_increase }}</strong> players are candidates to gain playing time,
+            <strong>{{ playing_time.n_reduce }}</strong> to lose it.
+        </p>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Pos</th>
+                    <th>Age</th>
+                    <th class="num">PA YTD</th>
+                    <th class="num">Projected PA</th>
+                    <th class="num">WAR / 100 PA</th>
+                    <th class="num">OPS+</th>
+                    <th>Recommendation</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in playing_time.rows %}
+                <tr>
+                    <td>{{ r.name }}</td>
+                    <td>{{ r.position }}</td>
+                    <td>{{ r.age }}</td>
+                    <td class="num">{{ r.pa_ytd }}</td>
+                    <td class="num">{{ r.projected_pa }}</td>
+                    <td class="num {% if r.war_per_100_pa < 0 %}neg{% elif r.war_per_100_pa > 0 %}pos{% endif %}">
+                        {{ '%+.3f'|format(r.war_per_100_pa) }}
+                    </td>
+                    <td class="num">{{ r.ops_plus }}</td>
+                    <td>
+                        {% if r.recommendation == 'Increase PA' %}
+                            <span class="rec-pill rec-Increase">Increase PA</span>
+                        {% elif r.recommendation == 'Reduce PA' %}
+                            <span class="rec-pill rec-Reduce">Reduce PA</span>
+                        {% else %}
+                            <span class="rec-pill rec-Hold">Hold PA</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 4. OPTIMAL LINEUP -->
+    <section class="analysis-section">
+        <span class="section-tag">Analysis 04</span>
+        <h2>wOBA-Weighted Optimal Lineup</h2>
+        <p class="section-desc">
+            Built using The Book (Tango / Lichtman / Dolphin): the #2 hitter sees the most
+            leveraged PA, then #4, then #1, so the best hitters are placed there first.
+            Remaining slots fill by wOBA descending.
+        </p>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">Lineup Mean wOBA</div>
+                <div class="stat-value">{{ '%.3f'|format(lineup.mean_woba) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">League wOBA</div>
+                <div class="stat-value">{{ '%.3f'|format(lineup.league_woba) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Est. Runs / Game</div>
+                <div class="stat-value">{{ lineup.runs_per_game_est }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Candidates Considered</div>
+                <div class="stat-value">{{ lineup.candidates_considered }}</div>
+            </div>
+        </div>
+
+        <ol class="lineup-list">
+            {% for p in lineup.lineup %}
+            <li class="lineup-row">
+                <span class="lineup-slot">{{ loop.index }}</span>
+                <div>
+                    <div class="lineup-name">{{ p.name }} <span class="lineup-meta">({{ p.pos }})</span></div>
+                    <div class="lineup-meta">{{ p.selected_for }}</div>
+                </div>
+                <div class="lineup-woba">wOBA {{ '%.3f'|format(p.woba) }}</div>
+            </li>
+            {% endfor %}
+        </ol>
+    </section>
+
+    <!-- 5. TOP-PA LINEUP (everyday regulars) -->
+    <section class="analysis-section">
+        <span class="section-tag">Analysis 05</span>
+        <h2>Top-PA Lineup — Everyday Regulars</h2>
+        <p class="section-desc">
+            The nine available (non-IL, non-DFA) batters with the most plate appearances this season,
+            slotted using The Book's leverage heuristic: best hitter at #2, cleanup at #4, best OBP at #1.
+            This answers "who should be penciled in right now" based purely on usage.
+        </p>
+
+        {% if top_pa_lineup.lineup %}
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total PA in Pool</div>
+                <div class="stat-value">{{ top_pa_lineup.total_pa }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Mean PA per Player</div>
+                <div class="stat-value">{{ top_pa_lineup.mean_pa }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Lineup Mean wOBA</div>
+                <div class="stat-value">{{ '%.3f'|format(top_pa_lineup.mean_woba) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Available Players</div>
+                <div class="stat-value">{{ top_pa_lineup.candidates_considered }}</div>
+            </div>
+        </div>
+
+        <ol class="lineup-list">
+            {% for p in top_pa_lineup.lineup %}
+            <li class="lineup-row">
+                <span class="lineup-slot">{{ loop.index }}</span>
+                <div>
+                    <div class="lineup-name">{{ p.name }} <span class="lineup-meta">({{ p.pos }})</span></div>
+                    <div class="lineup-meta">{{ p.selected_for }}</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="lineup-woba">wOBA {{ '%.3f'|format(p.woba) }}</div>
+                    <div class="lineup-meta">{{ p.pa }} PA</div>
+                </div>
+            </li>
+            {% endfor %}
+        </ol>
+        {% else %}
+        <p class="section-desc">Not enough available players to construct a lineup.</p>
+        {% endif %}
+    </section>
+
+    <!-- 6. SABERMETRIC LINEUP -->
+    <section class="analysis-section">
+        <span class="section-tag">Analysis 06</span>
+        <h2>Sabermetric Optimal Lineup</h2>
+        <p class="section-desc">
+            Lineup ordered by a composite score weighting <strong>Rbat+</strong> (park-adjusted batting
+            runs vs. average), <strong>rOBA</strong> (run-value-weighted OBA), and <strong>WPA</strong>
+            (win-probability added). Excludes IL/DFA players. The Book leverage slotting
+            still applies — the best composite contributor goes to #2.
+        </p>
+
+        {% if saber_lineup.lineup %}
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">Mean Rbat+</div>
+                <div class="stat-value">{{ saber_lineup.mean_rbat_plus }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Mean rOBA</div>
+                <div class="stat-value">{{ '%.3f'|format(saber_lineup.mean_roba) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Lineup Total WPA</div>
+                <div class="stat-value {% if saber_lineup.total_wpa < 0 %}neg{% else %}pos{% endif %}">
+                    {{ '%+.2f'|format(saber_lineup.total_wpa) }}
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Players Considered</div>
+                <div class="stat-value">{{ saber_lineup.candidates_considered }}</div>
+            </div>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Pos</th>
+                    <th class="num">Rbat+</th>
+                    <th class="num">rOBA</th>
+                    <th class="num">ISO</th>
+                    <th class="num">BB%</th>
+                    <th class="num">SO%</th>
+                    <th class="num">WPA</th>
+                    <th class="num">RE24</th>
+                    <th>Rationale</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in saber_lineup.lineup %}
+                <tr>
+                    <td><strong>{{ loop.index }}</strong></td>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.pos }}</td>
+                    <td class="num {% if p.rbat_plus >= 100 %}pos{% elif p.rbat_plus < 80 %}neg{% endif %}">{{ p.rbat_plus }}</td>
+                    <td class="num">{{ '%.3f'|format(p.roba) }}</td>
+                    <td class="num">{{ '%.3f'|format(p.iso) }}</td>
+                    <td class="num">{{ '%.1f'|format(p.bb_pct) }}%</td>
+                    <td class="num">{{ '%.1f'|format(p.so_pct) }}%</td>
+                    <td class="num {% if p.wpa < 0 %}neg{% else %}pos{% endif %}">{{ '%+.2f'|format(p.wpa) }}</td>
+                    <td class="num {% if p.re24 < 0 %}neg{% else %}pos{% endif %}">{{ '%+.2f'|format(p.re24) }}</td>
+                    <td><span class="lineup-meta">{{ p.selected_for }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="section-desc">Not enough qualified players (30+ PA) to construct a sabermetric lineup.</p>
+        {% endif %}
+    </section>
+
+    <!-- 7. INJURY REPORT -->
+    <section class="analysis-section">
+        <span class="section-tag">Injury Report</span>
+        <h2>Chicago White Sox IL / Injury Report — 2026</h2>
+        <p class="section-desc">
+            {{ injured.total }} players currently on the injured list or unavailable.
+            Position players are sourced from the batting dataset; pitchers and other roster
+            members are sourced from the team injury report.
+        </p>
+
+        {% if injured.batters %}
+        <h3 style="font-family:'DM Serif Display',serif;color:var(--navy);margin-bottom:0.75rem;font-size:1.15rem;">Position Players</h3>
+        <table class="data-table" style="margin-bottom:1.5rem;">
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Pos</th>
+                    <th>Status</th>
+                    <th>Injury</th>
+                    <th class="num">PA</th>
+                    <th class="num">WAR YTD</th>
+                    <th class="num">OPS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in injured.batters %}
+                <tr>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.position }}</td>
+                    <td>
+                        {% if 'DFA' in p.status %}
+                            <span class="tier-pill tier-Cut-Replace">{{ p.status }}</span>
+                        {% elif '60' in p.status or 'Season' in p.status %}
+                            <span class="tier-pill" style="background:#7B241C;color:#fff;">{{ p.status }}</span>
+                        {% else %}
+                            <span class="tier-pill tier-Hold">{{ p.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ p.injury }}</td>
+                    <td class="num">{{ p.pa }}</td>
+                    <td class="num {% if p.war_ytd < 0 %}neg{% else %}pos{% endif %}">{{ '%+.1f'|format(p.war_ytd) }}</td>
+                    <td class="num">{{ '%.3f'|format(p.ops) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        {% if injured.others %}
+        <h3 style="font-family:'DM Serif Display',serif;color:var(--navy);margin-bottom:0.75rem;font-size:1.15rem;">Pitchers & Other Roster Members</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Status</th>
+                    <th>Injury / Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in injured.others %}
+                <tr>
+                    <td>{{ p.name }}</td>
+                    <td>
+                        {% if 'Season' in p.status %}
+                            <span class="tier-pill tier-Cut-Replace">{{ p.status }}</span>
+                        {% elif '60' in p.status %}
+                            <span class="tier-pill" style="background:#7B241C;color:#fff;">{{ p.status }}</span>
+                        {% else %}
+                            <span class="tier-pill tier-Hold">{{ p.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ p.injury }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </section>
+
+</div>
+{% endblock %}

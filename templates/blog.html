@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% block title %}Blog · Kyle Flynn{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .blog-header {
+        background: var(--navy);
+        color: var(--white);
+        padding: 4rem 2rem;
+        text-align: center;
+    }
+
+    .blog-header h1 {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        margin-bottom: 1rem;
+    }
+
+    .blog-header p {
+        font-size: 1.1rem;
+        color: var(--gold-light);
+        letter-spacing: 0.05em;
+    }
+
+    .blog-container {
+        max-width: 1000px;
+        margin: 4rem auto;
+        padding: 0 2rem;
+    }
+
+    .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
+    }
+
+    .post-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .post-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .post-image {
+        width: 100%;
+        height: 200px;
+        background: var(--navy-light);
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .post-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .post-image.empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: rgba(255,255,255,0.2);
+    }
+
+    .post-content {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .post-date {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
+
+    .post-title {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.5rem;
+        color: var(--navy);
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+    }
+
+    .post-description {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+        flex-grow: 1;
+    }
+
+    .post-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .post-tag {
+        display: inline-block;
+        background: var(--cream);
+        color: var(--navy);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .post-links {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .post-link {
+        flex: 1;
+        padding: 0.5rem 1rem;
+        text-align: center;
+        background: var(--navy);
+        color: var(--white);
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border-radius: 3px;
+        transition: background 0.2s;
+    }
+
+    .post-link:hover {
+        background: var(--navy-light);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+    }
+
+    .empty-state h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--text-dark);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="blog-header">
+    <h1>Projects & Work</h1>
+    <p>Professional portfolio of baseball operations and data-driven financial analysis projects</p>
+</section>
+
+<div class="blog-container">
+    {% if posts %}
+        <div class="blog-grid">
+            {% for post in posts %}
+            <div class="post-card">
+                <div class="post-image {% if not post.image %}empty{% endif %}">
+                    {% if post.image %}
+                        <img src="{{ post.image }}" alt="{{ post.title }}">
+                    {% else %}
+                        ⚾
+                    {% endif %}
+                </div>
+                <div class="post-content">
+                    <p class="post-date">{{ post.date }}</p>
+                    <h3 class="post-title">{{ post.title }}</h3>
+                    <p class="post-description">{{ post.description }}</p>
+                    <div class="post-tags">
+                        {% for tag in post.tags %}
+                            <span class="post-tag">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="post-links">
+                        {% if post.project_url %}
+                            <a href="{{ post.project_url }}" target="_blank" class="post-link">View Project</a>
+                        {% endif %}
+                        {% if post.github_url %}
+                            <a href="{{ post.github_url }}" target="_blank" class="post-link">GitHub</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">�</div>
+            <h2>No Projects Listed</h2>
+            <p>Check back soon as I showcase my latest professional projects</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

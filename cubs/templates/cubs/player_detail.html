@@ -1,0 +1,290 @@
+{% extends "cubs/base.html" %}
+{% block title %}{{ player.name }} · Cubs 2026 · Kyle Flynn{% endblock %}
+
+{% block cubs_page_styles %}
+<style>
+    .player-hero {
+        background: linear-gradient(135deg, var(--cubs-blue) 0%, var(--cubs-blue-dark) 100%);
+        color: #fff;
+        padding: 3rem 2rem;
+    }
+    .player-hero-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        align-items: flex-start;
+        gap: 2.5rem;
+        flex-wrap: wrap;
+    }
+    .player-badge {
+        background: rgba(255,255,255,0.1);
+        border: 2px solid rgba(255,255,255,0.2);
+        border-radius: 8px;
+        padding: 1.25rem 1.75rem;
+        text-align: center;
+        min-width: 130px;
+    }
+    .badge-pos {
+        font-size: 2rem;
+        font-weight: 700;
+        color: rgba(255,255,255,0.9);
+        display: block;
+    }
+    .badge-lineup {
+        background: var(--cubs-red);
+        color: #fff;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 0.2rem 0.6rem;
+        border-radius: 3px;
+        margin-top: 0.5rem;
+        display: inline-block;
+    }
+    .badge-notlineup {
+        color: rgba(255,255,255,0.4);
+        font-size: 0.7rem;
+        margin-top: 0.5rem;
+        display: block;
+    }
+    .player-meta { flex: 1; }
+    .player-meta h1 {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(1.75rem, 3vw, 2.75rem);
+        margin-bottom: 0.25rem;
+    }
+    .player-meta .meta-sub {
+        color: rgba(255,255,255,0.6);
+        font-size: 0.9rem;
+        margin-bottom: 1.25rem;
+    }
+    .hero-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat .hs-val {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.75rem;
+        display: block;
+        line-height: 1;
+    }
+    .hero-stat .hs-lbl {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.5);
+        margin-top: 0.2rem;
+    }
+
+    /* Charts */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    @media (max-width: 700px) { .charts-grid { grid-template-columns: 1fr; } }
+
+    .chart-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1.5rem;
+    }
+    .chart-card h3 {
+        font-family: 'DM Serif Display', serif;
+        color: var(--cubs-blue);
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Detail tables side by side */
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+    @media (max-width: 900px) { .detail-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .detail-grid { grid-template-columns: 1fr; } }
+
+    .detail-section h3 {
+        font-family: 'DM Serif Display', serif;
+        color: var(--cubs-blue);
+        font-size: 1.05rem;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 2px solid var(--cubs-red);
+    }
+    .detail-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .detail-table td { padding: 0.4rem 0; border-bottom: 1px solid var(--border); }
+    .detail-table td:last-child { text-align: right; font-weight: 600; color: var(--cubs-blue); }
+    .back-link {
+        display: inline-block;
+        margin-bottom: 1.5rem;
+        color: var(--cubs-blue);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+    .back-link:hover { color: var(--cubs-red); }
+</style>
+{% endblock %}
+
+{% block cubs_content %}
+<div class="player-hero">
+    <div class="player-hero-inner">
+        <div class="player-badge">
+            <span class="badge-pos">{{ player.pos }}</span>
+            {% if lineup_spot %}
+                <span class="badge-lineup">Spot #{{ lineup_spot }}</span>
+            {% else %}
+                <span class="badge-notlineup">Not in lineup</span>
+            {% endif %}
+        </div>
+        <div class="player-meta">
+            <h1>{{ player.name }}</h1>
+            <p class="meta-sub">Age {{ player.age }} · {{ player.PA }} PA · OPS+ {{ player['OPS+'] }}</p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hs-val">{{ player.BA }}</span>
+                    <span class="hs-lbl">BA</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hs-val">{{ player.OBP }}</span>
+                    <span class="hs-lbl">OBP</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hs-val">{{ player.SLG }}</span>
+                    <span class="hs-lbl">SLG</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hs-val">{{ player.OPS }}</span>
+                    <span class="hs-lbl">OPS</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hs-val">{{ player.HR }}</span>
+                    <span class="hs-lbl">HR</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hs-val">{{ player.RBI }}</span>
+                    <span class="hs-lbl">RBI</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hs-val">{{ player.WAR }}</span>
+                    <span class="hs-lbl">WAR</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cubs-container">
+    <a href="{{ url_for('cubs.players') }}" class="back-link">← Back to Roster</a>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Skill Radar vs Qualified Roster</h3>
+            <canvas id="radarChart" height="240"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Slash Line vs Team Average</h3>
+            <canvas id="barChart" height="240"></canvas>
+        </div>
+    </div>
+
+    <div class="detail-grid">
+        <div class="detail-section">
+            <h3>Advanced Stats</h3>
+            <table class="detail-table">
+                {% for row in adv_table %}
+                <tr>
+                    <td>{{ row.stat }}</td>
+                    <td>{{ row.value }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="detail-section">
+            <h3>Baserunning</h3>
+            <table class="detail-table">
+                {% for row in run_table %}
+                <tr>
+                    <td>{{ row.stat }}</td>
+                    <td>{{ row.value }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="detail-section">
+            <h3>Situational</h3>
+            <table class="detail-table">
+                {% for row in situ_table %}
+                <tr>
+                    <td>{{ row.stat }}</td>
+                    <td>{{ row.value }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block cubs_scripts %}
+<script>
+const D = {{ chart_data|safe }};
+
+// Radar chart
+new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: {
+        labels: D.radar_labels,
+        datasets: [{
+            label: D.player_name,
+            data: D.radar_values,
+            backgroundColor: 'rgba(14,51,134,0.15)',
+            borderColor: '#0E3386',
+            borderWidth: 2,
+            pointBackgroundColor: '#CC3433',
+            pointRadius: 4,
+        }]
+    },
+    options: {
+        scales: { r: { min: 0, max: 100, ticks: { display: false }, grid: { color: 'rgba(0,0,0,0.07)' } } },
+        plugins: { legend: { display: false } }
+    }
+});
+
+// Bar chart: player vs team average
+new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+        labels: D.bar_labels,
+        datasets: [
+            {
+                label: D.player_name,
+                data: D.bar_player,
+                backgroundColor: '#0E3386',
+                borderRadius: 4,
+            },
+            {
+                label: 'Team Avg',
+                data: D.bar_avg,
+                backgroundColor: 'rgba(204,52,51,0.55)',
+                borderRadius: 4,
+            }
+        ]
+    },
+    options: {
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.06)' } } }
+    }
+});
+</script>
+{% endblock %}

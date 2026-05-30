@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}Connect · Kyle Flynn{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .connect-hero {
+        background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+        color: var(--white);
+        padding: 6rem 2rem;
+        text-align: center;
+        min-height: 70vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .connect-content {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .connect-eyebrow {
+        font-size: 0.85rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .connect-title {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+    }
+
+    .connect-description {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: rgba(255,255,255,0.8);
+        margin-bottom: 2rem;
+    }
+
+    .connect-divider {
+        width: 48px;
+        height: 2px;
+        background: var(--gold);
+        margin: 2rem auto;
+    }
+
+    .connect-button {
+        background: var(--gold);
+        color: var(--navy);
+        padding: 1rem 3rem;
+        border: none;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+        display: inline-block;
+        border-radius: 4px;
+    }
+
+    .connect-button:hover {
+        background: var(--gold-light);
+        transform: translateY(-2px);
+    }
+
+    .connect-contact {
+        margin-top: 4rem;
+        font-size: 0.95rem;
+        color: rgba(255,255,255,0.7);
+    }
+
+    .contact-item {
+        margin: 0.5rem 0;
+    }
+
+    .contact-label {
+        font-weight: 600;
+        color: var(--gold);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="connect-hero">
+    <div class="connect-content">
+        <p class="connect-eyebrow">⚾ Let's Connect</p>
+        <h1 class="connect-title">Get in Touch</h1>
+        <p class="connect-description">
+            I'm always interested in discussing baseball operations, financial analysis, and how data-driven decision-making can improve organizational performance. Let's connect!
+        </p>
+        <div class="connect-divider"></div>
+        <a href="https://www.linkedin.com/in/kyle-l-flynn/" target="_blank" class="connect-button">
+            Connect on LinkedIn
+        </a>
+        <div class="connect-contact">
+            <div class="contact-item">
+                <span class="contact-label">Location:</span> Franklin, TN
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">Email:</span> <a href="mailto:Kylelflynn@outlook.com" style="color: rgba(255,255,255,0.8); text-decoration: none;">Kylelflynn@outlook.com</a>
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">Phone:</span> 630-379-1759
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">Focus:</span> Baseball Operations, Finance & Analytics
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

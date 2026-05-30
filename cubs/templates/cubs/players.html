@@ -1,0 +1,143 @@
+{% extends "cubs/base.html" %}
+{% block title %}Cubs 2026 Roster · Kyle Flynn{% endblock %}
+
+{% block cubs_page_styles %}
+<style>
+    .table-wrap { overflow-x: auto; }
+    .lineup-badge {
+        display: inline-block;
+        background: var(--cubs-red);
+        color: #fff;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 0.1rem 0.4rem;
+        border-radius: 3px;
+        margin-left: 0.4rem;
+        vertical-align: middle;
+    }
+    .table-legend {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 0.75rem;
+    }
+    .legend-swatch {
+        width: 14px; height: 14px;
+        background: var(--cubs-light);
+        border: 1px solid var(--border);
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
+    .player-link { color: var(--cubs-blue); text-decoration: none; font-weight: 600; }
+    .player-link:hover { color: var(--cubs-red); text-decoration: underline; }
+</style>
+{% endblock %}
+
+{% block cubs_content %}
+<section class="cubs-page-header">
+    <h1>Full Roster — 2026 Chicago Cubs</h1>
+    <p class="header-sub">Click any column header to sort · Highlighted rows are in the optimal lineup</p>
+</section>
+
+<div class="cubs-container">
+    <div class="table-legend">
+        <span class="legend-swatch"></span>
+        <span>Highlighted = in the optimal batting lineup</span>
+    </div>
+
+    <div class="table-wrap">
+        <table class="cubs-table" id="roster-table">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Player</th>
+                    <th onclick="sortTable(1)">Pos</th>
+                    <th onclick="sortTable(2)">Age</th>
+                    <th onclick="sortTable(3)">PA</th>
+                    <th onclick="sortTable(4)">AB</th>
+                    <th onclick="sortTable(5)">R</th>
+                    <th onclick="sortTable(6)">H</th>
+                    <th onclick="sortTable(7)">2B</th>
+                    <th onclick="sortTable(8)">3B</th>
+                    <th onclick="sortTable(9)">HR</th>
+                    <th onclick="sortTable(10)">RBI</th>
+                    <th onclick="sortTable(11)">SB</th>
+                    <th onclick="sortTable(12)">BB</th>
+                    <th onclick="sortTable(13)">SO</th>
+                    <th onclick="sortTable(14)">BA</th>
+                    <th onclick="sortTable(15)">OBP</th>
+                    <th onclick="sortTable(16)">SLG</th>
+                    <th onclick="sortTable(17)">OPS</th>
+                    <th onclick="sortTable(18)">OPS+</th>
+                    <th onclick="sortTable(19)">WAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in players %}
+                <tr class="{{ 'in-lineup' if p.player_id in lineup_ids else '' }}">
+                    <td>
+                        <a class="player-link"
+                           href="{{ url_for('cubs.player_detail', player_id=p.player_id) }}">
+                            {{ p.display_name }}
+                        </a>
+                        {% if p.player_id in lineup_ids %}
+                            <span class="lineup-badge">Lineup</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ p.pos_primary }}</td>
+                    <td class="num">{{ p.Age }}</td>
+                    <td class="num">{{ p.PA }}</td>
+                    <td class="num">{{ p.AB }}</td>
+                    <td class="num">{{ p.R }}</td>
+                    <td class="num">{{ p.H }}</td>
+                    <td class="num">{{ p['2B'] }}</td>
+                    <td class="num">{{ p['3B'] }}</td>
+                    <td class="num">{{ p.HR }}</td>
+                    <td class="num">{{ p.RBI }}</td>
+                    <td class="num">{{ p.SB }}</td>
+                    <td class="num">{{ p.BB }}</td>
+                    <td class="num">{{ p.SO }}</td>
+                    <td class="num">{{ p.BA }}</td>
+                    <td class="num">{{ p.OBP }}</td>
+                    <td class="num">{{ p.SLG }}</td>
+                    <td class="num">{{ p.OPS }}</td>
+                    <td class="num">{{ p['OPS+'] }}</td>
+                    <td class="num">{{ p.WAR }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block cubs_scripts %}
+<script>
+// Simple column sort for the roster table
+let sortDir = {};
+function sortTable(col) {
+    const table = document.getElementById('roster-table');
+    const tbody = table.tBodies[0];
+    const rows  = Array.from(tbody.rows);
+    sortDir[col] = !sortDir[col];  // toggle direction
+
+    rows.sort((a, b) => {
+        const aVal = a.cells[col].innerText.trim();
+        const bVal = b.cells[col].innerText.trim();
+        const aNum = parseFloat(aVal);
+        const bNum = parseFloat(bVal);
+        // Use numeric comparison if both values are numbers
+        if (!isNaN(aNum) && !isNaN(bNum)) {
+            return sortDir[col] ? aNum - bNum : bNum - aNum;
+        }
+        return sortDir[col]
+            ? aVal.localeCompare(bVal)
+            : bVal.localeCompare(aVal);
+    });
+    rows.forEach(r => tbody.appendChild(r));
+}
+</script>
+{% endblock %}

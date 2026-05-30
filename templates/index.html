@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+{% block title %}Kyle Flynn · Baseball Operations{% endblock %}
+
+{% block extra_styles %}
+<style>
+  .hero {
+    min-height: calc(100vh - 64px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 4rem 5rem 5rem;
+    position: relative;
+  }
+
+  .hero-left::after {
+    content: '';
+    position: absolute;
+    top: 0; right: -60px; bottom: 0;
+    width: 120px;
+    background: var(--navy);
+    clip-path: polygon(0 0, 0% 100%, 100% 100%);
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  .hero-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    color: var(--white);
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    color: var(--gold-light);
+    letter-spacing: 0.05em;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+
+  .hero-divider {
+    width: 48px;
+    height: 2px;
+    background: var(--gold);
+    margin-bottom: 2rem;
+  }
+
+  .hero-bio {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.65);
+    max-width: 420px;
+    margin-bottom: 3rem;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-right {
+    background: var(--cream);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .profile-photo-wrap {
+    width: 240px;
+    height: 280px;
+    position: relative;
+    margin-bottom: 3rem;
+  }
+
+  .profile-photo-wrap::before {
+    content: '';
+    position: absolute;
+    top: 12px; left: 12px;
+    right: -12px; bottom: -12px;
+    border: 2px solid var(--gold);
+    z-index: 0;
+  }
+
+  .profile-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+  }
+
+  .profile-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--navy-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .placeholder-icon {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.4;
+    color: var(--white);
+  }
+
+  .placeholder-text {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .stat-box {
+    background: var(--cream);
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    color: var(--navy);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+    display: block;
+  }
+
+  .bg-diamond {
+    position: absolute;
+    opacity: 0.04;
+    font-size: 20rem;
+    right: -2rem;
+    bottom: -2rem;
+    line-height: 1;
+    color: var(--navy);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-left, .hero-right {
+      padding: 3rem 1.5rem;
+    }
+
+    .profile-photo-wrap {
+      width: 180px;
+      height: 220px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Baseball Operations & Finance</p>
+    <h1 class="hero-name">{{ profile.name }}</h1>
+    <p class="hero-subtitle">{{ profile.subtitle }}</p>
+    <div class="hero-divider"></div>
+    <p class="hero-bio">{{ profile.bio }}</p>
+    <div class="hero-cta">
+      <a href="/blog" class="btn-primary">View Projects</a>
+      <a href="/resume" class="btn-outline">View Resume</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="profile-photo-wrap">
+      {% if profile.photo %}
+        <img src="{{ profile.photo }}" alt="{{ profile.name }}" class="profile-photo" style="border-radius: 4px;">
+      {% else %}
+        <img src="https://media.licdn.com/dms/image/v2/D5603AQGgBQKDVifjow/profile-displayphoto-scale_400_400/B56ZrsZq24L8Ag-/0/1764902744919?e=1781740800&v=beta&t=HzaFPbd4wyFm75jP6qChkt3Cjo5wZRXKDg7xyJTiRqg" alt="{{ profile.name }}" class="profile-photo" style="border-radius: 4px;">
+      {% endif %}
+    </div>
+    <div class="stats-row">
+      <div class="stat-box">
+        <span class="stat-number">4</span>
+        <span class="stat-label">Years of Collegiate Baseball</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-number">FP&A</span>
+        <span class="stat-label">Experience</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-number">Leader</span>
+        <span class="stat-label">Student-Athlete</span>
+      </div>
+    </div>
+    <div class="bg-diamond">◆</div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,224 @@
+{% extends "cubs/base.html" %}
+{% block title %}Methodology · Cubs 2026 · Kyle Flynn{% endblock %}
+
+{% block cubs_page_styles %}
+<style>
+    .meth-section {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .meth-section h2 {
+        font-family: 'DM Serif Display', serif;
+        color: var(--cubs-blue);
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+        padding-bottom: 0.6rem;
+        border-bottom: 2px solid var(--cubs-red);
+    }
+    .meth-tag {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--cubs-red);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+    .meth-section p {
+        color: var(--text-muted);
+        line-height: 1.75;
+        margin-top: 0.9rem;
+        font-size: 0.95rem;
+    }
+    .meth-section ul {
+        margin-top: 0.9rem;
+        padding-left: 1.5rem;
+        color: var(--text-muted);
+        line-height: 1.9;
+        font-size: 0.95rem;
+    }
+    .score-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    .score-card {
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--cubs-blue);
+        border-radius: 4px;
+        padding: 1rem;
+    }
+    .score-card h4 {
+        font-weight: 700;
+        color: var(--cubs-blue);
+        margin-bottom: 0.5rem;
+    }
+    .score-card p { margin-top: 0; font-size: 0.85rem; }
+    .final-lineup {
+        background: var(--cubs-light);
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    .lineup-row {
+        display: grid;
+        grid-template-columns: 48px 1fr auto;
+        align-items: center;
+        padding: 0.75rem 1.25rem;
+        border-bottom: 1px solid var(--border);
+        gap: 1rem;
+    }
+    .lineup-row:last-child { border-bottom: none; }
+    .lineup-spot {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.5rem;
+        color: var(--cubs-blue);
+        text-align: center;
+    }
+    .lineup-name { font-weight: 600; color: var(--text-dark); }
+    .lineup-pos { font-size: 0.8rem; color: var(--text-muted); }
+    .lineup-ops { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--cubs-blue); font-size: 0.9rem; }
+</style>
+{% endblock %}
+
+{% block cubs_content %}
+<section class="cubs-page-header">
+    <h1>Methodology</h1>
+    <p class="header-sub">How the optimal batting order is computed from Baseball Reference data.</p>
+</section>
+
+<div class="cubs-container">
+
+    <div class="meth-section">
+        <span class="meth-tag">Step 1 — Data</span>
+        <h2>Source Data</h2>
+        <p>
+            Nine CSV exports from Baseball Reference are joined into one master DataFrame at startup.
+            The join key is the player's unique Baseball Reference ID (the <code>Player-additional</code>
+            or <code>Name-additional</code> column). Players that appear in standard batting but not
+            in a supplemental table retain a <code>NaN</code> for that table's columns rather than
+            being dropped — so no player is excluded due to a missing supplemental file.
+        </p>
+        <ul>
+            <li><strong>Standard Batting</strong> — slash line (BA/OBP/SLG), HR, RBI, SB, WAR, OPS+, rOBA, Rbat+</li>
+            <li><strong>Advanced Batting</strong> — BAbip, ISO, EV, Hard-Hit%, LD/GB/FB%, Pull/Cent/Oppo%</li>
+            <li><strong>Value Batting</strong> — Rbat, Rbaser, Rfield, oWAR, dWAR</li>
+            <li><strong>Neutralized Batting</strong> — park-neutral Runs Created (RC_neut)</li>
+            <li><strong>Team Baserunning</strong> — SB%, RS%, XBT%, SBO</li>
+            <li><strong>Batting Ratios</strong> — SO/W, AB/HR, GO/AO, HR/FB</li>
+            <li><strong>Sabermetric Batting</strong> — RC, RC/G, SecA, TotA, PwrSpd</li>
+            <li><strong>Win Probability</strong> — WPA, Clutch, aLI, RE24, REW</li>
+            <li><strong>Situational Hitting</strong> — vs RHP/LHP, Home/Road HR splits</li>
+        </ul>
+    </div>
+
+    <div class="meth-section">
+        <span class="meth-tag">Step 2 — Player Selection</span>
+        <h2>Selecting the Nine Starters</h2>
+        <p>
+            The algorithm treats the top 9 players by Plate Appearances as the everyday
+            starters. This reflects actual manager usage — the players who have accumulated
+            the most PA are the ones pencilled in most often. No positional constraints are
+            applied at this stage; the algorithm optimizes purely on offensive production.
+        </p>
+    </div>
+
+    <div class="meth-section">
+        <span class="meth-tag">Step 3 — Scoring</span>
+        <h2>Batting-Spot Fitness Scores</h2>
+        <p>
+            All scoring stats are min-max normalized to [0, 1] within the nine starters so
+            that no single statistic dominates due to scale differences. A weighted formula
+            then rates each player's fitness for each of spots 1–6:
+        </p>
+        <div class="score-grid">
+            <div class="score-card">
+                <h4>Spot 1 — Leadoff</h4>
+                <p>OBP (35%) + SB% (25%) + Contact/K-rate (25%) + SecA (15%)<br>
+                <em>Prioritizes getting on base and stealing bases.</em></p>
+            </div>
+            <div class="score-card">
+                <h4>Spot 2 — 2-Hole</h4>
+                <p>OBP (30%) + BA (20%) + SecA (25%) + SB% (25%)<br>
+                <em>On-base + contact + ability to move runners.</em></p>
+            </div>
+            <div class="score-card">
+                <h4>Spot 3 — Best Hitter</h4>
+                <p>OPS+ (25%) + rOBA (25%) + RC/G (25%) + WAR (25%)<br>
+                <em>Pure overall offensive value.</em></p>
+            </div>
+            <div class="score-card">
+                <h4>Spot 4 — Cleanup</h4>
+                <p>SLG (30%) + HR (30%) + ISO (20%) + RBI (20%)<br>
+                <em>Power and RBI production first.</em></p>
+            </div>
+            <div class="score-card">
+                <h4>Spot 5 — Secondary Power</h4>
+                <p>SLG (25%) + HR (20%) + RBI (30%) + RC/G (25%)<br>
+                <em>Protects the cleanup hitter.</em></p>
+            </div>
+            <div class="score-card">
+                <h4>Spot 6 — Bottom Anchor</h4>
+                <p>OPS (40%) + RBI (30%) + BA (30%)<br>
+                <em>Best overall hitter in the bottom third.</em></p>
+            </div>
+        </div>
+        <p>
+            Spots 7–9 are filled with the three unassigned players sorted by OPS descending —
+            ensuring the best of the "bottom of the order" players still appear higher in the
+            bottom third.
+        </p>
+    </div>
+
+    <div class="meth-section">
+        <span class="meth-tag">Step 4 — Optimization</span>
+        <h2>Finding the Best Overall Lineup</h2>
+        <p>
+            A 9×6 score matrix is built — each row is a player, each column is a batting spot
+            (1–6). The model then solves an <em>assignment problem</em>: rather than greedily
+            picking the highest-scoring player for spot 1, then spot 2, and so on (which can
+            box out better fits for later spots), it considers every possible way to assign
+            9 players to 6 spots and selects the single arrangement where the combined fitness
+            score across all six spots is highest. The result is a globally optimal lineup —
+            not locally optimized slot by slot, but the best possible combination overall.
+            SciPy's <code>linear_sum_assignment</code> solves this efficiently in milliseconds.
+        </p>
+    </div>
+
+    <div class="meth-section">
+        <span class="meth-tag">Step 5 — Limitations</span>
+        <h2>Known Limitations</h2>
+        <ul>
+            <li><strong>No platoon splits in assignment.</strong> The algorithm does not account for pitcher handedness or matchup-specific splits — it optimizes on season-aggregate stats only.</li>
+            <li><strong>PA-based starter selection.</strong> Using PA as a proxy for "starter" may include players who accumulated PA via pinch-hitting rather than starting every game.</li>
+            <li><strong>Positional constraints ignored.</strong> A lineup could theoretically place two catchers; the algorithm has no defensive validity check.</li>
+            <li><strong>Small-sample noise.</strong> Early in the season, stats may not be representative of true talent; projections or multi-year averages would reduce noise.</li>
+            <li><strong>Run-expectancy weights are approximations.</strong> The per-spot weights above are research-informed estimates, not derived from live Markov-chain simulation of the Cubs roster specifically.</li>
+        </ul>
+    </div>
+
+    {% if lineup %}
+    <div class="meth-section">
+        <span class="meth-tag">Result</span>
+        <h2>Current Optimal Lineup</h2>
+        <div class="final-lineup">
+            {% for p in lineup %}
+            <div class="lineup-row">
+                <span class="lineup-spot">{{ p.spot }}</span>
+                <div>
+                    <div class="lineup-name">{{ p.name }}</div>
+                    <div class="lineup-pos">{{ p.pos }} · {{ p.PA }} PA</div>
+                </div>
+                <div class="lineup-ops">OPS {{ "%.3f"|format(p.OPS) }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,434 @@
+{% extends "base.html" %}
+{% block title %}Resume · Kyle Flynn{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .resume-header {
+        background: var(--navy);
+        color: var(--white);
+        padding: 4rem 2rem;
+        text-align: center;
+    }
+
+    .resume-header h1 {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        margin-bottom: 1rem;
+    }
+
+    .resume-header p {
+        font-size: 1.1rem;
+        color: var(--gold-light);
+        letter-spacing: 0.05em;
+    }
+
+    .resume-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+    }
+
+    .about-section {
+        background: var(--cream);
+        padding: 2.5rem;
+        border-radius: 8px;
+        margin-bottom: 3rem;
+        border-left: 4px solid var(--gold);
+    }
+
+    .about-section h2 {
+        font-family: 'DM Serif Display', serif;
+        color: var(--navy);
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .about-section p {
+        color: var(--text-dark);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .about-section p:last-child {
+        margin-bottom: 0;
+    }
+
+    .resume-section {
+        margin-bottom: 3rem;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 2rem;
+    }
+
+    .resume-section:last-child {
+        border-bottom: none;
+    }
+
+    .section-title {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.75rem;
+        color: var(--navy);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--gold);
+    }
+
+    .contact-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: var(--cream);
+        border-radius: 4px;
+    }
+
+    .contact-item {
+        font-size: 0.9rem;
+        color: var(--text-dark);
+    }
+
+    .contact-label {
+        font-weight: 600;
+        color: var(--navy);
+        display: block;
+        margin-bottom: 0.25rem;
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .experience-item {
+        margin-bottom: 2.5rem;
+    }
+
+    .experience-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .job-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 0.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .job-title {
+        font-weight: 600;
+        color: var(--navy);
+        font-size: 1.1rem;
+    }
+
+    .company {
+        color: var(--text-muted);
+        font-style: italic;
+        font-size: 0.95rem;
+    }
+
+    .date-range {
+        font-size: 0.85rem;
+        color: var(--gold);
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .location {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 0.75rem;
+    }
+
+    .bullets {
+        list-style: none;
+        padding: 0;
+        margin: 0.75rem 0 0 0;
+    }
+
+    .bullets li {
+        padding-left: 1.5rem;
+        margin-bottom: 0.5rem;
+        position: relative;
+        color: var(--text-dark);
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+
+    .bullets li:before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--gold);
+        font-weight: bold;
+    }
+
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .skill-item {
+        background: var(--cream);
+        padding: 1.25rem;
+        border-radius: 4px;
+        border-left: 3px solid var(--gold);
+    }
+
+    .skill-category {
+        font-weight: 600;
+        color: var(--navy);
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+    }
+
+    .skill-list {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        line-height: 1.7;
+    }
+
+    .download-section {
+        background: var(--gold);
+        padding: 2rem;
+        border-radius: 8px;
+        text-align: center;
+        margin: 3rem 0;
+    }
+
+    .download-btn {
+        display: inline-block;
+        background: var(--navy);
+        color: var(--white);
+        padding: 1rem 2rem;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        transition: background 0.2s;
+        margin: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .download-btn:hover {
+        background: var(--navy-light);
+    }
+
+    .download-section h3 {
+        color: var(--navy);
+        margin-bottom: 1rem;
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.25rem;
+    }
+
+    @media (max-width: 768px) {
+        .resume-container {
+            padding: 2rem 1rem;
+        }
+
+        .skills-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .job-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .contact-info {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="resume-header">
+    <h1>Professional Experience</h1>
+    <p>Finance Professional & Baseball Operations Analyst</p>
+</section>
+
+<div class="resume-container">
+    <div class="download-section">
+        <h3>📄 Download Full Resume</h3>
+        <a href="https://1drv.ms/w/c/24619a49793ceffd/IQDlrPF9YcmfT7MLRRtolLc2ATcoi-MJp7k5dcGA2_dEG8A?e=D2vluz" target="_blank" class="download-btn">Download PDF</a>
+    </div>
+
+    <section class="about-section">
+        <h2>About Me</h2>
+        <p>
+            I am a recent graduate of Concordia University Wisconsin with a degree in Finance and will be joining Endodontic Practice Partners (EPP) in June 2026 as a Financial Analyst. At EPP, I will focus on forecasting, budgeting, and analyzing trends to support business decisions.
+        </p>
+        <p>
+            Outside of finance, I complete projects using AI to explore Python, SQL, and other coding languages and databases to answer baseball-related questions. I enjoy learning about sabermetrics and how front offices view the game through an analytical lens. With four years of college baseball playing experience, I have a deep understanding of the game that drives my pursuit of a career in baseball operations/analytics.
+        </p>
+        <p>
+            Later in my professional career, I plan to pursue an MBA to strengthen my strategic and leadership skills and further position myself for front-office roles in baseball.
+        </p>
+    </section>
+
+    <section class="resume-section">
+        <h2 class="section-title">Education</h2>
+        <div class="experience-item">
+            <div class="job-header">
+                <div class="job-title">Bachelor of Science, Finance</div>
+                <div class="date-range">December 2025</div>
+            </div>
+            <div class="company">Concordia University – Wisconsin</div>
+            <div class="location">Mequon, WI</div>
+            <ul class="bullets">
+                <li>Varsity Team Captain, CUW Baseball</li>
+                <li>Academic Honors</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="resume-section">
+        <h2 class="section-title">Professional Experience</h2>
+        
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Financial Planning Associate</div>
+                    <div class="company">Northwestern Mutual</div>
+                </div>
+                <div class="date-range">January 2026 - March 2026</div>
+            </div>
+            <div class="location">Whitefish Bay, WI</div>
+            <ul class="bullets">
+                <li>Developed comprehensive financial models and presented strategic plans to policyowners and potential clients, demonstrating strong analytical skills and ability to articulate insurance and financial recommendations</li>
+                <li>Collaborated weekly within a 5-person team to brainstorm and implement office improvements while showcasing teamwork to enhance office growth</li>
+            </ul>
+        </div>
+
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Financial Planning Intern</div>
+                    <div class="company">Northwestern Mutual</div>
+                </div>
+                <div class="date-range">May 2025 - December 2025</div>
+            </div>
+            <div class="location">Whitefish Bay, WI</div>
+            <ul class="bullets">
+                <li>Developed comprehensive financial models and presented strategic plans to policyowners and potential clients, demonstrating strong analytical skills and ability to articulate insurance and financial recommendations</li>
+                <li>Collaborated weekly within a 5-person team to brainstorm and implement office improvements while showcasing teamwork to enhance office growth</li>
+            </ul>
+        </div>
+
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Finance & Estimating Intern</div>
+                    <div class="company">Michel's Corporation</div>
+                </div>
+                <div class="date-range">May 2024 - August 2024</div>
+            </div>
+            <div class="location">Milwaukee, WI</div>
+            <ul class="bullets">
+                <li>Utilized a bottom-up estimating approach to break down large projects into smaller components for budgeting</li>
+                <li>Analyzed blueprints and project specifications to perform detailed quantity takeoffs and cost analysis in a deadline-driven environment</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="resume-section">
+        <h2 class="section-title">Baseball Operations Experience</h2>
+        
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Baseball Coaching Volunteer</div>
+                    <div class="company">Concordia University Wisconsin Baseball</div>
+                </div>
+                <div class="date-range">August 2025 - October 2025</div>
+            </div>
+            <div class="location">Mequon, WI</div>
+            <ul class="bullets">
+                <li>Led on-field player development & practices</li>
+                <li>Facilitated hitting & fielding practices outside of structured team practice</li>
+                <li>Created team practice plans along with using data analysis to improve player's performance</li>
+            </ul>
+        </div>
+
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Vizual Edge Volunteer & Showcase Operations Volunteer</div>
+                    <div class="company">Prep Baseball Report</div>
+                </div>
+                <div class="date-range">August 2023 - August 2024</div>
+            </div>
+            <div class="location">Sheboygan, WI</div>
+            <ul class="bullets">
+                <li>Managed showcase operations and data collection</li>
+                <li>Facilitated athlete testing and maintained datasets</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="resume-section">
+        <h2 class="section-title">Leadership & Involvement</h2>
+        
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Women's/Men's Soccer Game Operations Manager</div>
+                    <div class="company">Concordia University Wisconsin</div>
+                </div>
+                <div class="date-range">August 2023 - October 2024</div>
+            </div>
+            <div class="location">Mequon, WI</div>
+            <ul class="bullets">
+                <li>Coordinated game-day operations and staffing</li>
+                <li>Managed scheduling systems in Excel</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="resume-section">
+        <h2 class="section-title">Core Competencies</h2>
+        <div class="skills-grid">
+            <div class="skill-item">
+                <div class="skill-category">Finance & Strategy</div>
+                <div class="skill-list">
+                    Financial Analysis<br>
+                    Financial Modeling<br>
+                    Budgeting<br>
+                    Cost Analysis
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-category">Data & Analytics</div>
+                <div class="skill-list">
+                    Excel (Advanced)<br>
+                    Pivot Tables<br>
+                    VLOOKUP/XLOOKUP<br>
+                    VBA Macros
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-category">Baseball Operations</div>
+                <div class="skill-list">
+                    Player Evaluation<br>
+                    Player Development<br>
+                    Performance Analysis<br>
+                    Sabermetrics
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-category">Technical Skills</div>
+                <div class="skill-list">
+                    Python<br>
+                    SQL<br>
+                    AI Tools<br>
+                    Data Analysis
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+

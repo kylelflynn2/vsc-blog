@@ -1,0 +1,22 @@
+[
+  {
+    "id": "3",
+    "title": "The Most Ideal Batting Lineup for the 2026 Chicago Cubs",
+    "description": "A multi-source sabermetric analysis of the 2026 Chicago Cubs roster. Uses the Hungarian algorithm to optimally assign players to batting spots 1-6, scored across OBP, SLG, WAR, RC/G, SecA and more. Includes interactive charts, per-player profiles, and a full methodology writeup.",
+    "date": "May 28, 2026",
+    "project_url": "/projects/cubs-2026",
+    "github_url": "https://github.com/colinflynn/baseball-stats",
+    "tags": ["Baseball Analytics", "Sabermetrics", "Python", "Optimization"],
+    "image": null
+  },
+  {
+    "id": "2",
+    "title": "Rebuilding the 2026 Chicago White Sox",
+    "description": "A WAR-based valuation model for rebuilding the 2026 Chicago White Sox. Combines $/WAR surplus valuation, a Gaussian revenue-maximization curve, playing-time reallocation, and a wOBA-weighted optimal lineup using The Book's leverage heuristic.",
+    "date": "May 28, 2026",
+    "project_url": "/projects/whitesox-2026",
+    "github_url": null,
+    "tags": ["Baseball Analytics", "WAR", "Sabermetrics", "Python"],
+    "image": null
+  }
+]

@@ -1,0 +1,44 @@
+{% extends "cubs/base.html" %}
+{% block cubs_content %}
+<section class="cubs-page-header">
+    <h1>Data Not Yet Loaded</h1>
+    <p class="header-sub">Add the 9 Baseball Reference CSV files to get started.</p>
+</section>
+
+<div class="cubs-container">
+    <div class="cubs-card" style="max-width:700px;margin:0 auto;">
+        <span class="card-tag">Setup Required</span>
+        <h2>How to load the Cubs data</h2>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;line-height:1.7;">
+            Download the following 9 CSV files from
+            <strong>Baseball Reference → Cubs → Batting</strong> and place them in:
+            <code style="background:var(--cream);padding:0.15rem 0.4rem;border-radius:3px;">cubs/data/</code>
+        </p>
+        <table class="cubs-table">
+            <thead>
+                <tr><th>Filename</th><th>Baseball Reference Table</th></tr>
+            </thead>
+            <tbody>
+                {% for f in required %}
+                <tr>
+                    <td><code>{{ f }}</code></td>
+                    <td style="color:var(--text-muted);font-size:0.85rem;">
+                        {{ {
+                            'standard_batting.csv':         'Standard Batting',
+                            'advanced_batting.csv':         'Advanced Batting',
+                            'value_batting.csv':            'Value Batting',
+                            'neutralized_batting.csv':      'Neutralized Batting',
+                            'team_baserunning.csv':         'Team Baserunning',
+                            'team_batting_ratios.csv':      'Team Batting Ratios',
+                            'team_sabermetric_batting.csv': 'Team Sabermetric Batting',
+                            'team_win_probability.csv':     'Team Win Probability',
+                            'team_ph_hr_situ_hitting.csv':  'Situational Hitting',
+                        }.get(f, f) }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

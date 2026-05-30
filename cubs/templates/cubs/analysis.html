@@ -1,0 +1,206 @@
+{% extends "cubs/base.html" %}
+{% block title %}Cubs 2026 Analysis · Kyle Flynn{% endblock %}
+
+{% block cubs_page_styles %}
+<style>
+    .charts-2x2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.75rem;
+    }
+    @media (max-width: 800px) { .charts-2x2 { grid-template-columns: 1fr; } }
+
+    .chart-panel {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1.75rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .chart-panel h2 {
+        font-family: 'DM Serif Display', serif;
+        color: var(--cubs-blue);
+        font-size: 1.25rem;
+        margin-bottom: 0.35rem;
+    }
+    .chart-panel p {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        margin-bottom: 1.25rem;
+        line-height: 1.5;
+    }
+    .legend-dot {
+        display: inline-block;
+        width: 10px; height: 10px;
+        border-radius: 50%;
+        margin-right: 4px;
+        vertical-align: middle;
+    }
+    .chart-legend {
+        display: flex;
+        gap: 1.25rem;
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+    }
+</style>
+{% endblock %}
+
+{% block cubs_content %}
+<section class="cubs-page-header">
+    <h1>Comparative Analysis — 2026 Cubs</h1>
+    <p class="header-sub">Four charts comparing qualified batters (30+ PA). Lineup members are highlighted.</p>
+</section>
+
+<div class="cubs-container">
+    <div class="charts-2x2">
+
+        <div class="chart-panel">
+            <h2>OBP vs SLG</h2>
+            <p>On-base percentage vs slugging. The best hitters appear in the upper-right quadrant.
+               Lineup members shown in Cubs blue.</p>
+            <canvas id="scatterOBP" height="280"></canvas>
+            <div class="chart-legend">
+                <span><span class="legend-dot" style="background:#0E3386;"></span>In lineup</span>
+                <span><span class="legend-dot" style="background:rgba(204,52,51,0.55);"></span>Roster only</span>
+            </div>
+        </div>
+
+        <div class="chart-panel">
+            <h2>OPS+ Rankings</h2>
+            <p>Park and league adjusted OPS (100 = average). Shows who is producing above
+               or below a typical MLB hitter given the ballpark.</p>
+            <canvas id="barOPS" height="280"></canvas>
+        </div>
+
+        <div class="chart-panel">
+            <h2>RC/G vs WPA</h2>
+            <p>Runs Created per Game (overall offensive production rate) vs Win Probability Added
+               (actual clutch value added in real game situations).</p>
+            <canvas id="scatterRCG" height="280"></canvas>
+            <div class="chart-legend">
+                <span><span class="legend-dot" style="background:#0E3386;"></span>In lineup</span>
+                <span><span class="legend-dot" style="background:rgba(204,52,51,0.55);"></span>Roster only</span>
+            </div>
+        </div>
+
+        <div class="chart-panel">
+            <h2>Clutch Ratings</h2>
+            <p>Clutch measures how much better or worse a player performed in high-leverage
+               situations vs their overall performance. Positive = rose to the occasion.</p>
+            <canvas id="barClutch" height="280"></canvas>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block cubs_scripts %}
+<script>
+const D = {{ chart_data|safe }};
+const lineupNames = new Set(D.lineup_names);
+
+const blue   = '#0E3386';
+const red    = 'rgba(204,52,51,0.55)';
+const redSolid = '#CC3433';
+
+// ----- Chart 1: OBP vs SLG scatter -----
+new Chart(document.getElementById('scatterOBP'), {
+    type: 'scatter',
+    data: {
+        datasets: [{
+            label: 'In Lineup',
+            data: D.scatter_obp_slg.filter(p => p.in_lineup).map(p => ({ x: p.x, y: p.y, label: p.label, pid: p.player_id })),
+            backgroundColor: blue,
+            pointRadius: 7,
+        }, {
+            label: 'Roster',
+            data: D.scatter_obp_slg.filter(p => !p.in_lineup).map(p => ({ x: p.x, y: p.y, label: p.label, pid: p.player_id })),
+            backgroundColor: red,
+            pointRadius: 5,
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { position: 'bottom' },
+            tooltip: { callbacks: { label: ctx => `${ctx.raw.label} (${ctx.raw.x}, ${ctx.raw.y})` } }
+        },
+        scales: {
+            x: { title: { display: true, text: 'OBP' } },
+            y: { title: { display: true, text: 'SLG' } }
+        }
+    }
+});
+
+// ----- Chart 2: OPS+ bar -----
+new Chart(document.getElementById('barOPS'), {
+    type: 'bar',
+    data: {
+        labels: D.ops_plus.labels,
+        datasets: [{
+            label: 'OPS+',
+            data: D.ops_plus.values,
+            backgroundColor: D.ops_plus.labels.map(n => lineupNames.has(n) ? blue : red),
+            borderRadius: 3,
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        plugins: {
+            legend: { display: false },
+            annotation: {}
+        },
+        scales: {
+            x: { title: { display: true, text: 'OPS+ (100 = league avg)' } }
+        }
+    }
+});
+
+// ----- Chart 3: RC/G vs WPA scatter -----
+new Chart(document.getElementById('scatterRCG'), {
+    type: 'scatter',
+    data: {
+        datasets: [{
+            label: 'In Lineup',
+            data: D.scatter_rcg_wpa.filter(p => p.in_lineup).map(p => ({ x: p.x, y: p.y, label: p.label })),
+            backgroundColor: blue,
+            pointRadius: 7,
+        }, {
+            label: 'Roster',
+            data: D.scatter_rcg_wpa.filter(p => !p.in_lineup).map(p => ({ x: p.x, y: p.y, label: p.label })),
+            backgroundColor: red,
+            pointRadius: 5,
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { position: 'bottom' },
+            tooltip: { callbacks: { label: ctx => `${ctx.raw.label} (${ctx.raw.x}, ${ctx.raw.y})` } }
+        },
+        scales: {
+            x: { title: { display: true, text: 'RC/G' } },
+            y: { title: { display: true, text: 'WPA' } }
+        }
+    }
+});
+
+// ----- Chart 4: Clutch bar -----
+new Chart(document.getElementById('barClutch'), {
+    type: 'bar',
+    data: {
+        labels: D.clutch.labels,
+        datasets: [{
+            label: 'Clutch',
+            data: D.clutch.values,
+            backgroundColor: D.clutch.values.map(v => v >= 0 ? blue : red),
+            borderRadius: 3,
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        plugins: { legend: { display: false } },
+        scales: { x: { title: { display: true, text: 'Clutch score' } } }
+    }
+});
+</script>
+{% endblock %}

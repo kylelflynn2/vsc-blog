@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<style>
+    :root {
+        --cubs-blue:      #0E3386;
+        --cubs-blue-dark: #0A2560;
+        --cubs-blue-mid:  #1a4a9e;
+        --cubs-red:       #CC3433;
+        --cubs-light:     #e8edf7;
+    }
+
+    /* Cubs sub-navigation */
+    .cubs-subnav {
+        background: var(--cubs-blue-dark);
+        border-bottom: 3px solid var(--cubs-red);
+        padding: 0 2rem;
+    }
+
+    .cubs-subnav-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        height: 44px;
+    }
+
+    .cubs-subnav-title {
+        color: rgba(255,255,255,0.5);
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-right: 1rem;
+        white-space: nowrap;
+    }
+
+    .cubs-nav-link {
+        color: rgba(255,255,255,0.75);
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 0.3rem 0.85rem;
+        border-radius: 3px;
+        transition: background 0.15s, color 0.15s;
+    }
+
+    .cubs-nav-link:hover,
+    .cubs-nav-link.active {
+        background: var(--cubs-red);
+        color: #fff;
+    }
+
+    .cubs-nav-link.back {
+        margin-left: auto;
+        color: rgba(255,255,255,0.5);
+        font-size: 0.75rem;
+    }
+
+    .cubs-nav-link.back:hover {
+        background: transparent;
+        color: #fff;
+    }
+
+    /* Section headers */
+    .cubs-page-header {
+        background: linear-gradient(135deg, var(--cubs-blue) 0%, var(--cubs-blue-dark) 100%);
+        color: #fff;
+        padding: 3.5rem 2rem;
+        text-align: center;
+    }
+
+    .cubs-page-header h1 {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(1.75rem, 3.5vw, 3rem);
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+    }
+
+    .cubs-page-header .header-sub {
+        color: rgba(255,255,255,0.7);
+        font-size: 1rem;
+        letter-spacing: 0.04em;
+    }
+
+    /* Content wrapper */
+    .cubs-container {
+        max-width: 1100px;
+        margin: 3rem auto;
+        padding: 0 2rem;
+    }
+
+    /* Stat pills row */
+    .stat-pills {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .stat-pill {
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 6px;
+        padding: 0.75rem 1.5rem;
+        text-align: center;
+        min-width: 110px;
+    }
+
+    .stat-pill .pill-label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.6);
+        margin-bottom: 0.3rem;
+    }
+
+    .stat-pill .pill-value {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.6rem;
+        color: #fff;
+        line-height: 1;
+    }
+
+    /* Cubs-themed data table */
+    table.cubs-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+
+    table.cubs-table th {
+        background: var(--cubs-blue);
+        color: #fff;
+        text-align: left;
+        padding: 0.65rem 0.85rem;
+        font-size: 0.73rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        user-select: none;
+        white-space: nowrap;
+    }
+
+    table.cubs-table th:hover {
+        background: var(--cubs-blue-mid);
+    }
+
+    table.cubs-table td {
+        padding: 0.6rem 0.85rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-dark);
+    }
+
+    table.cubs-table tr:hover td {
+        background: var(--cubs-light);
+    }
+
+    table.cubs-table td.num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+
+    table.cubs-table tr.in-lineup td {
+        background: var(--cubs-light);
+        font-weight: 600;
+    }
+
+    /* Cards */
+    .cubs-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1.75rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .cubs-card h2 {
+        font-family: 'DM Serif Display', serif;
+        color: var(--cubs-blue);
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .cubs-card .card-tag {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--cubs-red);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    @media (max-width: 768px) {
+        .cubs-subnav { padding: 0 1rem; }
+        .cubs-container { padding: 0 1rem; }
+        table.cubs-table { font-size: 0.78rem; }
+        table.cubs-table th, table.cubs-table td { padding: 0.4rem 0.5rem; }
+    }
+</style>
+{% block cubs_page_styles %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="cubs-subnav">
+    <div class="cubs-subnav-inner">
+        <span class="cubs-subnav-title">Cubs 2026</span>
+        <a href="{{ url_for('cubs.index') }}"
+           class="cubs-nav-link {% if request.endpoint == 'cubs.index' %}active{% endif %}">Lineup</a>
+        <a href="{{ url_for('cubs.players') }}"
+           class="cubs-nav-link {% if request.endpoint == 'cubs.players' %}active{% endif %}">Roster</a>
+        <a href="{{ url_for('cubs.analysis') }}"
+           class="cubs-nav-link {% if request.endpoint == 'cubs.analysis' or request.endpoint == 'cubs.player_detail' %}active{% endif %}">Analysis</a>
+        <a href="{{ url_for('cubs.methodology') }}"
+           class="cubs-nav-link {% if request.endpoint == 'cubs.methodology' %}active{% endif %}">Methodology</a>
+        <a href="/blog" class="cubs-nav-link back">← Portfolio</a>
+    </div>
+</div>
+
+{% block cubs_content %}{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{% block cubs_scripts %}{% endblock %}
+{% endblock %}

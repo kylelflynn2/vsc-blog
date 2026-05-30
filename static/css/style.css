@@ -1,0 +1,238 @@
+:root {
+    --navy: #1A2744;
+    --navy-light: #2A3F5F;
+    --gold: #D4AF37;
+    --gold-light: #E8C547;
+    --cream: #F5F1E8;
+    --white: #FFFFFF;
+    --text-dark: #1A1A1A;
+    --text-muted: #666666;
+    --border: #E0E0E0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* NAVBAR */
+.navbar {
+    background: var(--navy);
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 2rem;
+}
+
+.nav-logo {
+    color: var(--white);
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.nav-logo:hover {
+    color: var(--gold);
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    text-align: center;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: var(--gold);
+}
+
+.nav-admin {
+    color: var(--gold);
+}
+
+/* BUTTONS */
+.btn-primary {
+    background: var(--gold);
+    color: var(--navy);
+    padding: 0.75rem 2rem;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+}
+
+.btn-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--white);
+    padding: 0.75rem 2rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+}
+
+.btn-outline:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.btn-secondary {
+    background: var(--navy);
+    color: var(--white);
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    display: inline-block;
+}
+
+.btn-secondary:hover {
+    background: var(--navy-light);
+}
+
+.btn-danger {
+    background: #E74C3C;
+    color: var(--white);
+    padding: 0.6rem 1.2rem;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-danger:hover {
+    background: #C0392B;
+}
+
+/* FORMS */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* FOOTER */
+.footer {
+    background: var(--navy);
+    color: var(--white);
+    text-align: center;
+    padding: 2rem;
+    margin-top: 5rem;
+    font-size: 0.85rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .nav-container {
+        padding: 0 1rem;
+    }
+
+    .nav-menu {
+        gap: 1rem;
+    }
+
+    .nav-link {
+        font-size: 0.75rem;
+    }
+
+    .hero {
+        grid-template-columns: 1fr !important;
+    }
+
+    .hero-left, .hero-right {
+        padding: 3rem 1.5rem !important;
+    }
+
+    .profile-photo-wrap {
+        width: 180px;
+        height: 220px;
+    }
+}
