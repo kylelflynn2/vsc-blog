@@ -1,5 +1,15 @@
 [
   {
+    "id": "4",
+    "title": "Yankees Baseball Operations Portfolio",
+    "description": "A comprehensive baseball operations analysis of the 2026 New York Yankees — optimal lineup construction with sabermetric reasoning, full payroll and CBT breakdown, arbitration primer, current depth chart, and a complete 2026–27 offseason strategic plan. Written from the perspective of a baseball operations analyst.",
+    "date": "June 8, 2026",
+    "project_url": "/projects/yankees-baseball-operations",
+    "github_url": null,
+    "tags": ["Yankees", "Sabermetrics", "Lineup Optimization", "Arbitration", "Payroll Analysis"],
+    "image": null
+  },
+  {
     "id": "3",
     "title": "The Most Ideal Batting Lineup for the 2026 Chicago Cubs",
     "description": "A multi-source sabermetric analysis of the 2026 Chicago Cubs roster. Uses the Hungarian algorithm to optimally assign players to batting spots 1-6, scored across OBP, SLG, WAR, RC/G, SecA and more. Includes interactive charts, per-player profiles, and a full methodology writeup.",

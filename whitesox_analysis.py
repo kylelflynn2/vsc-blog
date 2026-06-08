@@ -17,7 +17,7 @@ Model assumptions
 - Replacement-level team: 48 wins (industry-standard baseline)
 - Marginal revenue per win: Gaussian curve peaking at 88 wins ($6.0M/win)
 - League-average wOBA used in lineup weighting: .315
-- Linear extrapolation from YTD to full season (30 games observed as of 4/30/26)
+- Linear extrapolation from YTD to full season (63 games observed as of 6/8/26)
 """
 
 import csv
@@ -31,7 +31,7 @@ from typing import List, Dict, Tuple
 # Constants
 # ---------------------------------------------------------------------------
 DOLLARS_PER_WAR        = 9_000_000
-TEAM_GAMES_TO_DATE     = 55
+TEAM_GAMES_TO_DATE     = 63
 FULL_SEASON_GAMES      = 162
 MLB_MIN_SALARY         = 760_000
 REPLACEMENT_TEAM_WINS  = 48
@@ -51,14 +51,18 @@ WOBA_WEIGHTS = {
 }
 
 SALARY_OVERRIDES: Dict[str, int] = {
-    "Andrew Benintendi": 17_142_857,
-    "Austin Hays":         5_000_000,
-    "Jarred Kelenic":      2_750_000,
-    "Miguel Vargas":       1_200_000,
-    "Munetaka Murakami":  12_500_000,
-    "Reese McGuire":       1_500_000,
-    "Derek Hill":          1_100_000,
-    "Lenyn Sosa":            900_000,
+    # Guaranteed contracts (FanGraphs Roster Resource, June 2026)
+    "Andrew Benintendi":  17_100_000,   # 5 yr/$75M (2023-27), FA after 2027
+    "Munetaka Murakami":  16_500_000,   # 2 yr/$34M (2026-27), FA after 2027
+    "Austin Hays":         5_000_000,   # 1 yr/$6M + 2027 mutual option
+    "Randal Grichuk":      1_250_000,   # 1 yr/$1.25M, FA after 2026
+    # Arbitration-eligible
+    "Derek Hill":            900_000,   # Arb-1; split contract
+    # Pre-arb (MLB minimum approximations)
+    "Jarred Kelenic":        740_000,
+    "Miguel Vargas":         740_000,
+    "Reese McGuire":         740_000,
+    "Lenyn Sosa":            740_000,
 }
 
 
@@ -66,10 +70,11 @@ SALARY_OVERRIDES: Dict[str, int] = {
 # status itself comes from the CSV; this dict only adds a human-readable
 # injury description where one was reported.
 BATTER_INJURY_NOTES: Dict[str, str] = {
-    "Everson Pereira": "Right pectoral strain",
-    "Tanner Murray":   "Left shoulder dislocation",
-    "Austin Hays":     "Currently on the IL",
-    "Jarred Kelenic":  "Designated for assignment",
+    "Munetaka Murakami": "Left quadriceps strain",
+    "Everson Pereira":   "Right pectoral strain",
+    "Tanner Murray":     "Left shoulder dislocation",
+    "Austin Hays":       "Currently on the IL",
+    "Jarred Kelenic":    "Designated for assignment",
 }
 
 
@@ -107,14 +112,14 @@ def _advanced_path() -> str:
 
 def load_batting(csv_path: str | None = None) -> List[Dict]:
     csv_path = csv_path or _data_path()
-    with open(csv_path, "r", encoding="utf-8") as f:
+    with open(csv_path, "r", encoding="utf-8-sig") as f:
         return list(csv.DictReader(f))
 
 
 def load_advanced(csv_path: str | None = None) -> Dict[str, Dict]:
     """Load advanced/sabermetric stats, keyed by player name."""
     csv_path = csv_path or _advanced_path()
-    with open(csv_path, "r", encoding="utf-8") as f:
+    with open(csv_path, "r", encoding="utf-8-sig") as f:
         return {r["Player"]: r for r in csv.DictReader(f)}
 
 

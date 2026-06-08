@@ -1,0 +1,1468 @@
+{% extends "base.html" %}
+{% block title %}Yankees Baseball Operations Portfolio · Kyle Flynn{% endblock %}
+
+{% block extra_styles %}
+<style>
+  :root {
+    --ny: #0A1628;
+    --gold: #C9A84C;
+    --red: #C8102E;
+    --green: #2E7D32;
+    --cream: #f8f5ee;
+    --border: #ddd;
+    --text: #2a2a2a;
+    --muted: #666;
+  }
+
+  /* ── Header ── */
+  .proj-header {
+    background: var(--ny);
+    color: #fff;
+    padding: 4rem 2rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .proj-header::before {
+    content: 'NYY';
+    position: absolute;
+    font-size: 16rem;
+    font-weight: 900;
+    opacity: 0.04;
+    right: -2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    letter-spacing: -0.05em;
+    pointer-events: none;
+  }
+  .proj-header .eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  .proj-header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+  .proj-header .deck {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.65);
+    max-width: 700px;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+  }
+  .meta-row span { color: var(--gold); font-weight: 600; }
+
+  /* ── Layout ── */
+  .proj-body {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  /* ── Section blocks ── */
+  .section {
+    margin-bottom: 3.5rem;
+  }
+  .section-eyebrow {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 0.35rem;
+    margin-bottom: 1.25rem;
+    display: inline-block;
+  }
+  .section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    color: var(--ny);
+    margin-bottom: 0.75rem;
+  }
+  .section p {
+    color: var(--text);
+    font-size: 0.97rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+  .section p:last-child { margin-bottom: 0; }
+
+  /* ── Pull quotes ── */
+  .pull-quote {
+    border-left: 4px solid var(--gold);
+    background: var(--cream);
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--ny);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* ── Alert / callout boxes ── */
+  .alert-box {
+    border-radius: 6px;
+    padding: 1rem 1.5rem;
+    margin: 1.25rem 0;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .alert-red   { background: #fff5f5; border-left: 4px solid var(--red);   color: #5a1010; }
+  .alert-gold  { background: #fffbf0; border-left: 4px solid var(--gold);  color: #5a3a00; }
+  .alert-navy  { background: #f0f3f8; border-left: 4px solid var(--ny);    color: var(--ny); }
+  .alert-green { background: #f0f8f0; border-left: 4px solid var(--green); color: #1a401a; }
+  .alert-box strong { font-weight: 700; }
+
+  /* ── Stat cards ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .kpi-card {
+    background: var(--ny);
+    border-radius: 6px;
+    padding: 1.1rem 1.25rem;
+    text-align: center;
+  }
+  .kpi-card .kpi-label {
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .kpi-card .kpi-value {
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .kpi-card .kpi-value.red   { color: #ff6b6b; }
+  .kpi-card .kpi-value.gold  { color: var(--gold); }
+  .kpi-card .kpi-value.green { color: #69db7c; }
+  .kpi-card .kpi-sub {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.45);
+    margin-top: 0.25rem;
+  }
+
+  /* ── Tables ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin: 1rem 0 1.5rem;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .data-table thead tr {
+    background: var(--ny);
+    color: #fff;
+  }
+  .data-table thead th {
+    padding: 0.65rem 0.9rem;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .data-table thead th.right { text-align: right; }
+  .data-table tbody tr:nth-child(even) { background: #f8f9fb; }
+  .data-table tbody tr:hover { background: #eef2f8; }
+  .data-table tbody td {
+    padding: 0.6rem 0.9rem;
+    color: var(--text);
+    border-bottom: 1px solid #eee;
+  }
+  .data-table tbody td.right { text-align: right; font-variant-numeric: tabular-nums; }
+  .data-table tbody td.bold  { font-weight: 700; }
+  .data-table tfoot tr { background: #e8ecf3; }
+  .data-table tfoot td {
+    padding: 0.65rem 0.9rem;
+    font-weight: 700;
+    color: var(--ny);
+    border-top: 2px solid #ccd;
+    font-size: 0.85rem;
+  }
+
+  /* ── Status pills ── */
+  .pill {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .pill-guaranteed { background: #e8edf8; color: var(--ny); }
+  .pill-arb        { background: #fff3cd; color: #7a4a00; }
+  .pill-prearb     { background: #e8f5e9; color: var(--green); }
+  .pill-fa         { background: #fce4ec; color: var(--red); }
+  .pill-il         { background: #fff5f5; color: var(--red); border: 1px solid var(--red); }
+
+  /* ── Lineup card ── */
+  .lineup-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  @media (max-width: 640px) { .lineup-wrap { grid-template-columns: 1fr; } }
+  .lineup-card {
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--ny);
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .lineup-card-header {
+    background: var(--ny);
+    color: #fff;
+    padding: 0.75rem 1.1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .lineup-card-header span { color: var(--gold); }
+  .lineup-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.55rem 1.1rem;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.88rem;
+  }
+  .lineup-row:last-child { border-bottom: none; }
+  .lineup-num {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--gold);
+    width: 18px;
+    flex-shrink: 0;
+  }
+  .lineup-name { font-weight: 600; color: var(--ny); flex: 1; }
+  .lineup-pos {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #888;
+    width: 32px;
+  }
+  .lineup-stat { font-size: 0.8rem; color: var(--muted); }
+  .lineup-hand {
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 14px;
+    text-align: center;
+  }
+  .hand-l { color: #1565C0; }
+  .hand-r { color: var(--red); }
+
+  /* ── Depth chart bars ── */
+  .depth-pos { margin-bottom: 1.1rem; }
+  .depth-pos-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.35rem;
+  }
+  .depth-bars { display: flex; flex-direction: column; gap: 0.3rem; }
+  .depth-row { display: flex; align-items: center; gap: 0.6rem; }
+  .depth-name { font-size: 0.82rem; color: var(--text); width: 160px; flex-shrink: 0; }
+  .depth-bar-wrap { flex: 1; background: #e8ecf3; border-radius: 3px; height: 14px; overflow: hidden; }
+  .depth-bar { height: 100%; border-radius: 3px; }
+  .depth-bar-blue  { background: var(--ny); }
+  .depth-bar-gold  { background: var(--gold); }
+  .depth-bar-slate { background: #78909C; }
+  .depth-bar-red   { background: var(--red); }
+  .depth-pct { font-size: 0.75rem; color: var(--muted); width: 36px; text-align: right; flex-shrink: 0; }
+
+  /* ── CBT tier bar ── */
+  .cbt-wrap { margin: 1.5rem 0; }
+  .cbt-bar-outer {
+    width: 100%;
+    height: 36px;
+    background: #e8ecf3;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 0.5rem;
+  }
+  .cbt-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2E7D32 40%, #F9A825 55%, #e65100 70%, var(--red) 100%);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    position: relative;
+  }
+  .cbt-markers { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--muted); }
+  .cbt-marker-label { text-align: center; }
+
+  /* ── Sabermetrics grid ── */
+  .saber-grid {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 1rem 0;
+    font-size: 0.88rem;
+  }
+  .saber-grid .spot-num {
+    background: var(--ny);
+    color: var(--gold);
+    font-weight: 800;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 0.75rem 0;
+  }
+  .saber-grid .spot-desc {
+    background: #fff;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .saber-grid .spot-num:last-of-type,
+  .saber-grid .spot-desc:last-of-type { border-bottom: none; }
+
+  /* ── Arbitration rules ── */
+  .arb-rule {
+    background: #f8f9fb;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .arb-rule h4 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .arb-rule p { margin: 0; font-size: 0.9rem; line-height: 1.7; color: var(--text); }
+
+  /* ── Offseason plan ── */
+  .os-priority {
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid;
+  }
+  .os-critical { background: #fff5f5; border-color: var(--red); }
+  .os-high     { background: #fffbf0; border-color: var(--gold); }
+  .os-monitor  { background: #f0f3f8; border-color: var(--ny); }
+  .os-priority .os-tier {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .os-critical .os-tier { color: var(--red); }
+  .os-high     .os-tier { color: #8a5a00; }
+  .os-monitor  .os-tier { color: var(--ny); }
+  .os-priority h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ny);
+    margin-bottom: 0.5rem;
+  }
+  .os-priority p { margin: 0; font-size: 0.9rem; line-height: 1.7; color: var(--text); }
+
+  /* ── Misc ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 1rem 0;
+  }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+  .footnote {
+    font-size: 0.78rem;
+    color: var(--muted);
+    border-top: 1px solid #e0e0e0;
+    padding-top: 0.75rem;
+    margin-top: 1rem;
+    line-height: 1.6;
+  }
+  .source-tag {
+    font-size: 0.68rem;
+    color: var(--muted);
+    font-style: italic;
+    display: block;
+    margin-top: 0.35rem;
+  }
+
+  .notable-record {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.88rem;
+  }
+  .notable-record:last-child { border-bottom: none; }
+  .notable-record .rec-name  { color: var(--text); }
+  .notable-record .rec-amt   { font-weight: 700; color: var(--ny); }
+  .notable-record .rec-year  { color: var(--muted); font-size: 0.78rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ── HEADER ── -->
+<section class="proj-header">
+  <div style="max-width:1000px; margin:0 auto; padding:0 2rem;">
+    <p class="eyebrow">Yankees Baseball Operations Portfolio · Kyle Flynn</p>
+    <h1>New York Yankees<br>2026–27 Offseason Analysis</h1>
+    <p class="deck">
+      A comprehensive look at the 2026 New York Yankees — where they stand right now, how I'd optimize
+      the lineup without Aaron Judge, the full payroll and CBT reality, an arbitration primer for context,
+      and a complete strategic plan for the coming offseason. Written as a baseball operations analyst
+      working through the decisions in real time, with full transparency on the why behind every call.
+    </p>
+    <div class="meta-row">
+      <div>By <span>Kyle Flynn</span></div>
+      <div>Published <span>June 8, 2026</span></div>
+      <div>Baseball Operations Analysis</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BODY ── -->
+<div class="proj-body">
+
+  <!-- ══════════════════════════════════════════
+       1. SETTING THE SCENE
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-eyebrow">Current Outlook</div>
+    <h2>Current Outlook — June 8, 2026</h2>
+
+    <p>
+      The New York Yankees came into 2026 with legitimate World Series aspirations. They had the pitching — Gerrit
+      Cole, Max Fried, and a breakout candidate in Cam Schlittler. They had the lineup anchor in Aaron Judge. And
+      they had enough financial flexibility to address holes at the deadline. Through the first two months of the
+      season, injuries and offensive inconsistency have created a more complicated picture than expected — but
+      make no mistake, this team is still very much in the hunt.
+    </p>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--ny); margin:1.25rem 0 0.65rem;">
+      AL East Standings — June 8, 2026
+    </h3>
+
+    <table class="data-table" style="max-width:680px;">
+      <thead>
+        <tr>
+          <th style="width:28px;">#</th>
+          <th>Team</th>
+          <th class="right">W</th>
+          <th class="right">L</th>
+          <th class="right">PCT</th>
+          <th class="right">GB</th>
+          <th class="right">STRK</th>
+          <th class="right">L10</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#fffbf0;">
+          <td>1</td>
+          <td class="bold" style="color:var(--gold);">Tampa Bay Rays</td>
+          <td class="right">37</td>
+          <td class="right">25</td>
+          <td class="right">.597</td>
+          <td class="right">—</td>
+          <td class="right" style="color:var(--red);">L2</td>
+          <td class="right">3-7</td>
+        </tr>
+        <tr style="background:#f0f3f8; border-left:3px solid var(--ny);">
+          <td>2</td>
+          <td class="bold" style="color:var(--ny);">New York Yankees</td>
+          <td class="right bold">38</td>
+          <td class="right bold">26</td>
+          <td class="right bold">.594</td>
+          <td class="right">0.0</td>
+          <td class="right" style="color:var(--green);">W1</td>
+          <td class="right">6-4</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Toronto Blue Jays</td>
+          <td class="right">32</td>
+          <td class="right">34</td>
+          <td class="right">.485</td>
+          <td class="right">7.0</td>
+          <td class="right" style="color:var(--green);">W2</td>
+          <td class="right">5-5</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Baltimore Orioles</td>
+          <td class="right">31</td>
+          <td class="right">35</td>
+          <td class="right">.470</td>
+          <td class="right">8.0</td>
+          <td class="right" style="color:var(--red);">L2</td>
+          <td class="right">5-5</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Boston Red Sox</td>
+          <td class="right">27</td>
+          <td class="right">36</td>
+          <td class="right">.429</td>
+          <td class="right">10.5</td>
+          <td class="right" style="color:var(--red);">L1</td>
+          <td class="right">5-5</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-green" style="margin-top:1.25rem;">
+      <strong>The Yankees are a half-game out of first place with the best record in the division by wins.</strong>
+      At 38-26 (.594), they sit just a percentage point behind the Rays despite having played one more game.
+      Toronto and Baltimore are already 7 and 8 games back respectively, and Boston — fresh off getting swept
+      6-1 last night — is 10.5 out. The AL East race is effectively a two-team fight right now, and the Yankees
+      are in it with everything they have.
+    </div>
+
+    <p>
+      The case for this team as a World Series contender is real and it starts with context. Yes, Judge is on the
+      IL. Yes, Wells just joined him. Yes, the offense has been inconsistent. But this team just won 6 of their
+      last 10, beat a Red Sox team that has been utterly disappointing this season, and is doing it with a
+      starting rotation anchored by Schlittler — a 25-year-old who is pitching like a frontline ace.
+      They are not limping through this. They are competing.
+    </p>
+    <p>
+      What I want to do in this piece is work through the situation analytically — not just as a fan or an
+      observer, but the way a baseball operations department would. That means understanding the current roster
+      and its holes, building the most optimal lineups given who is actually available, being honest about the
+      financial constraints we're operating under, and mapping out how I'd approach the offseason to keep
+      this team in the division race in 2026 and set them up to compete at an even higher level in 2027.
+    </p>
+    <p>
+      The Yankees just beat Boston 6-1 with Schlittler on the mound. That win matters. But one good game
+      doesn't resolve the structural issues — and those structural issues are exactly what the rest of this
+      analysis is about.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       2. INJURY REPORT & CURRENT SITUATION
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-eyebrow">Current Roster Status</div>
+    <h2>The IL and What It Changes</h2>
+
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">On IL Right Now</div>
+        <div class="kpi-value red">5</div>
+        <div class="kpi-sub">Active injured list</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Judge (IL)</div>
+        <div class="kpi-value red">4–6 Wks</div>
+        <div class="kpi-sub">Rib stress fracture · ~mid-July return</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Wells (IL)</div>
+        <div class="kpi-value red">C · 10-Day</div>
+        <div class="kpi-sub">Cervical headaches, announced June 7</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Max Fried (IL)</div>
+        <div class="kpi-value gold">SP</div>
+        <div class="kpi-sub">Unavailable in rotation</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Chivilli (IL)</div>
+        <div class="kpi-value gold">RP</div>
+        <div class="kpi-sub">Bullpen depth impacted</div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--ny); margin-bottom:0.5rem; margin-top:1.5rem;">The Catcher Crisis</h3>
+    <p>
+      The most pressing issue right now is behind the plate. Austin Wells was just placed on the 10-day IL
+      Saturday with cervical headaches, which means the Yankees called up <strong>Ali Sánchez</strong> from
+      Triple-A Scranton/Wilkes-Barre. Sánchez is a right-handed hitting catcher with a .702 OPS at AAA this
+      season — not elite production, but workable. Importantly, 5 of his 6 home runs have come against
+      right-handed pitching, which shapes how you deploy him.
+    </p>
+
+    <div class="alert-gold">
+      <strong>The Sánchez context you need:</strong> He started the season in AAA looking like a real
+      option, slashing .314/.386/.490 with 3 HR and 7 RBI through April. He's cooled off significantly
+      since. But that April sample tells you the bat can play — it's not a lost cause.
+    </div>
+
+    <p>
+      The more complicated situation is with <strong>Escarra</strong>. In 62 at-bats over 22 games, he's
+      slashing .177/.235/.258 with 7 RBIs — those are genuinely bad numbers. Normally you'd option him
+      to Triple-A without a second thought. But with Wells on the IL, the Yankees can't. They need a
+      backup catcher on the active roster, so Escarra stays, even if his presence in a pinch-hit situation
+      would make you nervous.
+    </p>
+
+    <p>
+      This is exactly why the catcher position has been a season-long issue for this club. Wells — who is
+      the presumed solution — is hitting just .166/.278/.255 with 4 HR and 7 RBI through 47 games. Even
+      granting him significant defensive value (his framing metrics are solid), that offensive line isn't
+      good enough for a team with World Series aspirations. Losing him, even for 10 days, exposes just how
+      thin this roster is behind the plate.
+    </p>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--ny); margin-bottom:0.5rem; margin-top:1.5rem;">The Outfield Without Judge</h3>
+    <p>
+      With Judge on the IL — he was just diagnosed with a <strong>stress fracture in his rib</strong>,
+      putting him out an estimated <strong>4 to 6 weeks</strong> and targeting a mid-July return — Aaron
+      Boone has been shuffling the outfield. This is a more serious timeline than a typical IL stint.
+      A rib stress fracture in a power hitter is particularly concerning because the rotational mechanics
+      of a full swing are exactly what aggravates it, meaning Judge can't be rushed back.
+      The standard alignment — Grisham in center, Bellinger in left, Judge in right — is on hold until
+      at least mid-July. What we've seen is Bellinger and Grisham holding their spots, with
+      <strong>José Caballero</strong> sliding to right field. Caballero normally plays shortstop or
+      second, but he's a legitimate option out there, and this allows Anthony Volpe to stay at short.
+    </p>
+    <p>
+      <strong>Spencer Jones</strong> is now in the picture. We haven't seen enough from either Jones or
+      <strong>Jasson Domínguez</strong> this season to make a definitive case for one over the other — but
+      Jones has the head start simply because he's the healthy one while Domínguez continues his
+      IL60 recovery from an AC sprain. You play the player who can actually play.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       3. DEPTH CHART
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-eyebrow">Roster Construction</div>
+    <h2>Depth Chart — Projected Playing Time</h2>
+    <p>
+      The projections below reflect rest-of-season playing time estimates based on current roster status.
+      They're not predictions — they're the best available signal for how this roster breaks down and where
+      the vulnerabilities are.
+    </p>
+
+    <div class="two-col">
+      <div>
+        <div class="depth-pos">
+          <div class="depth-pos-label">Catcher</div>
+          <div class="depth-bars">
+            <div class="depth-row"><div class="depth-name">A. Wells</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-blue" style="width:60%"></div></div><div class="depth-pct">60%</div></div>
+            <div class="depth-row"><div class="depth-name">J. Escarra</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-slate" style="width:22%"></div></div><div class="depth-pct">22%</div></div>
+            <div class="depth-row"><div class="depth-name">A. Sánchez</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-gold" style="width:12%"></div></div><div class="depth-pct">12%</div></div>
+            <div class="depth-row"><div class="depth-name">B. Rice</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-slate" style="width:6%"></div></div><div class="depth-pct">6%</div></div>
+          </div>
+        </div>
+        <div class="depth-pos">
+          <div class="depth-pos-label">First Base</div>
+          <div class="depth-bars">
+            <div class="depth-row"><div class="depth-name">B. Rice</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-blue" style="width:62%"></div></div><div class="depth-pct">62%</div></div>
+            <div class="depth-row"><div class="depth-name">P. Goldschmidt</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-gold" style="width:36%"></div></div><div class="depth-pct">36%</div></div>
+          </div>
+        </div>
+        <div class="depth-pos">
+          <div class="depth-pos-label">Second Base</div>
+          <div class="depth-bars">
+            <div class="depth-row"><div class="depth-name">J. Chisholm Jr.</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-blue" style="width:85%"></div></div><div class="depth-pct">85%</div></div>
+            <div class="depth-row"><div class="depth-name">J. Caballero</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-gold" style="width:8%"></div></div><div class="depth-pct">8%</div></div>
+            <div class="depth-row"><div class="depth-name">A. Rosario</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-slate" style="width:4%"></div></div><div class="depth-pct">4%</div></div>
+          </div>
+        </div>
+        <div class="depth-pos">
+          <div class="depth-pos-label">Third Base</div>
+          <div class="depth-bars">
+            <div class="depth-row"><div class="depth-name">R. McMahon</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-blue" style="width:60%"></div></div><div class="depth-pct">60%</div></div>
+            <div class="depth-row"><div class="depth-name">A. Rosario</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-gold" style="width:33%"></div></div><div class="depth-pct">33%</div></div>
+            <div class="depth-row"><div class="depth-name">J. Caballero</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-slate" style="width:4%"></div></div><div class="depth-pct">4%</div></div>
+          </div>
+        </div>
+        <div class="depth-pos">
+          <div class="depth-pos-label">Shortstop</div>
+          <div class="depth-bars">
+            <div class="depth-row"><div class="depth-name">J. Caballero</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-blue" style="width:53%"></div></div><div class="depth-pct">53%</div></div>
+            <div class="depth-row"><div class="depth-name">A. Volpe</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-gold" style="width:43%"></div></div><div class="depth-pct">43%</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="depth-pos">
+          <div class="depth-pos-label">Left Field</div>
+          <div class="depth-bars">
+            <div class="depth-row"><div class="depth-name">J. Domínguez</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-blue" style="width:52%"></div></div><div class="depth-pct">52%</div></div>
+            <div class="depth-row"><div class="depth-name">C. Bellinger</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-gold" style="width:34%"></div></div><div class="depth-pct">34%</div></div>
+            <div class="depth-row"><div class="depth-name">J. Caballero</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-slate" style="width:9%"></div></div><div class="depth-pct">9%</div></div>
+            <div class="depth-row"><div class="depth-name">S. Jones</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-slate" style="width:3%"></div></div><div class="depth-pct">3%</div></div>
+          </div>
+        </div>
+        <div class="depth-pos">
+          <div class="depth-pos-label">Center Field</div>
+          <div class="depth-bars">
+            <div class="depth-row"><div class="depth-name">T. Grisham</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-blue" style="width:82%"></div></div><div class="depth-pct">82%</div></div>
+            <div class="depth-row"><div class="depth-name">C. Bellinger</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-gold" style="width:13%"></div></div><div class="depth-pct">13%</div></div>
+          </div>
+        </div>
+        <div class="depth-pos">
+          <div class="depth-pos-label">Right Field <span style="font-size:0.65rem; color:var(--red); font-weight:700;">← Updated: Judge out 4-6 wks</span></div>
+          <div class="depth-bars">
+            <div class="depth-row"><div class="depth-name">C. Bellinger</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-blue" style="width:40%"></div></div><div class="depth-pct">40%</div></div>
+            <div class="depth-row"><div class="depth-name">A. Judge</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-red" style="width:18%"></div></div><div class="depth-pct">18%</div></div>
+            <div class="depth-row"><div class="depth-name">S. Jones</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-gold" style="width:28%"></div></div><div class="depth-pct">28%</div></div>
+            <div class="depth-row"><div class="depth-name">J. Caballero</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-slate" style="width:10%"></div></div><div class="depth-pct">10%</div></div>
+            <div class="depth-row"><div class="depth-name">A. Rosario</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-slate" style="width:4%"></div></div><div class="depth-pct">4%</div></div>
+          </div>
+        </div>
+        <div class="depth-pos">
+          <div class="depth-pos-label">Designated Hitter</div>
+          <div class="depth-bars">
+            <div class="depth-row"><div class="depth-name">G. Stanton</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-blue" style="width:51%"></div></div><div class="depth-pct">51%</div></div>
+            <div class="depth-row"><div class="depth-name">B. Rice</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-gold" style="width:21%"></div></div><div class="depth-pct">21%</div></div>
+            <div class="depth-row"><div class="depth-name">P. Goldschmidt</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-slate" style="width:15%"></div></div><div class="depth-pct">15%</div></div>
+            <div class="depth-row"><div class="depth-name">A. Judge</div><div class="depth-bar-wrap"><div class="depth-bar depth-bar-red" style="width:7%"></div></div><div class="depth-pct">7%</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="source-tag">Source: Fangraphs rest-of-season depth chart projections · June 2026</span>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       4. LINEUP ANALYSIS
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-eyebrow">Lineup Construction</div>
+    <h2>Building the Optimal Lineup Without Judge</h2>
+
+    <p>
+      Before I show you my lineups, I want to lay out the framework I'm using. Sabermetrics has fundamentally
+      changed how we think about lineup construction — it's no longer "put your best hitter third and your speed
+      guy leadoff." The research shows clearly that certain qualities matter more at certain spots, and the goal
+      at every position in the order is to maximize runs scored over a full season, not to follow tradition.
+    </p>
+
+    <div class="saber-grid">
+      <div class="spot-num">1</div>
+      <div class="spot-desc"><strong>Highest OBP on the team.</strong> Speed matters, but getting on base matters infinitely more. The leadoff hitter sets the table. An extra base runner per game compounds across 162 games into a significant run-scoring advantage.</div>
+      <div class="spot-num">2</div>
+      <div class="spot-desc"><strong>Highest wRC+ on the team.</strong> Very high OBP, best overall batter. The No. 2 spot sees more plate appearances than anyone except leadoff, and they come up with runners on base more often than the 3-hole. Your best hitter belongs here.</div>
+      <div class="spot-num">3</div>
+      <div class="spot-desc"><strong>Good overall batter, high wRC+.</strong> Fourth-best hitter overall. Less critical than the 5-hole because they'll often bat with two outs and nobody on after the top of the lineup turns over.</div>
+      <div class="spot-num">4</div>
+      <div class="spot-desc"><strong>Most powerful hitter on the team.</strong> Must have elite SLG%, HR, and ISO. When runners are on base in the middle innings, you want the guy who hits the ball the farthest standing in there.</div>
+      <div class="spot-num">5</div>
+      <div class="spot-desc"><strong>Good overall batter with extra emphasis on power.</strong> High wRC+, high SLG%. Third-best hitter overall. More important than the 3-spot — this hitter protects the No. 4 hitter and punishes pitchers who try to pitch around the power.</div>
+      <div class="spot-num">6</div>
+      <div class="spot-desc"><strong>Average-to-good batter with baserunning emphasis.</strong> High OBP and SB upside. Starting the bottom third of the order with someone who can reach base keeps the lineup cycling.</div>
+      <div class="spot-num">7</div>
+      <div class="spot-desc"><strong>Average overall hitter.</strong> Productive out if needed, but not a lineup hole.</div>
+      <div class="spot-num">8</div>
+      <div class="spot-desc"><strong>Average overall hitter.</strong> Batting before the pitcher/weakest spot, so keeping them from being an automatic out is the priority.</div>
+    </div>
+
+    <p style="margin-top:1.5rem;">
+      Now, a few specific strategic realities that shape how I build these lineups for the 2026 Yankees:
+    </p>
+
+    <div class="alert-navy" style="margin-bottom:1rem;">
+      <strong>Paul Goldschmidt is a platoon player in 2026.</strong> He's batting .400 against left-handed
+      pitching this season. Against right-handers, he's at .184. That split is dramatic enough that I can't
+      treat him as an everyday leadoff hitter — he belongs in the lineup against lefties, but against righties,
+      he's not helping you at the top of the order.
+    </div>
+
+    <div class="alert-navy" style="margin-bottom:1rem;">
+      <strong>Keep Stanton in the lineup as much as possible.</strong> I know he's 36 and I know his numbers
+      this season against lefties (.200 in only 30 PA) look concerning. But that's a small sample size.
+      In 2025 he hit .277 against lefties in 78 PA, and his career line against them is .276/.372. Against
+      righties this year he's hitting .297 in 66 PA. With Judge now out 4 to 6 weeks, the Yankees need every
+      ounce of power they can get, and Stanton, even at 36, is still a guy.
+    </div>
+
+    <div class="alert-navy" style="margin-bottom:1rem;">
+      <strong>Volpe needs to split time with Caballero.</strong> Career-wise, Volpe hits lefties well —
+      .250 BA, .320 OBP — and struggles against righties (.212 BA, .272 OBP). Those career splits are
+      meaningful, even if the sample sizes differ (518 PA vs. lefties, 1,400+ vs. righties). I'm not
+      giving up on the 25-year-old, but I'm also not going to ignore the numbers. He plays against lefties.
+      Caballero slides in against righties.
+    </div>
+
+    <div class="alert-gold" style="margin-bottom:1rem;">
+      <strong>The Ben Rice dilemma.</strong> Here's the hard truth: against left-handed pitching, the
+      Yankees' three best hitters are Ben Rice, Paul Goldschmidt, and Giancarlo Stanton. The only way
+      to get all three in the lineup simultaneously is to play Rice at catcher. Aaron Boone has made it
+      clear he won't do that — his stated concern about Rice's offensive production declining if he's
+      behind the plate isn't wrong, but it's also costing this lineup real run-scoring potential.
+      My lineups reflect what I believe is optimal. I'll note where Boone's constraints diverge from
+      what the numbers suggest.
+    </div>
+
+    <div class="alert-navy" style="margin-bottom:0;">
+      <strong>Jones vs. Domínguez — give it to whoever is hot.</strong> We don't have enough 2026
+      at-bats from either to make a data-driven case for one over the other. Spencer Jones gets the
+      head start right now simply because he's the healthy one. Monitor both as the season progresses.
+    </div>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--ny); margin:1.75rem 0 0.5rem;">
+      Aaron Boone's Lineup — June 7, 2026
+    </h3>
+    <p>
+      For context, here is what Boone actually ran out against Boston the night before this analysis.
+      They won 6-1, so credit where it's due. But let's look at it critically anyway.
+    </p>
+
+    <table class="data-table" style="max-width:620px;">
+      <thead><tr>
+        <th style="width:30px;">#</th>
+        <th>Player</th>
+        <th>Position</th>
+        <th>Bats</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="bold">Paul Goldschmidt</td><td>1B</td><td>R</td></tr>
+        <tr><td>2</td><td class="bold">Ben Rice</td><td>DH</td><td>L</td></tr>
+        <tr><td>3</td><td class="bold">Cody Bellinger</td><td>LF</td><td>L</td></tr>
+        <tr><td>4</td><td class="bold">Amed Rosario</td><td>3B</td><td>R</td></tr>
+        <tr><td>5</td><td class="bold">Trent Grisham</td><td>CF</td><td>L</td></tr>
+        <tr><td>6</td><td class="bold">Anthony Volpe</td><td>SS</td><td>R</td></tr>
+        <tr><td>7</td><td class="bold">Jazz Chisholm Jr.</td><td>2B</td><td>L</td></tr>
+        <tr><td>8</td><td class="bold">José Caballero</td><td>RF</td><td>R</td></tr>
+        <tr><td>9</td><td class="bold">Ali Sánchez</td><td>C</td><td>R</td></tr>
+      </tbody>
+    </table>
+    <span class="source-tag">Boone's actual lineup, June 7, 2026 · NYY vs BOS (Yankees won 6-1)</span>
+
+    <p style="margin-top:1rem;">
+      The lineup won the game, but structurally there are things I'd change. Rosario batting 4th is
+      something I'd never do by choice — he's a contact hitter, not a run producer. And with Stanton
+      potentially available, not having him in there at all is leaving real power off the field.
+    </p>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--ny); margin:1.75rem 0 0.75rem;">
+      My Lineups — Optimized for the Situation
+    </h3>
+
+    <div class="lineup-wrap">
+      <!-- VS LHP -->
+      <div class="lineup-card">
+        <div class="lineup-card-header">vs. <span>Left-Handed Pitching</span></div>
+        <div class="lineup-row">
+          <div class="lineup-num">1</div>
+          <div class="lineup-name">Paul Goldschmidt</div>
+          <div class="lineup-pos">1B</div>
+          <div class="lineup-hand hand-r">R</div>
+          <div class="lineup-stat">.492 OBP vs L</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">2</div>
+          <div class="lineup-name">Ben Rice</div>
+          <div class="lineup-pos">C</div>
+          <div class="lineup-hand hand-l">L</div>
+          <div class="lineup-stat">.949 OPS vs L</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">3</div>
+          <div class="lineup-name">Giancarlo Stanton</div>
+          <div class="lineup-pos">DH</div>
+          <div class="lineup-hand hand-r">R</div>
+          <div class="lineup-stat">.372 OBP career vs L</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">4</div>
+          <div class="lineup-name">Trent Grisham</div>
+          <div class="lineup-pos">CF</div>
+          <div class="lineup-hand hand-l">L</div>
+          <div class="lineup-stat">.328 OBP vs L</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">5</div>
+          <div class="lineup-name">Cody Bellinger</div>
+          <div class="lineup-pos">LF</div>
+          <div class="lineup-hand hand-l">L</div>
+          <div class="lineup-stat">.349 OBP vs L</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">6</div>
+          <div class="lineup-name">Amed Rosario</div>
+          <div class="lineup-pos">3B</div>
+          <div class="lineup-hand hand-r">R</div>
+          <div class="lineup-stat">.328 OBP vs L (2025)</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">7</div>
+          <div class="lineup-name">José Caballero</div>
+          <div class="lineup-pos">RF</div>
+          <div class="lineup-hand hand-r">R</div>
+          <div class="lineup-stat">.341 OBP career vs L</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">8</div>
+          <div class="lineup-name">Anthony Volpe</div>
+          <div class="lineup-pos">SS</div>
+          <div class="lineup-hand hand-r">R</div>
+          <div class="lineup-stat">.320 OBP career vs L</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">9</div>
+          <div class="lineup-name">Jazz Chisholm Jr.</div>
+          <div class="lineup-pos">2B</div>
+          <div class="lineup-hand hand-l">L</div>
+          <div class="lineup-stat">.290 OBP career vs L</div>
+        </div>
+      </div>
+
+      <!-- VS RHP -->
+      <div class="lineup-card">
+        <div class="lineup-card-header">vs. <span>Right-Handed Pitching</span></div>
+        <div class="lineup-row">
+          <div class="lineup-num">1</div>
+          <div class="lineup-name">Trent Grisham</div>
+          <div class="lineup-pos">CF</div>
+          <div class="lineup-hand hand-l">L</div>
+          <div class="lineup-stat">.337 OBP vs R (2026)</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">2</div>
+          <div class="lineup-name">Ben Rice</div>
+          <div class="lineup-pos">1B</div>
+          <div class="lineup-hand hand-l">L</div>
+          <div class="lineup-stat">Best overall hitter available</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">3</div>
+          <div class="lineup-name">Giancarlo Stanton</div>
+          <div class="lineup-pos">DH</div>
+          <div class="lineup-hand hand-r">R</div>
+          <div class="lineup-stat">.297 BA vs R (2026)</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">4</div>
+          <div class="lineup-name">Cody Bellinger</div>
+          <div class="lineup-pos">LF</div>
+          <div class="lineup-hand hand-l">L</div>
+          <div class="lineup-stat">3.5 WAR, team leader</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">5</div>
+          <div class="lineup-name">Jazz Chisholm Jr.</div>
+          <div class="lineup-pos">2B</div>
+          <div class="lineup-hand hand-l">L</div>
+          <div class="lineup-stat">.316 OBP vs R (2026)</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">6</div>
+          <div class="lineup-name">José Caballero</div>
+          <div class="lineup-pos">SS</div>
+          <div class="lineup-hand hand-r">R</div>
+          <div class="lineup-stat">.331 OBP vs R (2026)</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">7</div>
+          <div class="lineup-name">Ryan McMahon</div>
+          <div class="lineup-pos">3B</div>
+          <div class="lineup-hand hand-l">L</div>
+          <div class="lineup-stat">Guaranteed, locked in</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">8</div>
+          <div class="lineup-name">Spencer Jones</div>
+          <div class="lineup-pos">RF</div>
+          <div class="lineup-hand hand-l">L</div>
+          <div class="lineup-stat">Head start over Domínguez</div>
+        </div>
+        <div class="lineup-row">
+          <div class="lineup-num">9</div>
+          <div class="lineup-name">Ali Sánchez</div>
+          <div class="lineup-pos">C</div>
+          <div class="lineup-hand hand-r">R</div>
+          <div class="lineup-stat">.702 OPS at AAA</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      The key strategic difference between these two lineups is Goldschmidt and Volpe. Against lefties,
+      Goldschmidt is one of your best weapons (.492 OBP) and Volpe gets his platoon advantage. Against
+      righties, Goldschmidt's .184 average simply isn't good enough to be in the lineup, and Volpe
+      splits time with Caballero at short.
+    </div>
+
+    <p>
+      One final note on the vs.-lefties lineup: I have Rice at catcher (spot 2). Boone won't do this.
+      His reasoning — that the physical demands of catching reduce Rice's offensive output — isn't wrong
+      in theory. But the production gap between a Rice-at-catcher lineup and a Rice-at-DH lineup where
+      Goldschmidt and Stanton also fit is significant. This is a decision Boone and the front office need
+      to revisit seriously, especially with Wells on the IL.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       5. PAYROLL & FINANCIALS
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-eyebrow">Financial Reality</div>
+    <h2>The 2026 Payroll Picture</h2>
+    <p>
+      Here's the financial reality: the New York Yankees are the most expensive team in baseball right
+      now, and by a significant margin. Understanding the numbers isn't just an academic exercise — it
+      shapes every roster decision they make, from the trade deadline to the offseason.
+    </p>
+
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">2026 Actual Payroll</div>
+        <div class="kpi-value red">$308M</div>
+        <div class="kpi-sub">Estimated cash expenditure</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">2026 Luxury Tax</div>
+        <div class="kpi-value red">$334M</div>
+        <div class="kpi-sub">CBT payroll (AAV-based)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">2025 Final Payroll</div>
+        <div class="kpi-value gold">$296M</div>
+        <div class="kpi-sub">Year-over-year up $12M</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">2027 Projected</div>
+        <div class="kpi-value green">$216M</div>
+        <div class="kpi-sub">Without new signings</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">2027 LTX Est.</div>
+        <div class="kpi-value green">$235M</div>
+        <div class="kpi-sub">Potential CBT reset</div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; color:var(--ny); margin:1.5rem 0 0.5rem;">
+      The CBT — Where the Yankees Stand
+    </h3>
+    <p>
+      The Competitive Balance Tax isn't a hard salary cap, but for the Yankees, the penalties are real
+      enough to function like one. The 2026 thresholds are <strong>$244M, $264M, $284M, and $304M</strong>,
+      with progressively steeper surcharges at each level. Importantly, the Yankees are repeat offenders
+      — they've been above the first threshold for several consecutive years — meaning they pay the
+      <em>highest possible surcharge rates</em> at each tier.
+    </p>
+
+    <div class="cbt-wrap">
+      <div class="cbt-bar-outer">
+        <div class="cbt-fill" style="width: 85%;">
+          $334M Luxury Tax Payroll
+        </div>
+      </div>
+      <div class="cbt-markers">
+        <div class="cbt-marker-label">$0</div>
+        <div class="cbt-marker-label" style="color:#2E7D32; font-weight:600;">$244M Tier 1</div>
+        <div class="cbt-marker-label" style="color:#F9A825; font-weight:600;">$264M Tier 2</div>
+        <div class="cbt-marker-label" style="color:#e65100; font-weight:600;">$284M Tier 3</div>
+        <div class="cbt-marker-label" style="color:var(--red); font-weight:600;">$304M Tier 4</div>
+        <div class="cbt-marker-label">~$395M</div>
+      </div>
+    </div>
+
+    <div class="alert-red">
+      <strong>The Yankees are $30M over the fourth CBT threshold.</strong> At $334M, they're paying
+      the highest surcharge rate on every dollar over $304M. As repeat offenders in the fourth tier,
+      they also face international bonus pool reductions and potential draft pick salary restrictions.
+      There is a real financial cost to this roster that goes well beyond the headline payroll number.
+    </div>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; color:var(--ny); margin:1.5rem 0 0.5rem;">
+      Why 2027 Is the Most Important Financial Year in Recent Yankees History
+    </h3>
+    <p>
+      The chart below shows the dramatic payroll cliff that hits after 2026. A large number of contracts
+      expire — Grisham, Goldschmidt, Chisholm, Bednar, McMahon, Rosario, Hill, Yarbrough, Blackburn,
+      and several others all come off the books. The projected 2027 CBT payroll without any new signings
+      drops to <strong>$235M</strong> — which would be <em>below</em> the first CBT threshold for the
+      first time in years.
+    </p>
+    <p>
+      Why does this matter so much? Because resetting below the CBT threshold resets the penalty clock.
+      A team that comes in under the threshold in one year pays only 20% surcharges (instead of the
+      escalating repeat-offender rates) in subsequent years. The Yankees, if they can stay disciplined
+      in 2027, can then re-enter the spending market at significantly cheaper penalty rates in 2028
+      and beyond. This is the financial strategy that actually makes sense for this franchise long-term.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       6. CONTRACT TABLES
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-eyebrow">Contract Breakdown</div>
+    <h2>Full Roster Contract Status</h2>
+    <p>
+      Understanding who is owed what — and when — is the foundation of any offseason plan. I've broken
+      this into three categories: guaranteed contracts (what the team is locked into regardless of
+      performance or roster moves), arbitration-eligible players (where the team has control but must
+      negotiate), and pre-arbitration players (the cost-controlled core that represents the best
+      value on the roster).
+    </p>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--ny); margin:1.5rem 0 0.5rem;">
+      Guaranteed Contracts
+    </h3>
+    <table class="data-table">
+      <thead><tr>
+        <th>Player</th>
+        <th>Age</th>
+        <th>Svc</th>
+        <th>Contract</th>
+        <th class="right">AAV</th>
+        <th class="right">2026</th>
+        <th class="right">2027</th>
+        <th>After</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="bold">Cody Bellinger</td><td>30.9</td><td>8.16</td><td>2yr/$85M · opt out after '27 or '28</td><td class="right">$44.75M</td><td class="right">$42.5M</td><td class="right">$42.5M</td><td><span class="pill pill-fa">FA / OPT OUT</span></td></tr>
+        <tr><td class="bold">Aaron Judge</td><td>34.1</td><td>9.051</td><td>9yr/$360M (2023–31)</td><td class="right">$40M</td><td class="right">$40M</td><td class="right">$40M</td><td><span class="pill pill-guaranteed">Through 2031</span></td></tr>
+        <tr><td class="bold">Gerrit Cole</td><td>35.7</td><td>12.111</td><td>9yr/$324M (2020–28)</td><td class="right">$36M</td><td class="right">$36M</td><td class="right">$36M</td><td><span class="pill pill-fa">FA after 2028</span></td></tr>
+        <tr><td class="bold">Max Fried <span class="pill pill-il">IL</span></td><td>32.4</td><td>7.148</td><td>8yr/$218M (2025–32)</td><td class="right">$27.25M</td><td class="right">$14.5M</td><td class="right">$31.5M</td><td><span class="pill pill-guaranteed">Through 2032</span></td></tr>
+        <tr><td class="bold">Carlos Rodón</td><td>33.5</td><td>10.168</td><td>6yr/$162M (2023–28)</td><td class="right">$27M</td><td class="right">$27.83M</td><td class="right">$27.83M</td><td><span class="pill pill-fa">FA after 2028</span></td></tr>
+        <tr><td class="bold">Giancarlo Stanton</td><td>36.6</td><td>15.118</td><td>13yr/$325M · 2028 club option</td><td class="right">$25M</td><td class="right">$29M</td><td class="right">$25M</td><td><span class="pill pill-fa">FA after 2027</span></td></tr>
+        <tr><td class="bold">Trent Grisham</td><td>29.6</td><td>6.06</td><td>1yr/$22.025M (2026)</td><td class="right">$22.025M</td><td class="right">$22.025M</td><td class="right">—</td><td><span class="pill pill-fa">FA</span></td></tr>
+        <tr><td class="bold">Ryan McMahon</td><td>31.5</td><td>8.006</td><td>6yr/$70M (2022–27)</td><td class="right">$15.4M</td><td class="right">$16M</td><td class="right">$16M</td><td><span class="pill pill-fa">FA after 2027</span></td></tr>
+        <tr><td class="bold">Paul Goldschmidt</td><td>38.7</td><td>14.059</td><td>1yr/$4M (2026)</td><td class="right">$4M</td><td class="right">$4M</td><td class="right">—</td><td><span class="pill pill-fa">FA</span></td></tr>
+        <tr><td class="bold">Tim Hill</td><td>36.3</td><td>7.112</td><td>2yr/$5.5M · 2026 club option exercised</td><td class="right">$3M</td><td class="right">$3M</td><td class="right">—</td><td><span class="pill pill-fa">FA</span></td></tr>
+        <tr><td class="bold">Ryan Yarbrough</td><td>34.4</td><td>7.117</td><td>1yr/$2.5M (2026)</td><td class="right">$2.5M</td><td class="right">$2.5M</td><td class="right">—</td><td><span class="pill pill-fa">FA</span></td></tr>
+        <tr><td class="bold">Amed Rosario</td><td>30.5</td><td>8.062</td><td>1yr/$2.5M (2026)</td><td class="right">$2.5M</td><td class="right">$2.5M</td><td class="right">—</td><td><span class="pill pill-fa">FA</span></td></tr>
+        <tr><td class="bold">Paul Blackburn</td><td>32.5</td><td>6.018</td><td>1yr/$2M (2026)</td><td class="right">$2M</td><td class="right">$2M</td><td class="right">—</td><td><span class="pill pill-fa">FA</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--ny); margin:1.5rem 0 0.5rem;">
+      Arbitration-Eligible Players
+    </h3>
+    <table class="data-table">
+      <thead><tr>
+        <th>Player</th>
+        <th>Age</th>
+        <th>Svc</th>
+        <th class="right">2026 Salary</th>
+        <th>2027 Status</th>
+        <th>2028 Status</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="bold">Jazz Chisholm Jr.</td><td>28.3</td><td>5.075</td><td class="right">$10.2M</td><td><span class="pill pill-fa">FREE AGENT</span></td><td>—</td></tr>
+        <tr><td class="bold">David Bednar</td><td>31.7</td><td>5.076</td><td class="right">$9M</td><td><span class="pill pill-fa">FREE AGENT</span></td><td>—</td></tr>
+        <tr><td class="bold">Camilo Doval</td><td>28.9</td><td>4.071</td><td class="right">$6.1M</td><td><span class="pill pill-arb">ARB 3</span></td><td><span class="pill pill-fa">FA</span></td></tr>
+        <tr><td class="bold">Clarke Schmidt</td><td>30.3</td><td>4.148</td><td class="right">$4.5M</td><td><span class="pill pill-arb">ARB 4</span></td><td><span class="pill pill-fa">FA</span></td></tr>
+        <tr><td class="bold">Anthony Volpe</td><td>25.1</td><td>3.0</td><td class="right">$3.475M</td><td><span class="pill pill-arb">ARB 2</span></td><td><span class="pill pill-arb">ARB 3</span></td></tr>
+        <tr><td class="bold">Luis Gil</td><td>28</td><td>3.073</td><td class="right">$2.162M</td><td><span class="pill pill-arb">ARB 2</span></td><td><span class="pill pill-arb">ARB 3</span></td></tr>
+        <tr><td class="bold">José Caballero</td><td>29.8</td><td>2.17</td><td class="right">$2M</td><td><span class="pill pill-arb">ARB 2</span></td><td><span class="pill pill-arb">ARB 3</span></td></tr>
+        <tr><td class="bold">Fernando Cruz</td><td>36.2</td><td>3.035</td><td class="right">$1.45M</td><td><span class="pill pill-arb">ARB 2</span></td><td><span class="pill pill-arb">ARB 3</span></td></tr>
+        <tr><td class="bold">Ryan Weathers</td><td>26.5</td><td>3.066</td><td class="right">$1.35M</td><td><span class="pill pill-arb">ARB 2</span></td><td><span class="pill pill-arb">ARB 3</span></td></tr>
+        <tr><td class="bold">Oswaldo Cabrera</td><td>27.3</td><td>3.05</td><td class="right">$1.2M</td><td><span class="pill pill-arb">ARB 2</span></td><td><span class="pill pill-arb">ARB 3</span></td></tr>
+        <tr><td class="bold">Jake Bird</td><td>30.5</td><td>3.051</td><td class="right">$975K</td><td><span class="pill pill-arb">ARB 2</span></td><td><span class="pill pill-arb">ARB 3</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--ny); margin:1.5rem 0 0.5rem;">
+      Pre-Arbitration Players — The Cost-Controlled Core
+    </h3>
+    <p>
+      These are the players I want to protect most in any trade discussion. On a team carrying over
+      $300M in payroll, these pre-arb contracts are the most valuable financial assets on the roster.
+    </p>
+    <table class="data-table">
+      <thead><tr>
+        <th>Player</th>
+        <th>Age</th>
+        <th>Svc</th>
+        <th class="right">2026 Salary</th>
+        <th>2027</th>
+        <th>2028</th>
+        <th>2029</th>
+        <th>FA</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="bold">Austin Wells <span class="pill pill-il">IL10</span></td><td>26.9</td><td>2.031</td><td class="right">$866.2K</td><td><span class="pill pill-arb">ARB 1</span></td><td><span class="pill pill-arb">ARB 2</span></td><td><span class="pill pill-arb">ARB 3</span></td><td>2030</td></tr>
+        <tr><td class="bold">Ben Rice</td><td>27.3</td><td>1.076</td><td class="right">$845.8K</td><td><span class="pill pill-prearb">Pre-ARB</span></td><td><span class="pill pill-arb">ARB 1</span></td><td><span class="pill pill-arb">ARB 2</span></td><td>2031</td></tr>
+        <tr><td class="bold">Will Warren</td><td>27</td><td>1.016</td><td class="right">$826.6K</td><td><span class="pill pill-prearb">Pre-ARB</span></td><td><span class="pill pill-arb">ARB 1</span></td><td><span class="pill pill-arb">ARB 2</span></td><td>2031</td></tr>
+        <tr><td class="bold">Jasson Domínguez <span class="pill pill-il">IL60 · AC Sprain</span></td><td>23.3</td><td>1.13</td><td class="right">TBD</td><td><span class="pill pill-arb">ARB 1</span></td><td><span class="pill pill-arb">ARB 2</span></td><td><span class="pill pill-arb">ARB 3</span></td><td>2030</td></tr>
+        <tr><td class="bold">Cam Schlittler</td><td>25.3</td><td>0.082</td><td class="right">$801.4K</td><td><span class="pill pill-prearb">Pre-ARB</span></td><td><span class="pill pill-prearb">Pre-ARB</span></td><td><span class="pill pill-arb">ARB 1</span></td><td>2032</td></tr>
+        <tr><td class="bold">Brent Headrick</td><td>28.5</td><td>0.171</td><td class="right">$792.7K</td><td><span class="pill pill-prearb">Pre-ARB</span></td><td><span class="pill pill-arb">ARB 1</span></td><td><span class="pill pill-arb">ARB 2</span></td><td>2031</td></tr>
+      </tbody>
+    </table>
+    <div class="footnote">
+      * The league minimum salary for 2026 is $780,000. Pre-arbitration players have no power to negotiate their salary — the club sets it. Schlittler at $801K generating 2.9 WAR is the most extreme value contract on this roster.
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       7. ARBITRATION PRIMER
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-eyebrow">Education</div>
+    <h2>Arbitration Primer — How It Actually Works</h2>
+    <p>
+      For any analysis of the Yankees' roster to be useful, you need to understand the arbitration system.
+      It's the mechanism that controls player salaries from roughly year three through year six of a
+      player's career, and it has a massive impact on team-building decisions. Here's how it works.
+    </p>
+
+    <div class="arb-rule">
+      <h4>Who Is Eligible?</h4>
+      <p>
+        A player reaches "one year" of Major League service time by accumulating 172 days in a given
+        season. Once a player reaches <strong>three years of service time</strong>, they become
+        arbitration-eligible — assuming they haven't already signed a contract for the upcoming season.
+        They remain eligible each offseason until they hit <strong>six years of service time</strong>,
+        at which point they become eligible for free agency.
+      </p>
+    </div>
+
+    <div class="arb-rule">
+      <h4>The "Super Two" Designation</h4>
+      <p>
+        Players with <strong>more than two but less than three years</strong> of service time can also
+        become arbitration-eligible early if they rank in the top 22% in terms of service time among
+        all players in that range — and have accumulated at least 86 days of service the prior season.
+        These players are called "Super Two" players, and they get <strong>four years of arbitration
+        eligibility</strong> instead of three. This is why teams often manipulate service time by keeping
+        top prospects in the minors a few extra weeks at the start of a season — to avoid triggering
+        Super Two status and gain an additional pre-arb year.
+      </p>
+    </div>
+
+    <div class="arb-rule">
+      <h4>How Does the Process Work?</h4>
+      <p>
+        If a player and team can't agree on a salary by the January deadline, both sides exchange
+        salary figures. A hearing is then scheduled for February, where both sides present arguments
+        to a panel of arbitrators. Critically, the panel <strong>must choose one figure or the other</strong>
+        — they cannot split the difference. This "final offer" structure incentivizes both sides to
+        submit reasonable numbers and pushes the vast majority of cases to settle before the hearing.
+        In practice, most cases are resolved in the week before figures are exchanged.
+      </p>
+    </div>
+
+    <div class="arb-rule">
+      <h4>What Does "Tender a Contract" Mean?</h4>
+      <p>
+        To <strong>tender</strong> a contract means the team agrees to give the player a contract for
+        the upcoming season. Controllable players on the 40-man roster must be tendered by a set
+        deadline or they become "non-tendered" free agents immediately — no compensation, no control.
+        A team will non-tender a player when the projected arbitration salary exceeds the player's
+        value to the team. This is a key offseason decision point.
+      </p>
+    </div>
+
+    <h3 style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--ny); margin:1.5rem 0 0.75rem;">
+      Notable Arbitration Benchmarks
+    </h3>
+    <div class="two-col">
+      <div>
+        <div style="font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:0.5rem;">Highest Single-Year Arb Salaries</div>
+        <div class="notable-record"><span class="rec-name">Tarik Skubal (3rd yr)</span><span><span class="rec-year">2026</span> <span class="rec-amt">$32M</span></span></div>
+        <div class="notable-record"><span class="rec-name">Juan Soto (4th yr, Super Two)</span><span><span class="rec-year">2024</span> <span class="rec-amt">$31M</span></span></div>
+        <div class="notable-record"><span class="rec-name">Shohei Ohtani (3rd yr)</span><span><span class="rec-year">2023</span> <span class="rec-amt">$30M</span></span></div>
+        <div class="notable-record"><span class="rec-name">Vladmir Guerrero Jr. (4th yr, Super Two)</span><span><span class="rec-year">2025</span> <span class="rec-amt">$28.5M</span></span></div>
+        <div class="notable-record"><span class="rec-name">Mookie Betts (3rd yr)</span><span><span class="rec-year">2020</span> <span class="rec-amt">$27M</span></span></div>
+      </div>
+      <div>
+        <div style="font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:0.5rem;">Records by Arb Year</div>
+        <div class="notable-record"><span class="rec-name">1st Year Record</span><span><span class="rec-year">Cody Bellinger, 2020</span> <span class="rec-amt">$11.5M</span></span></div>
+        <div class="notable-record"><span class="rec-name">2nd Year Record</span><span><span class="rec-year">Mookie Betts, 2019</span> <span class="rec-amt">$20M</span></span></div>
+        <div class="notable-record"><span class="rec-name">3rd Year Record</span><span><span class="rec-year">Tarik Skubal, 2026</span> <span class="rec-amt">$32M</span></span></div>
+        <div class="notable-record"><span class="rec-name">Hearing winner (largest)</span><span><span class="rec-year">Tarik Skubal, 2026</span> <span class="rec-amt">$32M</span></span></div>
+      </div>
+    </div>
+    <span class="source-tag">Source: MLB Trade Rumors arbitration database · MLBPA records</span>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       8. OFFSEASON PLAN
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-eyebrow">2026–27 Offseason Strategy</div>
+    <h2>The Offseason Plan — What I Would Do</h2>
+    <p>
+      The Yankees face a genuinely consequential offseason. They have real financial flexibility coming,
+      a clear set of roster needs, and a cost-controlled pitching core that gives them leverage in trade
+      discussions. Here is how I would approach it, in priority order.
+    </p>
+
+    <div class="os-priority os-critical">
+      <div class="os-tier">🔴 Critical Priority</div>
+      <h3>Upgrade the Catcher Position</h3>
+      <p>
+        This was the most pressing need before Wells went on the IL. It is now a crisis. Austin Wells'
+        .166/.278/.255 offensive line and −0.2 WAR through 47 games is not acceptable for a team with
+        World Series expectations, even granting him above-average defensive value. The Wells situation
+        needs to be addressed in the offseason — either through a trade for a legitimate starter or by
+        committing to a veteran free-agent upgrade.
+        <br><br>
+        My recommendation is a trade. The Yankees have pitching depth in the minor leagues — their system
+        is heavy on arms at A and A+ — and a B-level SP prospect can acquire a 26-to-30-year-old catcher
+        with a .700+ OPS and plus receiving grades. This is the most important transaction of the offseason.
+      </p>
+    </div>
+
+    <div class="os-priority os-critical">
+      <div class="os-tier">🔴 Critical Priority</div>
+      <h3>Address the Closer Role — Bednar Decision</h3>
+      <p>
+        David Bednar is a free agent after 2026 at $9M. He is a legitimate late-inning arm and one of
+        the better closers the Yankees have had in recent memory. The decision isn't whether he's worth
+        paying — he is. The decision is whether to extend him now (before he hits the open market and
+        another team sets the price), or let him walk and address the need through trade or free agency.
+        <br><br>
+        My preference is to get a deal done before the offseason if possible. Closer production is
+        volatile year to year, and locking in a known quantity beats rolling the dice on the market.
+        The bullpen, already without Chivilli for now, can't afford uncertainty at the back end.
+      </p>
+    </div>
+
+    <div class="os-priority os-high">
+      <div class="os-tier">🟡 High Priority</div>
+      <h3>Re-Sign Trent Grisham in Center Field</h3>
+      <p>
+        Grisham is on a 1-year, $22M deal and will be a free agent. He has been one of the most
+        underappreciated Yankees this season — above-average defense in center, consistent contact
+        rates, and the kind of steady production that doesn't show up in highlights but absolutely
+        shows up in winning games.
+        <br><br>
+        The alternative is sliding Bellinger to center and using a cheaper corner outfield option —
+        but that creates a different set of problems. My recommendation is a 2-year deal in the
+        $20–22M AAV range. It keeps the outfield stable while Domínguez recovers and gives the
+        organization time to evaluate Jones and Domínguez without forcing a premature decision.
+      </p>
+    </div>
+
+    <div class="os-priority os-high">
+      <div class="os-tier">🟡 High Priority</div>
+      <h3>The Chisholm Decision — Re-Sign or Move On</h3>
+      <p>
+        Jazz Chisholm Jr. is a free agent after 2026. He's been one of the most exciting players
+        on this roster when healthy — elite athleticism, legitimate power, and a club presence that
+        matters. But he's also injury-prone, and at $10.2M this year, his 2027 free-agent price
+        will be considerably higher.
+        <br><br>
+        This is genuinely a hard call. If Chisholm finishes the season at or above his current
+        production level, I'd explore an extension — 4 years / $80M is a reasonable framework.
+        If his performance is inconsistent, the more financially prudent move is to let him walk
+        and use that budget toward the catcher upgrade and pitching depth. The second baseman
+        market will not be as competitive as the catcher or outfield markets in 2027, and there
+        are internal bridge options (Caballero can play 2B) until Core Jackson is MLB-ready.
+      </p>
+    </div>
+
+    <div class="os-priority os-monitor">
+      <div class="os-tier">🔵 Monitor &amp; Manage</div>
+      <h3>Leverage the 2027 Financial Reset</h3>
+      <p>
+        The single most important strategic concept for the Yankees' front office going into this
+        offseason is the 2027 CBT reset. At $235M projected LTX payroll without new signings —
+        below the first $244M threshold — the Yankees have a chance to reset their penalty tier
+        for the first time in years.
+        <br><br>
+        This means every offseason signing needs to be evaluated not just on baseball value, but
+        on CBT impact. An extra $20M in free agent spending could keep them above the threshold
+        and cost them significantly more in surcharges on every subsequent dollar. The front office
+        needs to model both scenarios: reset by staying under, or continue spending and accept the
+        higher penalty rates. My view is that the reset is worth prioritizing — a one-year discipline
+        in 2027 creates cheaper access to talent in 2028 and 2029, exactly when Cole's contract
+        expires and the rotation will need to be rebuilt.
+      </p>
+    </div>
+
+    <div class="os-priority os-monitor">
+      <div class="os-tier">🔵 Monitor &amp; Manage</div>
+      <h3>Protect the Cost-Controlled Core in Trades</h3>
+      <p>
+        On a roster carrying over $300M in guaranteed money, the pre-arb players are
+        disproportionately valuable. <strong>Cam Schlittler at $801K generating 2.9 WAR</strong>
+        is the most obvious example — that production at that price doesn't exist anywhere on the
+        free agent market. Ben Rice, Will Warren, Brent Headrick, and Anthony Volpe represent
+        similar value. Any trade discussion involving these players needs to pass an extremely
+        high bar. The Yankees' pitching depth at the A/A+ level is the correct trade currency —
+        not the cost-controlled MLB contributors already on the roster.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       9. CLOSING
+  ══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-eyebrow">Closing Thoughts</div>
+    <h2>The Path Forward</h2>
+    <p>
+      The 2026 Yankees are a good team navigating a difficult stretch. They have genuine World Series
+      talent — Judge when healthy, Bellinger leading the position players, Schlittler emerging as an
+      ace-caliber arm, and a bullpen capable of closing games. What they don't have is depth at
+      catcher or a clean answer for what happens when the bottom of the lineup needs to produce.
+    </p>
+    <p>
+      The financial picture is actually more optimistic than the 2026 CBT number suggests. The 2027
+      cliff in payroll obligations is real, and the opportunity to reset the penalty clock while
+      re-investing smartly in the right positions is right there. The front office that executes this
+      offseason well — signing Grisham, upgrading catcher, making a decision on Bednar and Chisholm,
+      and staying disciplined on the CBT — gives this franchise a realistic path to compete at the
+      highest level in 2027 and 2028, not just survive until the Judge contract runs out.
+    </p>
+    <p>
+      The talent is there. The money is (mostly) manageable. The decisions are clear. Now it's about
+      execution.
+    </p>
+  </div>
+
+  <div style="border-top:1px solid #e0e0e0; padding-top:1.25rem; margin-top:2rem;">
+    <div style="font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:0.75rem;">Sources & References</div>
+    <div style="display:flex; flex-wrap:wrap; gap:0.6rem; margin-bottom:1rem;">
+      <a href="https://www.baseball-reference.com" target="_blank" rel="noopener" style="display:inline-block; background:var(--ny); color:#fff; padding:0.3rem 0.9rem; border-radius:20px; font-size:0.75rem; font-weight:600; text-decoration:none;">Baseball Reference</a>
+      <a href="https://www.fangraphs.com" target="_blank" rel="noopener" style="display:inline-block; background:var(--ny); color:#fff; padding:0.3rem 0.9rem; border-radius:20px; font-size:0.75rem; font-weight:600; text-decoration:none;">Fangraphs</a>
+      <a href="https://www.mlb.com" target="_blank" rel="noopener" style="display:inline-block; background:var(--ny); color:#fff; padding:0.3rem 0.9rem; border-radius:20px; font-size:0.75rem; font-weight:600; text-decoration:none;">MLB.com</a>
+      <a href="https://www.sportsbettingdime.com/guides/strategy/batting-order-sabermetrics/" target="_blank" rel="noopener" style="display:inline-block; background:var(--ny); color:#fff; padding:0.3rem 0.9rem; border-radius:20px; font-size:0.75rem; font-weight:600; text-decoration:none;">Sabermetric Batting Order Guide</a>
+      <a href="https://www.mlbtraderumors.com" target="_blank" rel="noopener" style="display:inline-block; background:var(--ny); color:#fff; padding:0.3rem 0.9rem; border-radius:20px; font-size:0.75rem; font-weight:600; text-decoration:none;">MLB Trade Rumors (Arb Data)</a>
+    </div>
+    <div style="text-align:right; font-size:0.7rem; color:var(--muted); font-style:italic;">
+      Yankees Baseball Operations Portfolio · Kyle Flynn · Baseball Operations Analysis · June 8, 2026
+    </div>
+  </div>
+
+</div>
+{% endblock %}

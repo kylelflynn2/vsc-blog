@@ -218,13 +218,250 @@
         table.data-table th, table.data-table td { padding: 0.45rem 0.5rem; }
         .analysis-section { padding: 1.25rem; }
     }
+
+    /* ── Current Lineup & Rotation ───────────────────────────────── */
+    .lineups-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .dated-lineup-card {
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    .dlc-header {
+        background: var(--navy);
+        color: var(--white);
+        padding: 0.75rem 1.25rem;
+    }
+    .dlc-date {
+        display: block;
+        color: var(--gold);
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 0.15rem;
+    }
+    .dlc-header h4 {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.05rem;
+        margin: 0;
+        color: var(--white);
+    }
+    .lp-row {
+        display: grid;
+        grid-template-columns: 28px 24px 1fr auto;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.55rem 1rem;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.88rem;
+    }
+    .lp-row:last-child { border-bottom: none; }
+    .lp-row:hover { background: var(--cream); }
+    .lp-num {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.2rem;
+        color: var(--gold);
+        text-align: center;
+        line-height: 1;
+    }
+    .lp-hand {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        font-size: 0.6rem;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+    .hand-L { background: #1A2744; color: #fff; }
+    .hand-R { background: #D4AF37; color: #1A2744; }
+    .hand-S { background: #5A6472; color: #fff; }
+    .lp-name { font-weight: 600; color: var(--navy); }
+    .lp-pos  { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-align: right; letter-spacing: 0.04em; }
+    .era-good { color: #2E7D32; font-weight: 700; }
+    .era-ok   { color: #E67E22; font-weight: 700; }
+    .era-bad  { color: #C0392B; font-weight: 700; }
+
+    /* ── Path to Contention styles ─────────────────────────────────── */
+    .priority-banner {
+        background: linear-gradient(135deg, var(--navy) 0%, #2A3F5F 100%);
+        color: var(--white);
+        border-radius: 6px;
+        padding: 1.75rem 2rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .priority-banner::after {
+        content: '';
+        position: absolute;
+        top: 0; right: 0;
+        width: 240px; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(212,175,55,0.09));
+        pointer-events: none;
+    }
+    .priority-badge {
+        background: var(--gold);
+        color: var(--navy);
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 0.25rem 0.75rem;
+        border-radius: 3px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-right: 0.6rem;
+    }
+    .priority-eyebrow {
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.6);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        vertical-align: middle;
+    }
+    .priority-banner h3 {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.55rem;
+        color: var(--white);
+        margin: 0.6rem 0 0.6rem;
+    }
+    .priority-banner p {
+        font-size: 0.95rem;
+        color: rgba(255,255,255,0.85);
+        line-height: 1.7;
+        margin: 0 0 1rem;
+        max-width: 820px;
+    }
+    .priority-stat-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 0.5rem;
+    }
+    .p-mini-stat .v {
+        display: block;
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.5rem;
+        color: var(--gold);
+        line-height: 1.1;
+    }
+    .p-mini-stat .l {
+        font-size: 0.65rem;
+        color: rgba(255,255,255,0.65);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .contention-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+    .contention-card {
+        background: var(--cream);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--navy);
+        border-radius: 4px;
+        padding: 1.25rem 1.5rem;
+    }
+    .contention-card.gold  { border-left-color: var(--gold); }
+    .contention-card.red   { border-left-color: #C0392B; }
+    .contention-card.green { border-left-color: #2E7D32; }
+    .contention-card h3 {
+        font-family: 'DM Serif Display', serif;
+        color: var(--navy);
+        font-size: 1.15rem;
+        margin: 0 0 0.5rem;
+    }
+    .contention-card p {
+        font-size: 0.92rem;
+        color: var(--text-muted);
+        line-height: 1.65;
+        margin: 0 0 0.5rem;
+    }
+    .contention-card p:last-child { margin-bottom: 0; }
+
+    .spending-callout {
+        background: #FFFBEE;
+        border: 1px solid #D4AF37;
+        border-radius: 5px;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .spending-callout .sc-heading {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--navy);
+        margin-bottom: 0.75rem;
+    }
+    .spending-callout table { width: 100%; font-size: 0.88rem; border-collapse: collapse; }
+    .spending-callout td { padding: 0.4rem 0.5rem; border-bottom: 1px solid rgba(212,175,55,0.25); color: var(--text-dark); }
+    .spending-callout tr:last-child td { border-bottom: none; }
+    .spending-callout td:first-child { font-weight: 600; color: var(--navy); width: 38%; }
+
+    .prospect-tag {
+        display: inline-block;
+        background: var(--navy);
+        color: var(--white);
+        font-size: 0.65rem;
+        font-weight: 700;
+        padding: 0.15rem 0.5rem;
+        border-radius: 3px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-right: 0.4rem;
+        vertical-align: middle;
+    }
+
+    .sub-heading {
+        font-family: 'DM Serif Display', serif;
+        color: var(--navy);
+        font-size: 1.2rem;
+        margin: 1.75rem 0 0.75rem;
+    }
+
+    .window-thesis {
+        background: var(--navy);
+        color: var(--white);
+        border-radius: 6px;
+        padding: 2rem 2.5rem;
+        margin-top: 1.75rem;
+        text-align: center;
+    }
+    .window-thesis h3 {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.65rem;
+        color: var(--gold);
+        margin-bottom: 0.75rem;
+    }
+    .window-thesis p {
+        font-size: 0.97rem;
+        color: rgba(255,255,255,0.88);
+        max-width: 720px;
+        margin: 0 auto;
+        line-height: 1.75;
+    }
+    @media (max-width: 600px) {
+        .priority-stat-row { gap: 1rem; }
+        .priority-banner h3 { font-size: 1.25rem; }
+        .window-thesis { padding: 1.5rem 1.25rem; }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <section class="project-header">
     <h1>Rebuilding the 2026 Chicago White Sox</h1>
-    <p class="subtitle">A WAR-based valuation model — seven analyses operating on the team's 2026 batting data through 55 games.</p>
+    <p class="subtitle">A WAR-based valuation model — eight analyses operating on the team's 2026 batting data through 63 games.</p>
 </section>
 
 <div class="project-container">
@@ -403,102 +640,120 @@
         </table>
     </section>
 
-    <!-- 4. OPTIMAL LINEUP -->
+    <!-- 4. CURRENT LINEUP & ROTATION -->
     <section class="analysis-section">
-        <span class="section-tag">Analysis 04</span>
-        <h2>wOBA-Weighted Optimal Lineup</h2>
+        <span class="section-tag">Analysis 04 — Current Lineups</span>
+        <h2>Current Lineups &amp; Starting Rotation</h2>
         <p class="section-desc">
-            Built using The Book (Tango / Lichtman / Dolphin): the #2 hitter sees the most
-            leveraged PA, then #4, then #1, so the best hitters are placed there first.
-            Remaining slots fill by wOBA descending.
+            Official game lineups from June 5 and June 7, 2026. With Murakami on the 10-day IL
+            (left quadriceps strain), the infield reshuffled: Vargas shifted to 1B on 6/5, and
+            Jacob Gonzalez was called up to take 1B by 6/7, allowing Vargas back to 3B and
+            Montgomery back to his natural shortstop position.
         </p>
 
-        <div class="stat-grid">
-            <div class="stat-card">
-                <div class="stat-label">Lineup Mean wOBA</div>
-                <div class="stat-value">{{ '%.3f'|format(lineup.mean_woba) }}</div>
+        <div class="lineups-grid">
+            <!-- 6/5 LINEUP -->
+            <div class="dated-lineup-card">
+                <div class="dlc-header">
+                    <span class="dlc-date">June 5, 2026</span>
+                    <h4>CWS Batting Order</h4>
+                </div>
+                <div class="lp-row"><span class="lp-num">1</span><span class="lp-hand hand-R">R</span><span class="lp-name">Chase Meidroth</span><span class="lp-pos">2B</span></div>
+                <div class="lp-row"><span class="lp-num">2</span><span class="lp-hand hand-R">R</span><span class="lp-name">Randal Grichuk</span><span class="lp-pos">DH</span></div>
+                <div class="lp-row"><span class="lp-num">3</span><span class="lp-hand hand-R">R</span><span class="lp-name">Miguel Vargas</span><span class="lp-pos">1B</span></div>
+                <div class="lp-row"><span class="lp-num">4</span><span class="lp-hand hand-L">L</span><span class="lp-name">Colson Montgomery</span><span class="lp-pos">3B</span></div>
+                <div class="lp-row"><span class="lp-num">5</span><span class="lp-hand hand-S">S</span><span class="lp-name">Edgar Quero</span><span class="lp-pos">C</span></div>
+                <div class="lp-row"><span class="lp-num">6</span><span class="lp-hand hand-R">R</span><span class="lp-name">Derek Hill</span><span class="lp-pos">RF</span></div>
+                <div class="lp-row"><span class="lp-num">7</span><span class="lp-hand hand-L">L</span><span class="lp-name">Sam Antonacci</span><span class="lp-pos">LF</span></div>
+                <div class="lp-row"><span class="lp-num">8</span><span class="lp-hand hand-R">R</span><span class="lp-name">Luisangel Acu&ntilde;a</span><span class="lp-pos">SS</span></div>
+                <div class="lp-row"><span class="lp-num">9</span><span class="lp-hand hand-L">L</span><span class="lp-name">Tristan Peters</span><span class="lp-pos">CF</span></div>
             </div>
-            <div class="stat-card">
-                <div class="stat-label">League wOBA</div>
-                <div class="stat-value">{{ '%.3f'|format(lineup.league_woba) }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Est. Runs / Game</div>
-                <div class="stat-value">{{ lineup.runs_per_game_est }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Candidates Considered</div>
-                <div class="stat-value">{{ lineup.candidates_considered }}</div>
+
+            <!-- 6/7 LINEUP -->
+            <div class="dated-lineup-card">
+                <div class="dlc-header">
+                    <span class="dlc-date">June 7, 2026</span>
+                    <h4>CWS Batting Order</h4>
+                </div>
+                <div class="lp-row"><span class="lp-num">1</span><span class="lp-hand hand-L">L</span><span class="lp-name">Sam Antonacci</span><span class="lp-pos">LF</span></div>
+                <div class="lp-row"><span class="lp-num">2</span><span class="lp-hand hand-R">R</span><span class="lp-name">Miguel Vargas</span><span class="lp-pos">3B</span></div>
+                <div class="lp-row"><span class="lp-num">3</span><span class="lp-hand hand-L">L</span><span class="lp-name">Andrew Benintendi</span><span class="lp-pos">DH</span></div>
+                <div class="lp-row"><span class="lp-num">4</span><span class="lp-hand hand-L">L</span><span class="lp-name">Colson Montgomery</span><span class="lp-pos">SS</span></div>
+                <div class="lp-row"><span class="lp-num">5</span><span class="lp-hand hand-R">R</span><span class="lp-name">Chase Meidroth</span><span class="lp-pos">2B</span></div>
+                <div class="lp-row"><span class="lp-num">6</span><span class="lp-hand hand-L">L</span><span class="lp-name">Jacob Gonzalez</span><span class="lp-pos">1B</span></div>
+                <div class="lp-row"><span class="lp-num">7</span><span class="lp-hand hand-L">L</span><span class="lp-name">Tristan Peters</span><span class="lp-pos">CF</span></div>
+                <div class="lp-row"><span class="lp-num">8</span><span class="lp-hand hand-S">S</span><span class="lp-name">Drew Romo</span><span class="lp-pos">C</span></div>
+                <div class="lp-row"><span class="lp-num">9</span><span class="lp-hand hand-L">L</span><span class="lp-name">Rikuu Nishida</span><span class="lp-pos">RF</span></div>
             </div>
         </div>
 
-        <ol class="lineup-list">
-            {% for p in lineup.lineup %}
-            <li class="lineup-row">
-                <span class="lineup-slot">{{ loop.index }}</span>
-                <div>
-                    <div class="lineup-name">{{ p.name }} <span class="lineup-meta">({{ p.pos }})</span></div>
-                    <div class="lineup-meta">{{ p.selected_for }}</div>
-                </div>
-                <div class="lineup-woba">wOBA {{ '%.3f'|format(p.woba) }}</div>
-            </li>
-            {% endfor %}
-        </ol>
+        <!-- ROTATION -->
+        <h3 style="font-family:'DM Serif Display',serif;color:var(--navy);font-size:1.2rem;margin-bottom:0.75rem;">2026 Starting Rotation</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Pitcher</th>
+                    <th class="num">W–L</th>
+                    <th class="num">ERA</th>
+                    <th class="num">WHIP</th>
+                    <th class="num">IP</th>
+                    <th class="num">GS</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Davis Martin</strong></td>
+                    <td class="num">8–2</td>
+                    <td class="num era-good">2.61</td>
+                    <td class="num era-good">1.14</td>
+                    <td class="num">72.1</td>
+                    <td class="num">12</td>
+                    <td>Ace of the staff; best arm on the roster</td>
+                </tr>
+                <tr>
+                    <td><strong>Sean Burke</strong></td>
+                    <td class="num">3–3</td>
+                    <td class="num era-ok">3.88</td>
+                    <td class="num era-ok">1.23</td>
+                    <td class="num">69.2</td>
+                    <td class="num">10</td>
+                    <td>Solid #2; young pre-arb arm with upside</td>
+                </tr>
+                <tr>
+                    <td>Anthony Kay</td>
+                    <td class="num">5–1</td>
+                    <td class="num era-ok">4.40</td>
+                    <td class="num era-ok">1.49</td>
+                    <td class="num">61.1</td>
+                    <td class="num">11</td>
+                    <td>2 yr / $12M (2026–27); swing-man / #3</td>
+                </tr>
+                <tr>
+                    <td>Erick Fedde</td>
+                    <td class="num">1–5</td>
+                    <td class="num era-bad">4.94</td>
+                    <td class="num era-ok">1.35</td>
+                    <td class="num">58.1</td>
+                    <td class="num">8</td>
+                    <td>1 yr / $1.5M; expiring; rotation filler</td>
+                </tr>
+                <tr>
+                    <td>Noah Schultz</td>
+                    <td class="num">2–4</td>
+                    <td class="num era-bad">5.82</td>
+                    <td class="num era-bad">1.60</td>
+                    <td class="num">38.2</td>
+                    <td class="num">8</td>
+                    <td>Pre-arb; command issues; high ceiling</td>
+                </tr>
+            </tbody>
+        </table>
     </section>
 
-    <!-- 5. TOP-PA LINEUP (everyday regulars) -->
+    <!-- 5. SABERMETRIC LINEUP -->
     <section class="analysis-section">
         <span class="section-tag">Analysis 05</span>
-        <h2>Top-PA Lineup — Everyday Regulars</h2>
-        <p class="section-desc">
-            The nine available (non-IL, non-DFA) batters with the most plate appearances this season,
-            slotted using The Book's leverage heuristic: best hitter at #2, cleanup at #4, best OBP at #1.
-            This answers "who should be penciled in right now" based purely on usage.
-        </p>
-
-        {% if top_pa_lineup.lineup %}
-        <div class="stat-grid">
-            <div class="stat-card">
-                <div class="stat-label">Total PA in Pool</div>
-                <div class="stat-value">{{ top_pa_lineup.total_pa }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Mean PA per Player</div>
-                <div class="stat-value">{{ top_pa_lineup.mean_pa }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Lineup Mean wOBA</div>
-                <div class="stat-value">{{ '%.3f'|format(top_pa_lineup.mean_woba) }}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Available Players</div>
-                <div class="stat-value">{{ top_pa_lineup.candidates_considered }}</div>
-            </div>
-        </div>
-
-        <ol class="lineup-list">
-            {% for p in top_pa_lineup.lineup %}
-            <li class="lineup-row">
-                <span class="lineup-slot">{{ loop.index }}</span>
-                <div>
-                    <div class="lineup-name">{{ p.name }} <span class="lineup-meta">({{ p.pos }})</span></div>
-                    <div class="lineup-meta">{{ p.selected_for }}</div>
-                </div>
-                <div style="text-align:right;">
-                    <div class="lineup-woba">wOBA {{ '%.3f'|format(p.woba) }}</div>
-                    <div class="lineup-meta">{{ p.pa }} PA</div>
-                </div>
-            </li>
-            {% endfor %}
-        </ol>
-        {% else %}
-        <p class="section-desc">Not enough available players to construct a lineup.</p>
-        {% endif %}
-    </section>
-
-    <!-- 6. SABERMETRIC LINEUP -->
-    <section class="analysis-section">
-        <span class="section-tag">Analysis 06</span>
         <h2>Sabermetric Optimal Lineup</h2>
         <p class="section-desc">
             Lineup ordered by a composite score weighting <strong>Rbat+</strong> (park-adjusted batting
@@ -568,9 +823,9 @@
         {% endif %}
     </section>
 
-    <!-- 7. INJURY REPORT -->
+    <!-- 6. INJURY REPORT -->
     <section class="analysis-section">
-        <span class="section-tag">Injury Report</span>
+        <span class="section-tag">Analysis 06 — Injury Report</span>
         <h2>Chicago White Sox IL / Injury Report — 2026</h2>
         <p class="section-desc">
             {{ injured.total }} players currently on the injured list or unavailable.
@@ -645,6 +900,487 @@
             </tbody>
         </table>
         {% endif %}
+    </section>
+
+    <!-- 8. 2026 PAYROLL & CONTRACTS -->
+    <section class="analysis-section">
+        <span class="section-tag">Analysis 08 — Payroll</span>
+        <h2>2026 Payroll &amp; Contract Status</h2>
+        <p class="section-desc">
+            Full roster payroll sourced from FanGraphs Roster Resource (June 2026).
+            2026 estimated payroll: <strong>$88M</strong> &middot;
+            Luxury Tax payroll: <strong>$109.4M</strong> &middot;
+            2027 projected payroll (current commitments): <strong>$57.1M</strong>.
+            The drop-off into 2027 is the offseason runway.
+        </p>
+
+        <div class="stat-grid" style="margin-bottom:1.5rem;">
+            <div class="stat-card">
+                <div class="stat-label">2026 Est. Payroll</div>
+                <div class="stat-value">$88M</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Luxury Tax Payroll</div>
+                <div class="stat-value">$109.4M</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">CBT Threshold</div>
+                <div class="stat-value">$244M</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">CBT Headroom</div>
+                <div class="stat-value pos">$134.6M</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">2027 Committed</div>
+                <div class="stat-value">$57.1M</div>
+            </div>
+        </div>
+
+        <h3 style="font-family:'DM Serif Display',serif;color:var(--navy);font-size:1.1rem;margin-bottom:0.6rem;">Guaranteed Contracts</h3>
+        <table class="data-table" style="margin-bottom:1.75rem;">
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Pos</th>
+                    <th class="num">2026 Salary</th>
+                    <th>Contract</th>
+                    <th>Expires</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Andrew Benintendi</strong></td>
+                    <td>DH/OF</td>
+                    <td class="num">$17.1M</td>
+                    <td>5 yr / $75M (2023–27)</td>
+                    <td><span class="tier-pill tier-Cut-Replace">2027 FA</span></td>
+                    <td>Largest total contract in franchise history</td>
+                </tr>
+                <tr>
+                    <td><strong>Munetaka Murakami</strong></td>
+                    <td>1B</td>
+                    <td class="num">$16.5M</td>
+                    <td>2 yr / $34M (2026–27)</td>
+                    <td><span class="tier-pill" style="background:#C0922B;color:#fff;">2027 FA</span></td>
+                    <td style="font-weight:600;color:#C0392B;">Extension talks must begin now</td>
+                </tr>
+                <tr>
+                    <td><strong>Jordan Hicks</strong></td>
+                    <td>RP</td>
+                    <td class="num">$12.5M</td>
+                    <td>4 yr / $44M (2024–27)</td>
+                    <td><span class="tier-pill tier-Cut-Replace">2027 FA</span></td>
+                    <td>Power closer; let expire per rebuild plan</td>
+                </tr>
+                <tr>
+                    <td>Seranthony Dom&iacute;nguez</td>
+                    <td>RP</td>
+                    <td class="num">$7.5M</td>
+                    <td>2 yr / $20M (2026–27) + 2028 opt</td>
+                    <td><span class="tier-pill tier-Hold">2028 opt</span></td>
+                    <td>Mutual option could extend through 2028</td>
+                </tr>
+                <tr>
+                    <td>Anthony Kay</td>
+                    <td>SP</td>
+                    <td class="num">$5.0M</td>
+                    <td>2 yr / $12M (2026–27) + 2028 opt</td>
+                    <td><span class="tier-pill tier-Hold">2028 opt</span></td>
+                    <td>Mutual option; rotation depth</td>
+                </tr>
+                <tr>
+                    <td>Austin Hays</td>
+                    <td>OF</td>
+                    <td class="num">$5.0M</td>
+                    <td>1 yr / $6M + 2027 mutual opt</td>
+                    <td><span class="tier-pill tier-Hold">2027 opt</span></td>
+                    <td>Currently on 10-day IL</td>
+                </tr>
+                <tr>
+                    <td>Sean Newcomb</td>
+                    <td>RP</td>
+                    <td class="num">$4.5M</td>
+                    <td>1 yr / $4.5M (2026)</td>
+                    <td><span class="tier-pill tier-Cut-Replace">2026 FA</span></td>
+                    <td>Bullpen depth, expires this offseason</td>
+                </tr>
+                <tr>
+                    <td>Erick Fedde</td>
+                    <td>SP</td>
+                    <td class="num">$1.5M</td>
+                    <td>1 yr / $1.5M (2026)</td>
+                    <td><span class="tier-pill tier-Cut-Replace">2026 FA</span></td>
+                    <td>Rotation depth, expires this offseason</td>
+                </tr>
+                <tr>
+                    <td>Randal Grichuk</td>
+                    <td>OF</td>
+                    <td class="num">$1.25M</td>
+                    <td>1 yr / $1.25M (2026)</td>
+                    <td><span class="tier-pill tier-Cut-Replace">2026 FA</span></td>
+                    <td>1.030 OPS in 56 PA — compelling extension case</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 style="font-family:'DM Serif Display',serif;color:var(--navy);font-size:1.1rem;margin-bottom:0.6rem;">Arbitration-Eligible</h3>
+        <table class="data-table" style="margin-bottom:1.75rem;">
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Pos</th>
+                    <th class="num">2026 Salary</th>
+                    <th>Arb Year</th>
+                    <th>Control Through</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Derek Hill</td>
+                    <td>OF</td>
+                    <td class="num">$900K</td>
+                    <td><span class="tier-pill tier-Develop">Arb-1</span></td>
+                    <td>2028</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 style="font-family:'DM Serif Display',serif;color:var(--navy);font-size:1.1rem;margin-bottom:0.6rem;">Pre-Arbitration Core — The Engine</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Pos</th>
+                    <th class="num">2026 Salary</th>
+                    <th>Arb Eligible</th>
+                    <th>Control Through</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Miguel Vargas</strong></td>
+                    <td>3B</td>
+                    <td class="num">~$740K</td>
+                    <td>2027</td>
+                    <td>2030</td>
+                    <td>2.3 WAR, 138 Rbat+ — arb costs rising but justified</td>
+                </tr>
+                <tr>
+                    <td><strong>Chase Meidroth</strong></td>
+                    <td>2B</td>
+                    <td class="num">~$740K</td>
+                    <td>2028</td>
+                    <td>2031</td>
+                    <td>1.7 WAR through 63 G; on-base machine</td>
+                </tr>
+                <tr>
+                    <td><strong>Colson Montgomery</strong></td>
+                    <td>SS</td>
+                    <td class="num">~$740K</td>
+                    <td>2028</td>
+                    <td>2031</td>
+                    <td>1.9 WAR, 15 HR; power emerging at SS</td>
+                </tr>
+                <tr>
+                    <td><strong>Sam Antonacci</strong></td>
+                    <td>LF</td>
+                    <td class="num">~$740K</td>
+                    <td>2029</td>
+                    <td>2032</td>
+                    <td>1.3 WAR, .393 OBP; among cheapest good hitters in baseball</td>
+                </tr>
+                <tr>
+                    <td>Edgar Quero</td>
+                    <td>C</td>
+                    <td class="num">~$740K</td>
+                    <td>2029</td>
+                    <td>2032</td>
+                    <td>Developing; defense-first profile; has been struggling offensively in 2026</td>
+                </tr>
+                <tr>
+                    <td>Luisangel Acu&ntilde;a</td>
+                    <td>UT</td>
+                    <td class="num">~$740K</td>
+                    <td>2029</td>
+                    <td>2032</td>
+                    <td>Struggling offensively; elite speed is a genuine asset</td>
+                </tr>
+                <tr>
+                    <td>Tristan Peters</td>
+                    <td>CF</td>
+                    <td class="num">~$740K</td>
+                    <td>2029</td>
+                    <td>2032</td>
+                    <td>1.3 WAR; solid depth OF option</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 9. PATH TO WORLD SERIES CONTENTION -->
+    <section class="analysis-section">
+        <span class="section-tag">Strategy — Analysis 09</span>
+        <h2>Path to World Series Contention</h2>
+        <p class="section-desc">
+            The 2026 White Sox are entering year three of their rebuild with genuine upside. Vargas,
+            Montgomery, Meidroth, and Antonacci are all legitimate contributors under team control.
+            The win curve is pointing up. But excitement is not a ring — here is the blueprint
+            to close the remaining gap.
+        </p>
+
+        <!-- ── PRIORITY #1: MURAKAMI EXTENSION ───────────────────────── -->
+        <div class="priority-banner">
+            <div>
+                <div style="margin-bottom:0.5rem;">
+                    <span class="priority-badge">Priority #1</span>
+                    <span class="priority-eyebrow">Do This Before Anything Else</span>
+                </div>
+                <h3>Extend Munetaka Murakami</h3>
+                <p>
+                    Murakami is the best hitter on this roster — and it is not close. Twenty-two home runs
+                    in 60 games, a .378 OBP, an OPS north of .946 from the first base position, and an
+                    Rbat+ of 157 puts him in the MVP conversation. He is 26 years old, under contract
+                    through 2027 on a 2-year, $34M deal ($16.5M in 2026, $17.5M in 2027) — already paying
+                    him above the league's standard for his service class, but still a significant
+                    discount relative to his production. After 2027 he is a free agent, and the open
+                    market will price a 28-year-old MVP-caliber first baseman accordingly. The White Sox
+                    need to initiate extension talks now. A five-year extension at $20–22M AAV buying
+                    out his free-agent years would be the most important contract in franchise history.
+                    Every month this drags out, the ask goes up. There is no Plan B. He is the anchor.
+                </p>
+                <div class="priority-stat-row">
+                    <div class="p-mini-stat"><span class="v">22</span><span class="l">HR (60 G)</span></div>
+                    <div class="p-mini-stat"><span class="v">.946</span><span class="l">OPS</span></div>
+                    <div class="p-mini-stat"><span class="v">.378</span><span class="l">OBP</span></div>
+                    <div class="p-mini-stat"><span class="v">.568</span><span class="l">SLG</span></div>
+                    <div class="p-mini-stat"><span class="v">157</span><span class="l">Rbat+</span></div>
+                    <div class="p-mini-stat"><span class="v">$16.5M</span><span class="l">2026 Salary</span></div>
+                    <div class="p-mini-stat"><span class="v">FA 2028</span><span class="l">Without Extension</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── OFFSEASON ROSTER DECISIONS ─────────────────────────────── -->
+        <h3 class="sub-heading">Offseason Roster Decisions</h3>
+        <div class="contention-grid">
+            <div class="contention-card red">
+                <h3>Let Walk: Benintendi &amp; Jordan Hicks</h3>
+                <p>
+                    Andrew Benintendi's deal was the largest contract in White Sox franchise history
+                    at the time it was signed — five years, $75M ($15M AAV). The return: -0.8 WAR
+                    through 63 games, a .274 OBP, and a lineup spot better allocated elsewhere.
+                    The organizational milestone was the signing itself. The production has not
+                    justified renewal. Do not pick up any option or extension.
+                </p>
+                <p>
+                    Jordan Hicks (4 yr/$44M, $12.5M in 2026) expires after 2027 as well.
+                    He's a power arm but a $12.5M closer on a team spending $88M total is
+                    a luxury this roster doesn't need locked in. Let the contract expire and use
+                    that money toward a starting pitcher or controlled outfielder. The payroll
+                    freed from both departures — roughly $29–30M — is the foundation of the
+                    2027 offseason.
+                </p>
+            </div>
+            <div class="contention-card green">
+                <h3>Retain Through Arbitration</h3>
+                <p>
+                    <strong>Vargas, Antonacci, Colson Montgomery, Meidroth</strong> — all four should
+                    be retained through arbitration. The aggregate arb cost across these four will
+                    climb toward $14–18M by 2027 (Vargas alone could reach $5–6M at Arb-2), but
+                    every dollar is justified. This group combined for over 7.2 WAR through 63 games.
+                    A viable contender does not let that core walk to save money on arbitration.
+                </p>
+                <p>
+                    These are not fringe players being paid above market — they are cheap, controlled
+                    contributors who will anchor the lineup through at least 2028.
+                </p>
+            </div>
+        </div>
+
+        <!-- ── REINSDORF SPENDING CONTEXT ─────────────────────────────── -->
+        <div class="spending-callout">
+            <div class="sc-heading">Jerry Reinsdorf Spending History — Franchise Benchmarks</div>
+            <table>
+                <tr>
+                    <td>Andrew Benintendi (2022)</td>
+                    <td>5 yr / $75M &middot; $15M AAV — Largest contract in White Sox franchise history at signing</td>
+                </tr>
+                <tr>
+                    <td>Yasmani Grandal (2020)</td>
+                    <td>4 yr / $73M &middot; $18.25M AAV — Highest single-season AAV commitment in franchise history</td>
+                </tr>
+                <tr>
+                    <td>Typical Reinsdorf ceiling</td>
+                    <td>One major free-agent signing per offseason cycle; rarely exceeds $16M AAV on position players</td>
+                </tr>
+                <tr>
+                    <td>Ace-SP market rate (2027 FA class)</td>
+                    <td>Est. $25–32M AAV — Would shatter both franchise records by $7–14M in a single signing</td>
+                </tr>
+                <tr>
+                    <td>The core question</td>
+                    <td>Can Reinsdorf write a check the franchise has never written? The 2027 window depends on it.</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ── THE ACE QUESTION ────────────────────────────────────────── -->
+        <div class="contention-card gold" style="margin-bottom:1rem;">
+            <h3>The Ace Question — The Biggest Decision This Franchise Will Make</h3>
+            <p>
+                The White Sox rotation lacks a true front-line starter. The team can win 85–87 games
+                with the current core, but 90+ games — the kind that locks up a Wild Card and keeps
+                the Division in play — requires an ace at the top of the rotation. The 2027 free
+                agent class offers three legitimate targets:
+            </p>
+            <p>
+                <strong>Shane Bieber</strong> — Returns from injury in 2026. If healthy, one of the
+                most efficient starters in baseball: command-first profile, sub-3.00 ERA potential,
+                and a demonstrated Cy Young ceiling. Lower floor than a power arm, but a known
+                commodity who controls the zone at an elite level. A lower-risk option in the
+                $22–26M AAV range.
+            </p>
+            <p>
+                <strong>Tarik Skubal</strong> — The best left-hander in baseball, period. Elite
+                strikeout and walk rates, top-5 FIP in the American League, and the kind of
+                durability and stuff combination teams pay generational money to secure. If he reaches
+                free agency in 2027, he will cost $28–32M AAV — the highest pitcher commitment in
+                White Sox history by a wide margin.
+            </p>
+            <p>
+                <strong>Brandon Woodruff</strong> — Perennial injury risk, but a genuine top-10 arm
+                when healthy. A potential $20–24M AAV alternative if Reinsdorf will not go past the
+                Grandal line. The health track record is the only legitimate concern; the talent is
+                unquestionable.
+            </p>
+            <p style="font-weight:600;color:var(--navy);font-style:italic;">
+                The Benintendi deal set the franchise record for total value. The Grandal deal set it
+                for per-year value. Signing an ace-caliber starter would break both simultaneously.
+                This is the inflection point.
+            </p>
+        </div>
+
+        <!-- ── THE OUTFIELD PROBLEM ────────────────────────────────────── -->
+        <h3 class="sub-heading">The Outfield Problem</h3>
+        <div class="contention-grid">
+            <div class="contention-card">
+                <h3>Option A — Brayden Montgomery (Internal)</h3>
+                <p>
+                    The team's top outfield prospect. If his trajectory holds through the 2026
+                    minor-league season, he is a candidate for a full-time role in 2027. Cost: zero
+                    dollars. Risk: asking a young player to carry a starting OF spot on a contending
+                    team before he is fully ready. The upside here is legitimate — so is the
+                    development variance.
+                </p>
+            </div>
+            <div class="contention-card">
+                <h3>Option B — Bring Back Randal Grichuk</h3>
+                <p>
+                    Grichuk is hitting .327 / .357 / .673 with six home runs in 56 plate appearances
+                    (1.030 OPS, 189 OPS+). At 34, on a short-term deal in the $4–6M range, he is
+                    a legitimate right field option — power, experience, and comfortable in a
+                    platoon or near-everyday role. Not a franchise-level acquisition, but a smart
+                    bridge while Montgomery develops.
+                </p>
+            </div>
+            <div class="contention-card">
+                <h3>Option C — Trade Using Prospect Capital</h3>
+                <p>
+                    The White Sox have five years of top-five draft picks banked in the system.
+                    A controlled, above-average outfielder acquired via trade is the highest-ceiling
+                    option and does not require Reinsdorf to write a free-agent check. Cost: future
+                    assets. If the 2027 window is real, this is the lever that signals the
+                    organization believes it.
+                </p>
+            </div>
+        </div>
+
+        <!-- ── BULLPEN ─────────────────────────────────────────────────── -->
+        <div class="contention-card" style="margin-bottom:1.25rem;">
+            <h3>Bullpen Upgrade</h3>
+            <p>
+                A World Series roster needs three legitimate high-leverage relievers. The 2026 White
+                Sox bullpen is a mix of young arms with upside and veterans holding roster spots.
+                One controllable, high-leverage arm should be targeted at the July 2026 trade deadline.
+                Two bullpen spots should be addressed in the 2026–27 offseason — either via
+                targeted free agency ($8–15M for a closer-caliber arm) or trade using pitching
+                depth from the system. A starting rotation gets you to October; a bullpen wins
+                in October.
+            </p>
+        </div>
+
+        <!-- ── 2026 DRAFT ──────────────────────────────────────────────── -->
+        <div class="contention-card" style="margin-bottom:1.5rem;">
+            <h3>2026 MLB Draft — Setting the Foundation for 2029 and Beyond</h3>
+            <p>
+                The White Sox are projected to hold the <strong>#1 overall pick</strong> in the 2026
+                MLB Draft. Two names are at the center of the conversation:
+            </p>
+            <p>
+                <span class="prospect-tag">#1 Candidate</span>
+                <strong>Roch Cholowsky, SS — UCLA</strong> — Polished college shortstop with a plus
+                hit tool, above-average arm, and advanced plate discipline rare for a 21-year-old.
+                Lower ceiling than a premium prep arm, but a dramatically safer floor. Could be
+                contributing at the big-league level within two to three years.
+            </p>
+            <p>
+                <span class="prospect-tag">#2 Candidate</span>
+                <strong>Grady Emerson, RHP — Fort Worth Christian HS (Fort Worth, TX)</strong> —
+                High school right-hander with frontline starter potential and the best pure stuff in
+                the class. Higher variance, higher ceiling. Signability is a factor at the prep level,
+                but if the White Sox are targeting a 2027–29 window, they do not need him to contribute
+                immediately — they need him to be dominant in 2030–31.
+            </p>
+            <p>
+                Either pick adds a foundational piece to a system that is already producing at the
+                big-league level. The farm does not need to be gutted to contend — it needs to
+                stay loaded while the major-league window opens.
+            </p>
+        </div>
+
+        <!-- ── 2027 WINDOW THESIS ──────────────────────────────────────── -->
+        <div class="window-thesis">
+            <h3>The 2027 Window Is Real</h3>
+            <p>
+                If the 2026 Chicago White Sox finish at or just above .500 — and the current
+                trajectory is pointing in that direction — the front office will face its most
+                consequential offseason in a decade. The core is young, controlled, and producing.
+                Murakami is an MVP-caliber bat at a below-market salary. Vargas, Montgomery,
+                Meidroth, and Antonacci are all under 27 and improving. The revenue model shows
+                every win near the 88-win threshold is worth $5–6M in marginal revenue — the Gaussian
+                curve is steep right there. Adding an ace starter and a true starting outfielder
+                pushes this team from an 82-win club to an 89-win playoff contender. The pieces
+                are there. The analytics support the commitment. The only remaining question is
+                whether Jerry Reinsdorf is willing to spend like he believes it.
+            </p>
+        </div>
+    </section>
+
+    <!-- DATA SOURCES -->
+    <section class="analysis-section">
+        <h2 class="analysis-title">Data Sources</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem;margin-top:1rem;">
+            <div style="background:var(--cream);border-left:3px solid var(--gold);padding:1rem 1.25rem;border-radius:4px;">
+                <div style="font-weight:600;color:var(--navy);margin-bottom:0.4rem;">FanGraphs</div>
+                <div style="font-size:0.88rem;color:var(--text-muted);line-height:1.6;">Batting stats, advanced metrics (wOBA, wRC+, WAR), Roster Resource payroll &amp; contract data</div>
+            </div>
+            <div style="background:var(--cream);border-left:3px solid var(--gold);padding:1rem 1.25rem;border-radius:4px;">
+                <div style="font-weight:600;color:var(--navy);margin-bottom:0.4rem;">MLB.com</div>
+                <div style="font-size:0.88rem;color:var(--text-muted);line-height:1.6;">Official game lineups, transaction wire (IL placements, DFA designations), rotation data</div>
+            </div>
+            <div style="background:var(--cream);border-left:3px solid var(--gold);padding:1rem 1.25rem;border-radius:4px;">
+                <div style="font-weight:600;color:var(--navy);margin-bottom:0.4rem;">Baseball Reference</div>
+                <div style="font-size:0.88rem;color:var(--text-muted);line-height:1.6;">Historical stats, OPS+, ERA+, park factors, and cross-era comparisons</div>
+            </div>
+            <div style="background:var(--cream);border-left:3px solid var(--gold);padding:1rem 1.25rem;border-radius:4px;">
+                <div style="font-weight:600;color:var(--navy);margin-bottom:0.4rem;">Spotrac</div>
+                <div style="font-size:0.88rem;color:var(--text-muted);line-height:1.6;">Contract breakdowns, AAV, guaranteed money, option years, and arbitration projections</div>
+            </div>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-top:1.25rem;">All statistics through 63 team games (June 8, 2026). Valuations and projections are analytical estimates, not official team figures.</p>
     </section>
 
 </div>

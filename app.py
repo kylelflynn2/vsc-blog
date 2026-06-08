@@ -262,6 +262,12 @@ def admin_setup():
     return render_template('admin_setup.html')
 
 
+@app.route('/projects/yankees-baseball-operations')
+def yankees_baseball_operations():
+    """Yankees Baseball Operations Portfolio — 2026-27 analysis."""
+    return render_template('projects/yankees_baseball_ops.html')
+
+
 @app.route('/projects/whitesox-2026')
 def whitesox_2026():
     """Rebuilding the 2026 Chicago White Sox — WAR-based valuation model."""
@@ -272,8 +278,6 @@ def whitesox_2026():
         summary=whitesox_analysis.valuation_summary(vals),
         revenue=whitesox_analysis.revenue_model(vals),
         playing_time=whitesox_analysis.playing_time_analysis(vals),
-        lineup=whitesox_analysis.optimal_lineup(),
-        top_pa_lineup=whitesox_analysis.top_pa_lineup(),
         saber_lineup=whitesox_analysis.sabermetric_lineup(),
         injured=whitesox_analysis.injured_list(),
     )
