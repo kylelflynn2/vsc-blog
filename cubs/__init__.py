@@ -2,12 +2,11 @@
 Chicago Cubs Batting Order Analyzer - Flask Blueprint
 Mounted at /projects/cubs-2026 inside the Kyle Flynn portfolio.
 
-All logic is adapted from the standalone app.py in the baseball-stats repo.
-The only Flask-specific changes are:
-  - Blueprint instead of a Flask app object
-  - Template names prefixed with 'cubs/'
-  - url_for() uses 'cubs.' endpoint names
-  - Data is loaded once at import time with a graceful fallback
+Lineup philosophy: Sabermetrics Not Salary.
+OBP is king. Two lineups generated — one optimized vs RHP, one vs LHP —
+using each player's actual FanGraphs split OBP (vs RHP / vs LHP).
+Source: FanGraphs batting leaderboard, month=14 (vs RHP) and month=13 (vs LHP),
+2025+2026 combined (2026 only for new Cubs additions).
 """
 
 import os
@@ -20,9 +19,6 @@ from scipy.optimize import linear_sum_assignment
 # -----------------------------------------------------------------------------
 # Blueprint setup
 # -----------------------------------------------------------------------------
-# 'cubs'            = the name used in url_for(), e.g. url_for('cubs.index')
-# template_folder   = look for templates in cubs/templates/
-# url_prefix        = every route in this blueprint starts with /projects/cubs-2026
 cubs_bp = Blueprint(
     'cubs',
     __name__,
@@ -30,25 +26,58 @@ cubs_bp = Blueprint(
     url_prefix='/projects/cubs-2026'
 )
 
-# Global data store – filled by load_all_data()
-DATA   = {}   # dict of DataFrames keyed by name
-LINEUP = []   # list of 9 dicts, one per batting spot
+# Global data store
+DATA          = {}
+LINEUP_VS_RHP = []
+LINEUP_VS_LHP = []
 
-# Where the CSV files live (cubs/data/ folder)
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 
-# Required CSV filenames (for the "data missing" page)
 REQUIRED_CSVS = [
     'standard_batting.csv',
     'advanced_batting.csv',
     'value_batting.csv',
-    'neutralized_batting.csv',
-    'team_baserunning.csv',
-    'team_batting_ratios.csv',
-    'team_sabermetric_batting.csv',
     'team_win_probability.csv',
-    'team_ph_hr_situ_hitting.csv',
 ]
+
+# Batting handedness for display on cards (L = left, R = right, S = switch)
+HANDEDNESS = {
+    'crowape01':  'L',   # Pete Crow-Armstrong
+    'happia01':   'S',   # Ian Happ (switch)
+    'hoernni01':  'R',   # Nico Hoerner
+    'buschmi02':  'L',   # Michael Busch
+    'suzukse01':  'R',   # Seiya Suzuki
+    'swansda01':  'R',   # Dansby Swanson
+    'bregmal01':  'R',   # Alex Bregman
+    'amayami01':  'R',   # Miguel Amaya
+    'kellyca02':  'R',   # Carson Kelly
+    'confomi01':  'L',   # Michael Conforto
+    'ballemo01':  'L',   # Moisés Ballesteros
+    'shawma01':   'R',   # Matt Shaw
+    'lopezni01':  'S',   # Nicky Lopez (switch)
+    'carlsdy01':  'S',   # Dylan Carlson (switch)
+    'alcanke01':  'R',   # Kevin Alcantara
+    'kingesc01':  'R',   # Scott Kingery
+    'ramirpe01':  'R',   # Pedro Ramirez
+}
+
+# Actual FanGraphs OBP splits per player: (vs_rhp_obp, vs_lhp_obp)
+# Source: FanGraphs batting leaderboard month=14 (vs RHP) and month=13 (vs LHP)
+# 2025+2026 combined average where both available; 2026-only for new Cubs additions.
+SPLITS_OBP = {
+    'crowape01': (0.318, 0.298),  # PCA: slight edge vs RHP; reverse splits in 2026
+    'happia01':  (0.373, 0.274),  # Happ (S): .099 gap — bats left vs RHP, right vs LHP
+    'hoernni01': (0.327, 0.373),  # Hoerner: .046 edge vs LHP (typical righty)
+    'buschmi02': (0.364, 0.319),  # Busch: .045 edge vs RHP (typical lefty)
+    'suzukse01': (0.317, 0.371),  # Suzuki: .054 edge vs LHP (typical righty)
+    'swansda01': (0.299, 0.285),  # Swanson: minimal splits either way
+    'bregmal01': (0.317, 0.354),  # Bregman: .037 edge vs LHP (2026 only, new Cub)
+    'amayami01': (0.325, 0.320),  # Amaya: nearly even splits
+    'kellyca02': (0.322, 0.382),  # Kelly: .060 edge vs LHP (typical righty)
+    'confomi01': (0.350, 0.500),  # Conforto: vs-LHP is small 2026 sample
+    'ballemo01': (0.353, 0.375),  # Ballesteros: slight reverse splits
+    'shawma01':  (0.270, 0.310),  # Shaw: estimated from limited data
+}
 
 
 # =============================================================================
@@ -56,11 +85,6 @@ REQUIRED_CSVS = [
 # =============================================================================
 
 def _clean_pct_cols(df, cols):
-    """
-    Strip trailing '%' from percentage string columns and convert to floats
-    in decimal form (e.g. "38%" becomes 0.38).
-    Only processes columns that actually exist in the DataFrame.
-    """
     for col in cols:
         if col in df.columns:
             df[col] = pd.to_numeric(
@@ -71,7 +95,6 @@ def _clean_pct_cols(df, cols):
 
 
 def _filter_totals(df):
-    """Remove Team Totals and League Average rows (player_id starts with '-')."""
     df = df[df['player_id'].notna()]
     df = df[~df['player_id'].astype(str).str.startswith('-')]
     return df.reset_index(drop=True)
@@ -80,7 +103,6 @@ def _filter_totals(df):
 def _numeric_all(df, skip=('player_id', 'display_name', 'pos_primary',
                             'Player', 'Name', 'Pos', 'Pos.1',
                             'Awards', 'Pos Summary')):
-    """Convert every non-string column to numeric where possible."""
     for col in df.columns:
         if col not in skip:
             df[col] = pd.to_numeric(df[col], errors='coerce')
@@ -88,10 +110,6 @@ def _numeric_all(df, skip=('player_id', 'display_name', 'pos_primary',
 
 
 def _safe_read(path, **kwargs):
-    """
-    Try to read a CSV file.
-    Returns None if the file doesn't exist — callers skip that merge.
-    """
     if not os.path.exists(path):
         print(f"  [Cubs] optional file not found, skipping: {os.path.basename(path)}")
         return None
@@ -99,36 +117,22 @@ def _safe_read(path, **kwargs):
 
 
 def load_all_data():
-    """
-    Load CSV files from cubs/data/, clean them up, and join everything
-    into one master DataFrame stored in DATA['master'].
-    Only standard_batting.csv is required; all other files are optional.
-    """
-
-    # 1. standard_batting.csv – primary source for slash stats and WAR
-    # on_bad_lines='skip' silently drops pitcher rows that have an extra
-    # field in Baseball Reference's CSV export (they have PA=0 and are
-    # irrelevant to the lineup anyway).
     df_std = pd.read_csv(os.path.join(DATA_DIR, 'standard_batting.csv'),
                          on_bad_lines='skip')
     df_std = df_std.rename(columns={'Player-additional': 'player_id'})
     df_std = _filter_totals(df_std)
-    # Clean display name: strip handedness markers (*/#) and IL/DFA notes
     df_std['display_name'] = (
         df_std['Player']
         .str.replace(r'[*#]', '', regex=True)
         .str.replace(r'\s*\(.*?\)', '', regex=True)
         .str.strip()
     )
-    # Use only the first position code (e.g. '1B' from '1B/DH')
     df_std['pos_primary'] = (
         df_std['Pos'].astype(str)
         .str.replace(r'[*#]', '', regex=True)
         .str.split('/').str[0]
         .str.strip()
     )
-
-    # 2-9. Supplemental files (all optional — missing files are skipped gracefully)
 
     df_adv = _safe_read(os.path.join(DATA_DIR, 'advanced_batting.csv'), header=1)
     if df_adv is not None:
@@ -175,18 +179,13 @@ def load_all_data():
         df_situ = df_situ.rename(columns={df_situ.columns[-1]: 'player_id'})
         df_situ = _filter_totals(df_situ)
 
-    # ------------------------------------------------------------------
-    # Join everything onto the standard_batting base.
-    # Only merge a supplemental source if it loaded successfully.
-    # ------------------------------------------------------------------
     df = df_std.copy()
 
     def _safe_merge(df, df_sup, cols):
-        """Merge df_sup into df only if df_sup is not None."""
         if df_sup is None:
             return df
         keep = [c for c in cols if c in df_sup.columns]
-        if len(keep) <= 1:   # only player_id, nothing useful
+        if len(keep) <= 1:
             return df
         return df.merge(df_sup[keep], on='player_id', how='left')
 
@@ -229,21 +228,26 @@ def load_all_data():
     df = _numeric_all(df)
 
     DATA['master'] = df
-    DATA['df_std']  = df_std
-    DATA['df_wp']   = df_wp if df_wp is not None else pd.DataFrame()
+    DATA['df_wp']  = df_wp if df_wp is not None else pd.DataFrame()
 
     print(f"Cubs data loaded: {len(df)} players, {df.shape[1]} columns")
 
 
 # =============================================================================
 # SECTION 2: BATTING ORDER ALGORITHM
-# Uses a weighted score per batting spot + the Hungarian algorithm (scipy)
-# to find the globally optimal assignment for spots 1-6, then fills 7-9
-# with the remaining players sorted by OPS.
+# OBP-first sabermetric framework:
+#   1. Leadoff  — highest OBP + speed
+#   2. 2-hole   — best overall hitter (OBP + wOBA/rOBA + OPS+)
+#   3. 3-hole   — balanced OBP & power (OPS+, SLG, WAR)
+#   4. Cleanup  — maximum power (SLG, HR)
+#   5. 5-hole   — secondary power (RBI, SLG)
+#   6-7         — table setters (OBP, OPS)
+#   8-9         — weakest by OPS
+# Platoon: each player's actual FanGraphs split OBP (vs RHP or vs LHP) is used
+#          directly — no blanket +.022 estimate needed.
 # =============================================================================
 
 def _safe_float(val, default=0.0):
-    """Convert a value to float, returning default if conversion fails."""
     try:
         f = float(val)
         return f if not np.isnan(f) else default
@@ -252,7 +256,6 @@ def _safe_float(val, default=0.0):
 
 
 def _safe_int(val, default=0):
-    """Convert a value to int, returning default if conversion fails."""
     try:
         f = float(val)
         return int(f) if not np.isnan(f) else default
@@ -261,10 +264,6 @@ def _safe_int(val, default=0):
 
 
 def _minmax_normalize(series):
-    """
-    Scale a pandas Series to the range [0, 1].
-    If all values are identical, returns 0.5 for every element.
-    """
     s = pd.to_numeric(series, errors='coerce').fillna(0.0)
     mn, mx = s.min(), s.max()
     if mx > mn:
@@ -274,9 +273,8 @@ def _minmax_normalize(series):
 
 def _spot_score(row, spot):
     """
-    Score how well a player (row of normalized stats) fits a batting spot (1-6).
-    Returns a float where higher = better fit.
-    All input values are already normalized to [0, 1].
+    Score how well a player fits a batting spot.
+    OBP is the primary driver at the top of the lineup.
     """
     obp      = row.get('OBP', 0)
     slg      = row.get('SLG', 0)
@@ -291,117 +289,135 @@ def _spot_score(row, spot):
     rcg      = row.get('RC/G', 0)
     seca     = row.get('SecA', 0)
     sb_pct   = row.get('SB%', 0)
-    so_inv   = row.get('SO%_inv', 0)   # 1 - normalized SO% (lower K rate = better)
+    so_inv   = row.get('SO%_inv', 0)
 
-    if spot == 1:   # Leadoff: needs OBP, speed, and contact
-        return obp * 0.35 + sb_pct * 0.25 + so_inv * 0.25 + seca * 0.15
-    elif spot == 2: # 2-hole: OBP + contact + secondary skills
-        return obp * 0.30 + ba * 0.20 + seca * 0.25 + sb_pct * 0.25
-    elif spot == 3: # Best overall hitter
-        return ops_plus * 0.25 + roba * 0.25 + rcg * 0.25 + war * 0.25
-    elif spot == 4: # Cleanup: power first, RBI second
+    if spot == 1:
+        # Leadoff: OBP is king, then speed and contact
+        return obp * 0.40 + sb_pct * 0.25 + so_inv * 0.20 + seca * 0.15
+    elif spot == 2:
+        # Best overall: OBP + rOBA + OPS+ + WAR
+        return obp * 0.35 + roba * 0.25 + ops_plus * 0.20 + war * 0.20
+    elif spot == 3:
+        # RBI/contact: balanced OBP, SLG, and overall value
+        return obp * 0.25 + ops_plus * 0.25 + slg * 0.25 + war * 0.25
+    elif spot == 4:
+        # Cleanup: maximum power
         return slg * 0.30 + hr * 0.30 + iso * 0.20 + rbi * 0.20
-    elif spot == 5: # Secondary power
+    elif spot == 5:
+        # Secondary power / RBI protection
         return slg * 0.25 + hr * 0.20 + rbi * 0.30 + rcg * 0.25
-    elif spot == 6: # Best of the bottom third
-        return ops * 0.40 + rbi * 0.30 + ba * 0.30
+    elif spot == 6:
+        # Top of the bottom third: OBP table setter
+        return obp * 0.40 + ops * 0.30 + ba * 0.30
     return 0.0
 
 
-def _build_rationale(player, spot):
-    """
-    Return a one-sentence explanation of why this player was placed
-    in the given batting spot, using their actual (un-normalized) stats.
-    """
-    name   = player['display_name']
-    obp    = _safe_float(player.get('OBP'))
-    slg    = _safe_float(player.get('SLG'))
-    ops    = _safe_float(player.get('OPS'))
-    ba     = _safe_float(player.get('BA'))
-    hr     = _safe_int(player.get('HR'))
-    rbi    = _safe_int(player.get('RBI'))
-    sb     = _safe_int(player.get('SB'))
-    war    = _safe_float(player.get('WAR'))
-    ops_p  = _safe_int(player.get('OPS+'))
-    rcg    = _safe_float(player.get('RC/G'))
-    seca   = _safe_float(player.get('SecA'))
+def _has_platoon_advantage(player_id, vs_rhp):
+    """True if the player's actual split OBP is meaningfully higher in this matchup."""
+    pid = str(player_id)
+    splits = SPLITS_OBP.get(pid)
+    if splits is None:
+        hand = HANDEDNESS.get(pid, 'R')
+        return (hand in ('L', 'S')) if vs_rhp else (hand in ('R', 'S'))
+    rhp_obp, lhp_obp = splits
+    if vs_rhp:
+        return (rhp_obp - lhp_obp) >= 0.015
+    else:
+        return (lhp_obp - rhp_obp) >= 0.015
 
-    # Helper: format 0.347 as ".347"
-    fmt = lambda v: f".{int(round(v * 1000)):03d}"
+
+def _build_rationale(player, spot, vs_rhp, split_obp=None):
+    name      = player['display_name']
+    first     = name.split()[0]
+    obp       = split_obp if split_obp is not None else _safe_float(player.get('OBP'))
+    slg       = _safe_float(player.get('SLG'))
+    ops       = _safe_float(player.get('OPS'))
+    hr        = _safe_int(player.get('HR'))
+    rbi       = _safe_int(player.get('RBI'))
+    sb        = _safe_int(player.get('SB'))
+    war       = _safe_float(player.get('WAR'))
+    ops_p     = _safe_int(player.get('OPS+'))
+
+    pid       = str(player.get('player_id', ''))
+    adv       = _has_platoon_advantage(pid, vs_rhp)
+    splits    = SPLITS_OBP.get(pid)
+    arm       = 'right-handed' if vs_rhp else 'left-handed'
+    fmt       = lambda v: f".{int(round(v * 1000)):03d}"
+
+    # Natural platoon note — only when the split gap is meaningful
+    platoon_note = ''
+    if adv and splits:
+        gap = abs(splits[0] - splits[1])
+        platoon_note = f' That {fmt(gap)} OBP edge against {arm} pitching is exactly why {first} is here.'
 
     rationales = {
-        1: (f"{name} leads off with a {fmt(obp)} OBP and {fmt(seca)} secondary average, "
-            f"combining elite on-base ability with {sb} stolen bases to set the table."),
-        2: (f"{name} bats second with a {fmt(obp)} OBP and {fmt(ba)} average, "
-            f"providing contact skills and secondary value ({fmt(seca)} SecA) to move runners."),
-        3: (f"{name} hits third with an OPS+ of {ops_p}, {war:.1f} WAR, and {rcg:.1f} RC/G — "
-            f"the most complete offensive threat in the lineup."),
-        4: (f"{name} bats cleanup with {hr} home runs, {rbi} RBI, and {fmt(slg)} slugging — "
-            f"the primary power source who drives in the top of the order."),
+        1: (f"{name} leads off with a {fmt(obp)} OBP against {arm} pitchers, "
+            f"combining elite on-base ability with {sb} stolen bases to set the table.{platoon_note}"),
+        2: (f"{name} bats second — the most important spot in any lineup. "
+            f"A {fmt(obp)} OBP against {arm} pitchers, {ops_p} OPS+, and {war:.1f} WAR "
+            f"make {first} the best all-around hitter on this roster.{platoon_note}"),
+        3: (f"{name} hits third with {ops_p} OPS+, {war:.1f} WAR, and {fmt(slg)} SLG — "
+            f"balanced OBP and power with the table already set.{platoon_note}"),
+        4: (f"{name} bats cleanup with {hr} HR, {rbi} RBI, and {fmt(slg)} SLG — "
+            f"the primary run-producer and the most dangerous bat in the order.{platoon_note}"),
         5: (f"{name} hits fifth with {rbi} RBI and {fmt(slg)} SLG, "
-            f"extending the heart of the order and protecting the cleanup hitter."),
-        6: (f"{name} bats sixth with a {fmt(ops)} OPS and {rbi} RBI, "
-            f"providing consistent run production at the top of the bottom third."),
-        7: (f"{name} bats seventh ({fmt(ops)} OPS) — the strongest of the three bottom-order spots, "
-            f"keeping pressure on opposing pitchers deep into games."),
-        8: (f"{name} hits eighth ({fmt(ops)} OPS), a reliable contact bat that "
-            f"helps turn the lineup over to the top of the order."),
-        9: (f"{name} bats ninth ({fmt(ops)} OPS), setting the table for the leadoff hitter "
-            f"and providing {rbi} RBI despite the lower-lineup positioning."),
+            f"extending the heart of the order and protecting the cleanup hitter.{platoon_note}"),
+        6: (f"{name} bats sixth with a {fmt(obp)} OBP against {arm} pitchers — "
+            f"the best table-setter at the top of the bottom third.{platoon_note}"),
+        7: (f"{name} bats seventh ({fmt(ops)} OPS), "
+            f"keeping pressure on opposing pitchers deep into games.{platoon_note}"),
+        8: (f"{name} hits eighth ({fmt(ops)} OPS) — "
+            f"a reliable bat that helps turn the lineup over late.{platoon_note}"),
+        9: (f"{name} bats ninth ({fmt(ops)} OPS), "
+            f"setting the table for the top of the order to come back around.{platoon_note}"),
     }
     return rationales[spot]
 
 
-def compute_lineup(df_master):
+def compute_lineup(df_master, vs_rhp=True):
     """
-    Find the optimal 9-man batting order.
+    Build an OBP-optimized batting order using actual FanGraphs split OBPs.
 
-    Steps:
-      1. Pick the top 9 players by Plate Appearances (the everyday starters).
-      2. Normalize all scoring stats to [0, 1] within those 9 players.
-      3. Build a 9x6 score matrix: score[player][spot] = fitness for spots 1-6.
-      4. Run the Hungarian algorithm to find the best assignment for spots 1-6.
-      5. Fill spots 7-9 with the remaining 3 players sorted by OPS descending.
-      6. Attach a plain-English rationale to each slot.
-
-    Returns a list of 9 dicts ordered by batting spot.
+    Each player's vs-RHP or vs-LHP OBP from SPLITS_OBP replaces their overall
+    OBP before normalization. No blanket platoon bonus — the real numbers do the work.
     """
     df = df_master.copy()
     df['PA'] = pd.to_numeric(df['PA'], errors='coerce').fillna(0)
     starters = df.nlargest(9, 'PA').reset_index(drop=True)
 
+    # Replace each player's OBP with their actual split OBP before normalization
+    for idx in starters.index:
+        pid = str(starters.at[idx, 'player_id'])
+        splits = SPLITS_OBP.get(pid)
+        if splits is not None:
+            starters.at[idx, 'OBP'] = splits[0] if vs_rhp else splits[1]
+
     score_cols = ['OBP', 'SLG', 'OPS', 'OPS+', 'BA', 'HR', 'RBI',
                   'ISO', 'WAR', 'rOBA', 'RC/G', 'SecA', 'SB%', 'SO%']
 
-    # Build a normalized copy of the starters' stats
     norm = pd.DataFrame(index=starters.index)
     for col in score_cols:
         if col in starters.columns:
             norm[col] = _minmax_normalize(starters[col])
         else:
-            norm[col] = 0.0  # stat missing – contributes nothing to scores
+            norm[col] = 0.0
 
-    # Lower strikeout rate is better, especially for the leadoff spot
-    norm['SO%_inv'] = 1.0 - norm['SO%']
+    norm['SO%_inv'] = 1.0 - norm.get('SO%', pd.Series([0.5]*len(starters), index=starters.index))
 
-    # Build the 9x6 score matrix for the Hungarian algorithm
-    n_players = len(starters)   # always 9
-    n_spots   = 6               # spots 1-6 are assigned optimally; 7-9 are filled by OPS
+    n_players = len(starters)
+    n_spots   = 6
     score_matrix = np.zeros((n_players, n_spots))
     for i in range(n_players):
         row = norm.iloc[i].to_dict()
         for j in range(n_spots):
             score_matrix[i][j] = _spot_score(row, j + 1)
 
-    # linear_sum_assignment minimizes cost, so we negate scores to maximize
     row_ind, col_ind = linear_sum_assignment(-score_matrix)
 
-    # Map batting spot (1-indexed) to the starters DataFrame row index
     spot_to_idx = {}
     for player_row, spot_col in zip(row_ind, col_ind):
-        spot_to_idx[spot_col + 1] = player_row   # spots 1-6
+        spot_to_idx[spot_col + 1] = player_row
 
-    # Fill spots 7-9 with the unassigned players, best OPS first
     assigned = set(row_ind)
     remaining_idx = [i for i in range(n_players) if i not in assigned]
     remaining = starters.iloc[remaining_idx].copy()
@@ -410,33 +426,43 @@ def compute_lineup(df_master):
     for rank, (_, _row) in enumerate(remaining.iterrows()):
         spot_to_idx[7 + rank] = starters.index.get_loc(_row.name)
 
-    # Assemble the final lineup list
+    starters_raw = df_master.nlargest(9, 'PA').reset_index(drop=True)
+
     lineup = []
     for spot in range(1, 10):
-        idx = spot_to_idx[spot]
-        p   = starters.iloc[idx]
+        idx     = spot_to_idx[spot]
+        p       = starters_raw.iloc[idx]
+        pid     = str(p['player_id'])
+        splits  = SPLITS_OBP.get(pid)
+        obp_rhp = splits[0] if splits else _safe_float(p.get('OBP'))
+        obp_lhp = splits[1] if splits else _safe_float(p.get('OBP'))
+        split_obp = obp_rhp if vs_rhp else obp_lhp
         lineup.append({
-            'spot':       spot,
-            'player_id':  str(p['player_id']),
-            'name':       str(p['display_name']),
-            'pos':        str(p.get('pos_primary', '—')),
-            'age':        _safe_int(p.get('Age')),
-            'PA':         _safe_int(p.get('PA')),
-            'BA':         _safe_float(p.get('BA')),
-            'OBP':        _safe_float(p.get('OBP')),
-            'SLG':        _safe_float(p.get('SLG')),
-            'OPS':        _safe_float(p.get('OPS')),
-            'OPS+':       _safe_int(p.get('OPS+')),
-            'HR':         _safe_int(p.get('HR')),
-            'RBI':        _safe_int(p.get('RBI')),
-            'SB':         _safe_int(p.get('SB')),
-            'WAR':        _safe_float(p.get('WAR')),
-            'RC/G':       _safe_float(p.get('RC/G')),
-            'SecA':       _safe_float(p.get('SecA')),
-            'SB%':        _safe_float(p.get('SB%')),
-            'WPA':        _safe_float(p.get('WPA')),
-            'Clutch':     _safe_float(p.get('Clutch')),
-            'rationale':  _build_rationale(p, spot),
+            'spot':        spot,
+            'player_id':   pid,
+            'name':        str(p['display_name']),
+            'pos':         str(p.get('pos_primary', '')),
+            'age':         _safe_int(p.get('Age')),
+            'PA':          _safe_int(p.get('PA')),
+            'BA':          _safe_float(p.get('BA')),
+            'OBP':         split_obp,
+            'obp_vs_rhp':  obp_rhp,
+            'obp_vs_lhp':  obp_lhp,
+            'SLG':         _safe_float(p.get('SLG')),
+            'OPS':         _safe_float(p.get('OPS')),
+            'OPS+':        _safe_int(p.get('OPS+')),
+            'HR':          _safe_int(p.get('HR')),
+            'RBI':         _safe_int(p.get('RBI')),
+            'SB':          _safe_int(p.get('SB')),
+            'WAR':         _safe_float(p.get('WAR')),
+            'RC/G':        _safe_float(p.get('RC/G')),
+            'SecA':        _safe_float(p.get('SecA')),
+            'SB%':         _safe_float(p.get('SB%')),
+            'WPA':         _safe_float(p.get('WPA')),
+            'Clutch':      _safe_float(p.get('Clutch')),
+            'hand':        HANDEDNESS.get(pid, 'R'),
+            'platoon_adv': _has_platoon_advantage(pid, vs_rhp),
+            'rationale':   _build_rationale(p, spot, vs_rhp, split_obp),
         })
 
     return lineup
@@ -447,7 +473,6 @@ def compute_lineup(df_master):
 # =============================================================================
 
 def _fmt(val, decimals=3):
-    """Format a float for display; return '—' if the value is missing."""
     try:
         f = float(val)
         return '—' if np.isnan(f) else f"{f:.{decimals}f}"
@@ -455,32 +480,17 @@ def _fmt(val, decimals=3):
         return '—'
 
 
-def _lineup_ids():
-    """Return the set of player_ids currently in the starting lineup."""
-    return {e['player_id'] for e in LINEUP}
+def _lineup_ids(lineup):
+    return {e['player_id'] for e in lineup}
 
 
-@cubs_bp.route('/')
-def index():
-    """
-    Main project page — lineup, analysis charts, and methodology all in one view.
-    """
-    if not DATA:
-        return render_template('cubs/no_data.html', required=REQUIRED_CSVS, data_dir=DATA_DIR)
-
-    df = DATA['master']
-    lineup_pids = _lineup_ids()
-    starters_df = df[df['player_id'].isin(lineup_pids)]
-    qualified   = df[pd.to_numeric(df['PA'], errors='coerce') >= 30].copy()
-
-    # Quick stats summary
+def _quick_stats(starters_df):
     total_hr  = int(pd.to_numeric(starters_df['HR'],  errors='coerce').fillna(0).sum())
     total_rbi = int(pd.to_numeric(starters_df['RBI'], errors='coerce').fillna(0).sum())
     avg_obp   = pd.to_numeric(starters_df['OBP'], errors='coerce').mean()
     avg_ops   = pd.to_numeric(starters_df['OPS'], errors='coerce').mean()
     total_war = pd.to_numeric(starters_df['WAR'], errors='coerce').sum()
-
-    quick_stats = {
+    return {
         'total_hr':  total_hr,
         'total_rbi': total_rbi,
         'avg_obp':   _fmt(avg_obp),
@@ -488,8 +498,10 @@ def index():
         'total_war': _fmt(total_war, 1),
     }
 
-    # Chart data (same logic as the /analysis route, embedded on this page)
-    lineup_names = [e['name'] for e in LINEUP]
+
+def _build_chart_data(lineup, df):
+    lineup_names = [e['name'] for e in lineup]
+    qualified    = df[pd.to_numeric(df['PA'], errors='coerce') >= 30].copy()
 
     scatter_obp_slg = [
         {
@@ -528,7 +540,7 @@ def index():
         for _, r in qualified.iterrows()
     ]
 
-    chart_data = {
+    return {
         'lineup_names':    lineup_names,
         'scatter_obp_slg': scatter_obp_slg,
         'ops_plus':        ops_plus_data,
@@ -536,22 +548,37 @@ def index():
         'scatter_rcg_wpa': rcg_wpa_pts,
     }
 
+
+@cubs_bp.route('/')
+def index():
+    if not DATA:
+        return render_template('cubs/no_data.html', required=REQUIRED_CSVS, data_dir=DATA_DIR)
+
+    df = DATA['master']
+
+    rhp_ids = _lineup_ids(LINEUP_VS_RHP)
+    lhp_ids = _lineup_ids(LINEUP_VS_LHP)
+    rhp_df  = df[df['player_id'].isin(rhp_ids)]
+
+    qs_rhp = _quick_stats(rhp_df)
+    chart_data = _build_chart_data(LINEUP_VS_RHP, df)
+
     return render_template(
         'cubs/index.html',
-        lineup=LINEUP,
-        quick_stats=quick_stats,
+        lineup_rhp=LINEUP_VS_RHP,
+        lineup_lhp=LINEUP_VS_LHP,
+        quick_stats=qs_rhp,
         chart_data=json.dumps(chart_data),
     )
 
 
 @cubs_bp.route('/players')
 def players():
-    """Roster page — full sortable stats table."""
     if not DATA:
         return render_template('cubs/no_data.html', required=REQUIRED_CSVS, data_dir=DATA_DIR)
 
     df = DATA['master']
-    lineup_ids = list(_lineup_ids())
+    lineup_ids = list(_lineup_ids(LINEUP_VS_RHP) | _lineup_ids(LINEUP_VS_LHP))
 
     display_cols = [
         'display_name', 'pos_primary', 'Age', 'PA', 'AB', 'R', 'H',
@@ -581,7 +608,6 @@ def players():
 
 @cubs_bp.route('/player/<player_id>')
 def player_detail(player_id):
-    """Individual player profile with charts and advanced stats."""
     if not DATA:
         return render_template('cubs/no_data.html', required=REQUIRED_CSVS, data_dir=DATA_DIR)
 
@@ -592,7 +618,6 @@ def player_detail(player_id):
     p    = df[mask].iloc[0]
     qual = df[pd.to_numeric(df['PA'], errors='coerce') >= 30].copy()
 
-    # Radar chart: 6 dimensions normalized 0-100 vs qualified roster
     radar_stats  = ['OBP', 'SLG', 'ISO', 'WAR', 'OPS+', 'RC/G']
     radar_labels = ['OBP', 'SLG', 'ISO', 'WAR', 'OPS+', 'RC/G']
     radar_values = []
@@ -603,7 +628,6 @@ def player_detail(player_id):
         norm_val = ((val - mn) / (mx - mn) * 100) if mx > mn else 50.0
         radar_values.append(round(max(0.0, min(100.0, norm_val)), 1))
 
-    # Bar chart: player vs team average
     bar_stats  = ['BA', 'OBP', 'SLG', 'OPS']
     bar_player = [_safe_float(p.get(s)) for s in bar_stats]
     bar_avg    = [
@@ -612,7 +636,6 @@ def player_detail(player_id):
         for s in bar_stats
     ]
 
-    # Advanced stats table
     adv_fields = ['BAbip', 'ISO', 'EV', 'HardH%', 'LD%', 'GB%', 'FB%', 'Pull%',
                   'WPA', 'RE24', 'Clutch', 'aLI']
     adv_table = []
@@ -624,12 +647,10 @@ def player_detail(player_id):
         else:
             adv_table.append({'stat': f, 'value': _fmt(p.get(f), 3)})
 
-    # Baserunning table
     run_fields = [('SB%', 'SB%'), ('RS%', 'RS%'), ('XBT%', 'XBT%'),
                   ('SecA', 'SecA'), ('SBO', 'SB Opps')]
     run_table = [{'stat': lbl, 'value': _fmt(p.get(col), 3)} for col, lbl in run_fields]
 
-    # Situational table
     situ_table = [
         {'stat': 'vs RHP',  'value': _fmt(p.get('vRH'), 3)},
         {'stat': 'vs LHP',  'value': _fmt(p.get('vLH'), 3)},
@@ -646,34 +667,37 @@ def player_detail(player_id):
         'bar_avg':      bar_avg,
     }
 
-    lineup_spot = next(
-        (e['spot'] for e in LINEUP if e['player_id'] == player_id),
-        None
-    )
+    lineup_spot_rhp = next(
+        (e['spot'] for e in LINEUP_VS_RHP if e['player_id'] == player_id), None)
+    lineup_spot_lhp = next(
+        (e['spot'] for e in LINEUP_VS_LHP if e['player_id'] == player_id), None)
 
     player_info = {
-        'player_id': player_id,
-        'name':      str(p.get('display_name', '—')),
-        'pos':       str(p.get('pos_primary', '—')),
-        'age':       _safe_int(p.get('Age')),
-        'PA':        _safe_int(p.get('PA')),
-        'WAR':       _fmt(p.get('WAR'), 1),
-        'oWAR':      _fmt(p.get('oWAR'), 1),
-        'dWAR':      _fmt(p.get('dWAR'), 1),
-        'OPS+':      _safe_int(p.get('OPS+')),
-        'BA':        _fmt(p.get('BA')),
-        'OBP':       _fmt(p.get('OBP')),
-        'SLG':       _fmt(p.get('SLG')),
-        'OPS':       _fmt(p.get('OPS')),
-        'HR':        _safe_int(p.get('HR')),
-        'RBI':       _safe_int(p.get('RBI')),
-        'SB':        _safe_int(p.get('SB')),
+        'player_id':    player_id,
+        'name':         str(p.get('display_name', '—')),
+        'pos':          str(p.get('pos_primary', '—')),
+        'age':          _safe_int(p.get('Age')),
+        'PA':           _safe_int(p.get('PA')),
+        'WAR':          _fmt(p.get('WAR'), 1),
+        'oWAR':         _fmt(p.get('oWAR'), 1),
+        'dWAR':         _fmt(p.get('dWAR'), 1),
+        'OPS+':         _safe_int(p.get('OPS+')),
+        'BA':           _fmt(p.get('BA')),
+        'OBP':          _fmt(p.get('OBP')),
+        'SLG':          _fmt(p.get('SLG')),
+        'OPS':          _fmt(p.get('OPS')),
+        'HR':           _safe_int(p.get('HR')),
+        'RBI':          _safe_int(p.get('RBI')),
+        'SB':           _safe_int(p.get('SB')),
+        'hand':         HANDEDNESS.get(player_id, 'R'),
     }
 
     return render_template(
         'cubs/player_detail.html',
         player=player_info,
-        lineup_spot=lineup_spot,
+        lineup_spot=lineup_spot_rhp,
+        lineup_spot_rhp=lineup_spot_rhp,
+        lineup_spot_lhp=lineup_spot_lhp,
         chart_data=json.dumps(chart_data),
         adv_table=adv_table,
         run_table=run_table,
@@ -683,85 +707,34 @@ def player_detail(player_id):
 
 @cubs_bp.route('/analysis')
 def analysis():
-    """Comparative analysis page with four Chart.js charts."""
     if not DATA:
         return render_template('cubs/no_data.html', required=REQUIRED_CSVS, data_dir=DATA_DIR)
 
     df        = DATA['master']
     qualified = df[pd.to_numeric(df['PA'], errors='coerce') >= 30].copy()
-    lineup_names = [e['name'] for e in LINEUP]
-
-    # Chart 1: OBP vs SLG scatter
-    scatter_obp_slg = [
-        {
-            'x': round(_safe_float(r.get('OBP')), 3),
-            'y': round(_safe_float(r.get('SLG')), 3),
-            'label': str(r['display_name']),
-            'player_id': str(r['player_id']),
-            'in_lineup': str(r['display_name']) in lineup_names,
-        }
-        for _, r in qualified.iterrows()
-    ]
-
-    # Chart 2: OPS+ bar
-    ops_df = qualified.copy()
-    ops_df['OPS+'] = pd.to_numeric(ops_df['OPS+'], errors='coerce').fillna(0)
-    ops_df = ops_df[ops_df['OPS+'] > 0].sort_values('OPS+', ascending=False)
-    ops_plus_data = {
-        'labels': ops_df['display_name'].tolist(),
-        'values': ops_df['OPS+'].tolist(),
-    }
-
-    # Chart 3: RC/G vs WPA scatter
-    scatter_rcg_wpa = [
-        {
-            'x': round(_safe_float(r.get('RC/G')), 2),
-            'y': round(_safe_float(r.get('WPA')), 2),
-            'label': str(r['display_name']),
-            'player_id': str(r['player_id']),
-            'in_lineup': str(r['display_name']) in lineup_names,
-        }
-        for _, r in qualified.iterrows()
-    ]
-
-    # Chart 4: Clutch bar
-    clutch_df = qualified.copy()
-    clutch_df['Clutch'] = pd.to_numeric(clutch_df['Clutch'], errors='coerce').fillna(0)
-    clutch_df = clutch_df.sort_values('Clutch', ascending=False)
-    clutch_data = {
-        'labels': clutch_df['display_name'].tolist(),
-        'values': [round(float(v), 2) for v in clutch_df['Clutch'].tolist()],
-    }
-
-    chart_data = {
-        'lineup_names':    lineup_names,
-        'scatter_obp_slg': scatter_obp_slg,
-        'ops_plus':        ops_plus_data,
-        'scatter_rcg_wpa': scatter_rcg_wpa,
-        'clutch':          clutch_data,
-    }
+    chart_data = _build_chart_data(LINEUP_VS_RHP, df)
 
     return render_template('cubs/analysis.html', chart_data=json.dumps(chart_data))
 
 
 @cubs_bp.route('/methodology')
 def methodology():
-    """Methodology page — algorithm explanation, stat definitions, limitations."""
     if not DATA:
         return render_template('cubs/no_data.html', required=REQUIRED_CSVS, data_dir=DATA_DIR)
-    return render_template('cubs/methodology.html', lineup=LINEUP)
+    return render_template('cubs/methodology.html', lineup=LINEUP_VS_RHP)
 
 
 # =============================================================================
 # LOAD DATA AT IMPORT TIME
-# Wrapped in try/except so missing CSV files don't crash the whole portfolio.
-# The routes check DATA and show a friendly message if it's still empty.
 # =============================================================================
 try:
     load_all_data()
-    _result = compute_lineup(DATA['master'])
-    LINEUP.extend(_result)
-    print(f"Cubs lineup ready: {[e['name'] for e in LINEUP]}")
+    _rhp = compute_lineup(DATA['master'], vs_rhp=True)
+    _lhp = compute_lineup(DATA['master'], vs_rhp=False)
+    LINEUP_VS_RHP.extend(_rhp)
+    LINEUP_VS_LHP.extend(_lhp)
+    print(f"Cubs vs-RHP lineup: {[e['name'] for e in LINEUP_VS_RHP]}")
+    print(f"Cubs vs-LHP lineup: {[e['name'] for e in LINEUP_VS_LHP]}")
 except FileNotFoundError as _e:
     print(f"Cubs CSV not found — add files to cubs/data/: {_e}")
 except Exception as _e:

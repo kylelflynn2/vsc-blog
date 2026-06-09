@@ -11,9 +11,9 @@
   },
   {
     "id": "3",
-    "title": "The Most Ideal Batting Lineup for the 2026 Chicago Cubs",
-    "description": "A multi-source sabermetric analysis of the 2026 Chicago Cubs roster. Uses the Hungarian algorithm to optimally assign players to batting spots 1-6, scored across OBP, SLG, WAR, RC/G, SecA and more. Includes interactive charts, per-player profiles, and a full methodology writeup.",
-    "date": "May 28, 2026",
+    "title": "Cubs Optimal Lineup, Sabermetrics Not Salary",
+    "description": "OBP-first sabermetric lineup optimization for the 2026 Chicago Cubs. Generates two lineups — vs RHP and vs LHP — using platoon-adjusted OBP scoring and the Hungarian algorithm. Built from FanGraphs and Baseball Reference data. Includes interactive charts, per-player profiles, and full methodology.",
+    "date": "June 8, 2026",
     "project_url": "/projects/cubs-2026",
     "github_url": "https://github.com/colinflynn/baseball-stats",
     "tags": ["Baseball Analytics", "Sabermetrics", "Python", "Optimization"],

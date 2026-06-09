@@ -1,5 +1,5 @@
 {% extends "cubs/base.html" %}
-{% block title %}The Most Ideal Batting Lineup for the 2026 Chicago Cubs · Kyle Flynn{% endblock %}
+{% block title %}Cubs Optimal Lineup, Sabermetrics Not Salary · Kyle Flynn{% endblock %}
 
 {% block cubs_page_styles %}
 <style>
@@ -78,6 +78,21 @@
         border-top: 1px solid var(--border);
         background: var(--cubs-light);
     }
+
+    .card-splits {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+        padding: 0.45rem 1rem;
+        border-top: 1px solid var(--border);
+        background: #f8f9fc;
+        font-size: 0.72rem;
+    }
+    .split-lbl { color: var(--text-muted); font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; }
+    .split-val { font-weight: 800; color: var(--cubs-blue); margin-left: 0.2rem; }
+    .split-val.active { color: var(--cubs-red); }
+    .split-sep  { color: var(--border); margin: 0 0.5rem; }
     .card-footer a {
         font-size: 0.74rem;
         font-weight: 600;
@@ -221,6 +236,53 @@
     .weight-bar { height: 8px; border-radius: 4px; background: var(--cubs-blue); }
 
     @media (max-width: 768px) { .lineup-grid { grid-template-columns: 1fr; } }
+
+    /* ── LINEUP TABS ──────────────────────────────────── */
+    .lineup-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 0;
+    }
+
+    .lineup-tab {
+        background: none;
+        border: none;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -2px;
+        padding: 0.6rem 1.25rem;
+        font-size: 0.88rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: color 0.18s, border-color 0.18s;
+    }
+
+    .lineup-tab:hover { color: var(--cubs-blue); }
+
+    .lineup-tab.active {
+        color: var(--cubs-blue);
+        border-bottom-color: var(--cubs-blue);
+    }
+
+    /* ── PLATOON BADGE ────────────────────────────────── */
+    .platoon-badge {
+        display: inline-block;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: rgba(255,255,255,0.18);
+        border: 1px solid rgba(255,255,255,0.35);
+        border-radius: 3px;
+        padding: 1px 5px;
+        margin-left: 0.4rem;
+        vertical-align: middle;
+        color: rgba(255,255,255,0.9);
+    }
 </style>
 {% endblock %}
 
@@ -228,11 +290,12 @@
 
 <!-- ──────────────── HERO ──────────────── -->
 <section class="cubs-page-header">
-    <h1>The Most Ideal Batting Lineup<br>for the 2026 Chicago Cubs</h1>
+    <h1>Cubs Optimal Lineup<br><span style="font-size:0.72em;letter-spacing:0.04em;color:rgba(255,255,255,0.75);">Sabermetrics Not Salary</span></h1>
     <p class="header-sub">
-        Each player is scored for every batting spot, then an optimal assignment algorithm
-        finds the lineup combination that maximizes total fit across all nine positions —
-        built from OBP, SLG, WAR, RC/G, SecA, WPA, ISO, and more.
+        OBP is the most important offensive stat. Two lineups built for this roster:
+        one vs Right-Handed Pitchers, one vs Left-Handed Pitchers.
+        Each is optimized with an OBP-first scoring model and platoon adjustments.
+        Stats from FanGraphs &amp; Baseball Reference, June 2026.
     </p>
     <div class="stat-pills">
         <div class="stat-pill">
@@ -265,38 +328,96 @@
         <span class="section-tag">Optimal Batting Order</span>
         <h2>The Starting Lineup</h2>
         <p class="section-desc">
-            The top 9 batters by Plate Appearances are selected as starters. A weighted scoring
-            formula rates each player's fit for every spot from 1–6. Rather than greedily picking
-            the best player for each spot one at a time — which can leave later spots worse off —
-            the model considers all possible assignments simultaneously and finds the single
-            combination that maximizes total lineup fitness across all six spots at once.
-            Spots 7–9 fill with the remaining players ranked by OPS.
+            The top 9 batters by Plate Appearances are the starters. Instead of a generic
+            platoon estimate, each player's actual OBP vs RHP and vs LHP is pulled from
+            FanGraphs (2025+2026 combined). The model scores every possible batting order
+            using split-specific OBP for each slot and picks the combination that
+            maximizes total lineup efficiency. Spots 7–9 fill with remaining players by OPS.
+            Each card shows both split values — the highlighted one is what drove the ranking.
         </p>
 
-        <div class="lineup-grid">
-            {% for p in lineup %}
-            <div class="lineup-card">
-                <div class="card-top">
-                    <div class="spot-num">{{ p.spot }}</div>
-                    <div class="player-info">
-                        <div class="player-name">{{ p.name }}</div>
-                        <div class="player-sub">{{ p.pos }} · Age {{ p.age }} · {{ p.PA }} PA</div>
+        <!-- Tab switcher -->
+        <div class="lineup-tabs">
+            <button class="lineup-tab active" onclick="showLineup('rhp', this)">vs Right-Handed Pitchers</button>
+            <button class="lineup-tab" onclick="showLineup('lhp', this)">vs Left-Handed Pitchers</button>
+        </div>
+
+        <!-- vs RHP lineup -->
+        <div id="lineup-rhp" class="lineup-panel">
+            <div class="lineup-grid">
+                {% for p in lineup_rhp %}
+                <div class="lineup-card">
+                    <div class="card-top">
+                        <div class="spot-num">{{ p.spot }}</div>
+                        <div class="player-info">
+                            <div class="player-name">
+                                {{ p.name }}
+                                {% if p.platoon_adv %}<span class="platoon-badge">▲ Platoon</span>{% endif %}
+                            </div>
+                            <div class="player-sub">{{ p.pos }} · Bats {{ p.hand }} · {{ p.PA }} PA</div>
+                        </div>
+                    </div>
+                    <div class="card-stats">
+                        <div class="cs"><span class="sl">OBP vs RHP</span><span class="sv" style="color:var(--cubs-red);font-weight:800;">{{ "%.3f"|format(p.OBP) }}</span></div>
+                        <div class="cs"><span class="sl">SLG</span><span class="sv">{{ "%.3f"|format(p.SLG) }}</span></div>
+                        <div class="cs"><span class="sl">OPS+</span><span class="sv">{{ p['OPS+'] }}</span></div>
+                        <div class="cs"><span class="sl">HR</span><span class="sv">{{ p.HR }}</span></div>
+                        <div class="cs"><span class="sl">RBI</span><span class="sv">{{ p.RBI }}</span></div>
+                        <div class="cs"><span class="sl">WAR</span><span class="sv">{{ "%.1f"|format(p.WAR) }}</span></div>
+                    </div>
+                    <div class="card-splits">
+                        <span class="split-lbl">vs RHP</span>
+                        <span class="split-val active">{{ "%.3f"|format(p.obp_vs_rhp) }}</span>
+                        <span class="split-sep">|</span>
+                        <span class="split-lbl">vs LHP</span>
+                        <span class="split-val">{{ "%.3f"|format(p.obp_vs_lhp) }}</span>
+                    </div>
+                    <div class="card-rationale">{{ p.rationale }}</div>
+                    <div class="card-footer">
+                        <a href="{{ url_for('cubs.player_detail', player_id=p.player_id) }}">Full stats & charts →</a>
                     </div>
                 </div>
-                <div class="card-stats">
-                    <div class="cs"><span class="sl">BA</span><span class="sv">{{ "%.3f"|format(p.BA) }}</span></div>
-                    <div class="cs"><span class="sl">OBP</span><span class="sv">{{ "%.3f"|format(p.OBP) }}</span></div>
-                    <div class="cs"><span class="sl">SLG</span><span class="sv">{{ "%.3f"|format(p.SLG) }}</span></div>
-                    <div class="cs"><span class="sl">HR</span><span class="sv">{{ p.HR }}</span></div>
-                    <div class="cs"><span class="sl">RBI</span><span class="sv">{{ p.RBI }}</span></div>
-                    <div class="cs"><span class="sl">WAR</span><span class="sv">{{ "%.1f"|format(p.WAR) }}</span></div>
-                </div>
-                <div class="card-rationale">{{ p.rationale }}</div>
-                <div class="card-footer">
-                    <a href="{{ url_for('cubs.player_detail', player_id=p.player_id) }}">Full stats & charts →</a>
-                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+        </div>
+
+        <!-- vs LHP lineup -->
+        <div id="lineup-lhp" class="lineup-panel" style="display:none;">
+            <div class="lineup-grid">
+                {% for p in lineup_lhp %}
+                <div class="lineup-card">
+                    <div class="card-top">
+                        <div class="spot-num">{{ p.spot }}</div>
+                        <div class="player-info">
+                            <div class="player-name">
+                                {{ p.name }}
+                                {% if p.platoon_adv %}<span class="platoon-badge">▲ Platoon</span>{% endif %}
+                            </div>
+                            <div class="player-sub">{{ p.pos }} · Bats {{ p.hand }} · {{ p.PA }} PA</div>
+                        </div>
+                    </div>
+                    <div class="card-stats">
+                        <div class="cs"><span class="sl">OBP vs LHP</span><span class="sv" style="color:var(--cubs-red);font-weight:800;">{{ "%.3f"|format(p.OBP) }}</span></div>
+                        <div class="cs"><span class="sl">SLG</span><span class="sv">{{ "%.3f"|format(p.SLG) }}</span></div>
+                        <div class="cs"><span class="sl">OPS+</span><span class="sv">{{ p['OPS+'] }}</span></div>
+                        <div class="cs"><span class="sl">HR</span><span class="sv">{{ p.HR }}</span></div>
+                        <div class="cs"><span class="sl">RBI</span><span class="sv">{{ p.RBI }}</span></div>
+                        <div class="cs"><span class="sl">WAR</span><span class="sv">{{ "%.1f"|format(p.WAR) }}</span></div>
+                    </div>
+                    <div class="card-splits">
+                        <span class="split-lbl">vs RHP</span>
+                        <span class="split-val">{{ "%.3f"|format(p.obp_vs_rhp) }}</span>
+                        <span class="split-sep">|</span>
+                        <span class="split-lbl">vs LHP</span>
+                        <span class="split-val active">{{ "%.3f"|format(p.obp_vs_lhp) }}</span>
+                    </div>
+                    <div class="card-rationale">{{ p.rationale }}</div>
+                    <div class="card-footer">
+                        <a href="{{ url_for('cubs.player_detail', player_id=p.player_id) }}">Full stats & charts →</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 
@@ -363,40 +484,66 @@
         <div class="meth-grid">
             <div class="meth-card">
                 <h4>Spot 1 — Leadoff</h4>
-                <p>OBP (35%) + Stolen Base % (25%) + Contact/K-rate (25%) + Secondary Average (15%)</p>
+                <p>OBP (40%) + Stolen Base % (25%) + Contact/K-rate (20%) + Secondary Average (15%). OBP ≥ .370 is ideal.</p>
             </div>
             <div class="meth-card">
-                <h4>Spot 2 — 2-Hole</h4>
-                <p>OBP (30%) + Batting Average (20%) + Secondary Average (25%) + SB% (25%)</p>
+                <h4>Spot 2 — Best Overall Hitter</h4>
+                <p>OBP (35%) + wOBA/rOBA (25%) + OPS+ (20%) + WAR (20%). Most plate appearances with runners on.</p>
             </div>
             <div class="meth-card">
-                <h4>Spot 3 — Best Hitter</h4>
-                <p>OPS+ (25%) + rOBA (25%) + Runs Created/Game (25%) + WAR (25%)</p>
+                <h4>Spot 3 — RBI / Contact</h4>
+                <p>OBP (25%) + OPS+ (25%) + SLG (25%) + WAR (25%). Balanced OBP and power with the table set.</p>
             </div>
             <div class="meth-card">
                 <h4>Spot 4 — Cleanup</h4>
-                <p>SLG (30%) + HR (30%) + ISO (20%) + RBI (20%)</p>
+                <p>SLG (30%) + HR (30%) + ISO (20%) + RBI (20%). Maximum power to drive in baserunners.</p>
             </div>
             <div class="meth-card">
                 <h4>Spot 5 — Secondary Power</h4>
-                <p>SLG (25%) + HR (20%) + RBI (30%) + RC/G (25%)</p>
+                <p>SLG (25%) + HR (20%) + RBI (30%) + RC/G (25%). Protection for the cleanup hitter.</p>
             </div>
             <div class="meth-card">
-                <h4>Spot 6 — Bottom Anchor</h4>
-                <p>OPS (40%) + RBI (30%) + Batting Average (30%)</p>
+                <h4>Spot 6 — Table Setter</h4>
+                <p>OBP (40%) + OPS (30%) + BA (30%). Best of the bottom third — keeps the lineup turning over.</p>
             </div>
         </div>
 
         <p class="section-desc" style="margin-top:1.5rem;margin-bottom:0;">
-            <strong>Data sources:</strong> Standard Batting, Advanced Batting, Value Batting,
-            Sabermetric Batting, Batting Ratios, and Win Probability tables from
-            <a href="https://www.baseball-reference.com" target="_blank" style="color:var(--cubs-blue);">Baseball Reference</a>.
-            All stats normalized to [0,1] within the nine starters before scoring.
+            <strong>Real splits, not estimates.</strong> Rather than applying a generic "+.022"
+            platoon adjustment (the historical league-average edge), this model pulls each
+            player's actual OBP vs RHP and vs LHP directly from FanGraphs — 2025 and 2026
+            seasons combined. The difference matters: Ian Happ (switch hitter) shows a
+            <strong>.099</strong> gap (.373 vs RHP, .274 vs LHP) because he bats left-handed
+            against righties and right-handed against lefties. Carson Kelly shows a
+            <strong>.060</strong> gap (.322 vs RHP, .382 vs LHP). Dansby Swanson shows almost
+            no gap (.299 vs RHP, .285 vs LHP) — a league-average adjustment would have
+            overstated his platoon edge. Each lineup uses the split-specific OBP during scoring
+            so the model naturally favors the right hitter for the right game. All stats
+            are then scaled to the same 0–1 range within the nine starters before final scoring,
+            so no single number dominates.
         </p>
     </div>
 
-    <div style="text-align:center;padding:2.5rem 1rem 1rem;border-top:1px solid var(--border);margin-top:1rem;">
-        <p style="font-size:1rem;color:#666;font-style:italic;letter-spacing:0.03em;">More projects coming soon — stay tuned.</p>
+    <!-- ──────────────── SOURCES ──────────────── -->
+    <div class="project-section" style="margin-bottom:2rem;">
+        <span class="section-tag">Sources</span>
+        <h2>Data &amp; References</h2>
+        <p class="section-desc" style="margin-bottom:0.75rem;">
+            All stats reflect the 2026 season through early June 2026.
+        </p>
+        <ul style="margin:0;padding-left:1.4rem;color:var(--text-muted);font-size:0.92rem;line-height:2.1;">
+            <li>
+                <a href="https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=nl&qual=0&season=2026&season1=2026&ind=0&team=17" target="_blank" rel="noopener" style="color:var(--cubs-blue);font-weight:600;">FanGraphs</a>
+                — wOBA, wRC+, ISO, WAR, BB%, K%, and all advanced metrics. Primary source for 2026 season-to-date batting statistics.
+            </li>
+            <li>
+                <a href="https://www.baseball-reference.com/teams/CHC/2026.shtml" target="_blank" rel="noopener" style="color:var(--cubs-blue);font-weight:600;">Baseball Reference</a>
+                — Standard batting, value batting (Rbat, oWAR, dWAR), sabermetric batting (RC/G, SecA), win probability (WPA, Clutch, RE24), and batting ratios. Exported as CSV for each table.
+            </li>
+            <li>
+                Lineup optimization based on SABR sabermetric framework: OBP-first ordering, platoon splits, and run-expectancy principles.
+            </li>
+        </ul>
     </div>
 
 </div>
@@ -404,6 +551,13 @@
 
 {% block cubs_scripts %}
 <script>
+function showLineup(type, btn) {
+    document.querySelectorAll('.lineup-panel').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.lineup-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('lineup-' + type).style.display = '';
+    btn.classList.add('active');
+}
+
 const D = {{ chart_data|safe }};
 const lineupNames = new Set(D.lineup_names);
 const blue   = '#0E3386';
