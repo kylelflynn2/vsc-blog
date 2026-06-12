@@ -2,18 +2,10 @@
 
 {% block extra_styles %}
 <style>
-    :root {
-        --cubs-blue:      #0E3386;
-        --cubs-blue-dark: #0A2560;
-        --cubs-blue-mid:  #1a4a9e;
-        --cubs-red:       #CC3433;
-        --cubs-light:     #e8edf7;
-    }
-
     /* Cubs sub-navigation */
     .cubs-subnav {
-        background: var(--cubs-blue-dark);
-        border-bottom: 3px solid var(--cubs-red);
+        background: var(--navy-light);
+        border-bottom: 3px solid var(--gold);
         padding: 0 2rem;
     }
 
@@ -50,8 +42,8 @@
 
     .cubs-nav-link:hover,
     .cubs-nav-link.active {
-        background: var(--cubs-red);
-        color: #fff;
+        background: var(--gold);
+        color: var(--navy);
     }
 
     .cubs-nav-link.back {
@@ -67,7 +59,7 @@
 
     /* Section headers */
     .cubs-page-header {
-        background: linear-gradient(135deg, var(--cubs-blue) 0%, var(--cubs-blue-dark) 100%);
+        background: var(--navy);
         color: #fff;
         padding: 3.5rem 2rem;
         text-align: center;
@@ -81,7 +73,7 @@
     }
 
     .cubs-page-header .header-sub {
-        color: rgba(255,255,255,0.7);
+        color: var(--gold-light);
         font-size: 1rem;
         letter-spacing: 0.04em;
     }
@@ -127,7 +119,7 @@
         line-height: 1;
     }
 
-    /* Cubs-themed data table */
+    /* Data table */
     table.cubs-table {
         width: 100%;
         border-collapse: collapse;
@@ -135,7 +127,7 @@
     }
 
     table.cubs-table th {
-        background: var(--cubs-blue);
+        background: var(--navy);
         color: #fff;
         text-align: left;
         padding: 0.65rem 0.85rem;
@@ -149,7 +141,7 @@
     }
 
     table.cubs-table th:hover {
-        background: var(--cubs-blue-mid);
+        background: var(--navy-light);
     }
 
     table.cubs-table td {
@@ -159,7 +151,7 @@
     }
 
     table.cubs-table tr:hover td {
-        background: var(--cubs-light);
+        background: var(--cream);
     }
 
     table.cubs-table td.num {
@@ -168,7 +160,7 @@
     }
 
     table.cubs-table tr.in-lineup td {
-        background: var(--cubs-light);
+        background: var(--cream);
         font-weight: 600;
     }
 
@@ -183,7 +175,7 @@
 
     .cubs-card h2 {
         font-family: 'DM Serif Display', serif;
-        color: var(--cubs-blue);
+        color: var(--navy);
         font-size: 1.4rem;
         margin-bottom: 0.5rem;
     }
@@ -193,7 +185,7 @@
         font-weight: 700;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: var(--cubs-red);
+        color: var(--gold);
         display: block;
         margin-bottom: 0.4rem;
     }
