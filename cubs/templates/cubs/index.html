@@ -3,6 +3,12 @@
 
 {% block cubs_page_styles %}
 <style>
+    :root {
+        --cubs-blue:  #0E3386;
+        --cubs-red:   #CC3433;
+        --cubs-light: #EEF2FF;
+    }
+
     /* ── LINEUP CARDS ─────────────────────────────────────── */
     .lineup-grid {
         display: grid;
@@ -40,13 +46,13 @@
         font-family: 'DM Serif Display', serif;
         font-size: 2.8rem;
         line-height: 1;
-        color: rgba(255,255,255,0.22);
+        color: rgba(255,255,255,0.35);
         min-width: 52px;
         text-align: center;
     }
 
     .player-info { flex: 1; min-width: 0; }
-    .player-name { font-weight: 700; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #000; }
+    .player-name { font-family: 'DM Serif Display', serif; font-size: 1.25rem; font-weight: 400; color: #fff; letter-spacing: 0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
     .player-sub  { font-size: 0.78rem; color: rgba(255,255,255,0.6); margin-top: 0.15rem; }
 
     .card-stats {
