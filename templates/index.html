@@ -20,6 +20,21 @@
     position: relative;
   }
 
+  .hero-left::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+    background-size: 26px 26px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero-left > * {
+    position: relative;
+    z-index: 1;
+  }
+
   .hero-left::after {
     content: '';
     position: absolute;
@@ -37,6 +52,7 @@
     color: var(--gold);
     margin-bottom: 1.5rem;
     font-weight: 500;
+    animation: fadeSlideUp 0.55s 0.1s ease both;
   }
 
   .hero-name {
@@ -45,6 +61,7 @@
     color: var(--white);
     line-height: 1.05;
     margin-bottom: 1.5rem;
+    animation: fadeSlideUp 0.55s 0.22s ease both;
   }
 
   .hero-subtitle {
@@ -53,6 +70,7 @@
     letter-spacing: 0.05em;
     margin-bottom: 2.5rem;
     font-weight: 300;
+    animation: fadeSlideUp 0.55s 0.32s ease both;
   }
 
   .hero-divider {
@@ -60,6 +78,7 @@
     height: 2px;
     background: var(--gold);
     margin-bottom: 2rem;
+    animation: fadeSlideUp 0.55s 0.4s ease both;
   }
 
   .hero-bio {
@@ -68,12 +87,14 @@
     color: rgba(255,255,255,0.65);
     max-width: 420px;
     margin-bottom: 3rem;
+    animation: fadeSlideUp 0.55s 0.48s ease both;
   }
 
   .hero-cta {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    animation: fadeSlideUp 0.55s 0.58s ease both;
   }
 
   .hero-right {
@@ -144,6 +165,8 @@
     background: var(--border);
     width: 100%;
     max-width: 320px;
+    box-shadow: 0 4px 20px rgba(26, 39, 68, 0.1);
+    animation: fadeSlideUp 0.55s 0.4s ease both;
   }
 
   .stat-box {
@@ -206,7 +229,7 @@
     <div class="hero-divider"></div>
     <p class="hero-bio">{{ profile.bio }}</p>
     <div class="hero-cta">
-      <a href="/blog" class="btn-primary">View Projects</a>
+      <a href="/blog" class="btn-primary">Read the Blog</a>
       <a href="/resume" class="btn-outline">View Resume</a>
     </div>
     <div style="display:flex;gap:1.5rem;margin-top:1.25rem;">

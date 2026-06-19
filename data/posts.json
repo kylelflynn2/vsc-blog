@@ -1,5 +1,16 @@
 [
   {
+    "id": "5",
+    "title": "Jordan Walker Is Finally the Player We All Thought He Was Going to Be",
+    "description": "The Cardinals' 24-year-old is putting up All-Star numbers in 2026 — a .292/.346/.545 slash line and a 3.4 WAR in just 71 games. What changed this offseason that turned a labeled bust into St. Louis's offensive catalyst?",
+    "date": "June 18, 2026",
+    "project_url": "/projects/jordan-walker-2026",
+    "github_url": null,
+    "tags": ["Cardinals", "Player Analysis", "Hitting Mechanics", "Pitch Discipline"],
+    "category": "baseball",
+    "image": null
+  },
+  {
     "id": "4",
     "title": "Yankees Baseball Operations Portfolio",
     "description": "A comprehensive baseball operations analysis of the 2026 New York Yankees — optimal lineup construction with sabermetric reasoning, full payroll and CBT breakdown, arbitration primer, current depth chart, and a complete 2026–27 offseason strategic plan. Written from the perspective of a baseball operations analyst.",
@@ -7,6 +18,7 @@
     "project_url": "/projects/yankees-baseball-operations",
     "github_url": null,
     "tags": ["Yankees", "Sabermetrics", "Lineup Optimization", "Arbitration", "Payroll Analysis"],
+    "category": "baseball",
     "image": null
   },
   {
@@ -17,6 +29,7 @@
     "project_url": "/projects/cubs-2026",
     "github_url": "https://github.com/colinflynn/baseball-stats",
     "tags": ["Baseball Analytics", "Sabermetrics", "Python", "Optimization"],
+    "category": "baseball",
     "image": null
   },
   {
@@ -27,6 +40,7 @@
     "project_url": "/projects/whitesox-2026",
     "github_url": null,
     "tags": ["Baseball Analytics", "WAR", "Sabermetrics", "Python"],
+    "category": "baseball",
     "image": null
   }
 ]

@@ -1,0 +1,989 @@
+{% extends "base.html" %}
+{% block title %}Jordan Walker Is Finally the Player We All Thought He Was Going to Be · Kyle Flynn{% endblock %}
+
+{% block extra_styles %}
+<style>
+    /* ARTICLE HEADER */
+    .article-hero {
+        background: linear-gradient(135deg, #0F1A30 0%, var(--navy) 55%, #1E3460 100%);
+        color: var(--white);
+        padding: 5rem 2rem 4rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .article-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(rgba(201, 168, 76, 0.06) 1px, transparent 1px);
+        background-size: 24px 24px;
+        pointer-events: none;
+    }
+
+    .article-hero-inner {
+        position: relative;
+        z-index: 1;
+        max-width: 780px;
+        margin: 0 auto;
+    }
+
+    .article-category {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 1.25rem;
+    }
+
+    .article-hero h1 {
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(2rem, 4.5vw, 3.5rem);
+        line-height: 1.12;
+        margin-bottom: 1.25rem;
+    }
+
+    .article-dek {
+        font-size: 1.05rem;
+        color: rgba(255,255,255,0.62);
+        line-height: 1.65;
+        margin-bottom: 2rem;
+        max-width: 620px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .article-byline {
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.4);
+    }
+
+    .article-byline span { color: var(--gold-light); }
+
+    /* QUICK STATS */
+    .quick-stats {
+        background: var(--cream);
+        border-bottom: 1px solid var(--border);
+        padding: 1.5rem 2rem;
+    }
+
+    .quick-stats-inner {
+        max-width: 780px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 2.5rem;
+    }
+
+    .qs-item { text-align: center; }
+
+    .qs-value {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.75rem;
+        color: var(--navy);
+        display: block;
+        line-height: 1;
+        margin-bottom: 0.3rem;
+    }
+
+    .qs-label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+    }
+
+    .qs-divider {
+        width: 1px;
+        background: var(--border);
+        align-self: stretch;
+    }
+
+    /* PLAYER PHOTO */
+    .player-photo-wrap {
+        max-width: 780px;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+        line-height: 0;
+    }
+
+    .player-photo-wrap img {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+        object-position: center 15%;
+        display: block;
+        filter: brightness(0.92);
+    }
+
+    .player-photo-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(10,18,38,0.88) 0%, transparent 100%);
+        padding: 2rem 1.5rem 0.9rem;
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.6);
+        letter-spacing: 0.06em;
+        font-style: italic;
+        line-height: 1;
+    }
+
+    /* ARTICLE BODY */
+    .article-body {
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 3.5rem 2rem 2rem;
+    }
+
+    .article-body p {
+        font-size: 1.05rem;
+        line-height: 1.85;
+        color: #2A2A2A;
+        margin-bottom: 1.6rem;
+    }
+
+    .article-body p:first-child::first-letter {
+        font-family: 'DM Serif Display', serif;
+        font-size: 3.5rem;
+        float: left;
+        line-height: 0.8;
+        margin: 0.1em 0.08em 0 0;
+        color: var(--navy);
+    }
+
+    /* PULL QUOTE */
+    .pull-quote {
+        border-left: 4px solid var(--gold);
+        margin: 2.5rem 0;
+        padding: 1.25rem 1.75rem;
+        background: #FAFAF7;
+    }
+
+    .pull-quote p {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.35rem !important;
+        line-height: 1.5 !important;
+        color: var(--navy) !important;
+        margin-bottom: 0.5rem !important;
+        font-style: italic;
+    }
+
+    .pull-quote cite {
+        font-size: 0.78rem;
+        font-style: normal;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+    }
+
+    /* ── FANGRAPHS-STYLE CHART BLOCKS ── */
+    .fg-chart {
+        margin: 2.5rem 0;
+        border: 1px solid #D8D8D8;
+        background: #fff;
+        font-family: 'Inter', Arial, sans-serif;
+    }
+
+    .fg-chart-header {
+        background: #F4F4F4;
+        border-bottom: 1px solid #D8D8D8;
+        padding: 0.6rem 1rem;
+        display: flex;
+        align-items: baseline;
+        gap: 0.6rem;
+    }
+
+    .fg-chart-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #888;
+    }
+
+    .fg-chart-title {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #1A1A1A;
+    }
+
+    .fg-chart-body {
+        padding: 1.25rem 1.25rem 0.75rem;
+    }
+
+    .fg-chart-footer {
+        padding: 0.35rem 1rem 0.5rem;
+        border-top: 1px solid #EBEBEB;
+        font-size: 0.68rem;
+        color: #999;
+        font-style: italic;
+    }
+
+    /* STATS TABLE (FanGraphs style) */
+    .fg-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+        font-family: 'Inter', Arial, sans-serif;
+    }
+
+    .fg-table thead th {
+        background: #EEF2F7;
+        color: #1B4F8C;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 0.6rem 0.85rem;
+        text-align: center;
+        border-bottom: 2px solid #C8D4E0;
+    }
+
+    .fg-table thead th:first-child { text-align: left; }
+
+    .fg-table tbody td {
+        padding: 0.7rem 0.85rem;
+        text-align: center;
+        border-bottom: 1px solid #EBEBEB;
+        color: #222;
+    }
+
+    .fg-table tbody td:first-child {
+        text-align: left;
+        font-weight: 700;
+        color: #1B4F8C;
+    }
+
+    .fg-table tbody tr:last-child {
+        background: #FFFBEF;
+    }
+
+    .fg-table tbody tr:last-child td {
+        border-bottom: none;
+        font-weight: 700;
+    }
+
+    .fg-highlight { color: #1B6CA8; font-weight: 700; }
+    .fg-negative  { color: #C0392B; font-weight: 700; }
+    .fg-positive  { color: #1A7F37; font-weight: 700; }
+
+    /* STANCE COMPARISON */
+    .stance-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+        background: #D8D8D8;
+    }
+
+    .stance-panel {
+        background: var(--navy);
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+        color: var(--white);
+    }
+
+    .stance-panel.right-panel { background: #0F1A30; }
+
+    .stance-label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #fff !important;
+        margin-bottom: 0.85rem;
+    }
+
+    .stance-icon {
+        font-size: 4rem;
+        opacity: 0.35;
+        margin-bottom: 0.85rem;
+        line-height: 1;
+    }
+
+    .stance-panel p.stance-desc {
+        font-size: 0.82rem !important;
+        color: rgba(255,255,255,0.82) !important;
+        line-height: 1.6 !important;
+        margin-bottom: 0 !important;
+    }
+
+    .stance-tags {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 0.85rem;
+    }
+
+    .stance-tag {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.28);
+        color: #fff;
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        padding: 0.2rem 0.55rem;
+        text-transform: uppercase;
+    }
+
+    /* SECTION MARKERS */
+    .section-marker {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 3rem 0 1.5rem;
+    }
+
+    .section-marker-line { flex: 1; height: 1px; background: var(--border); }
+
+    .section-marker-text {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        white-space: nowrap;
+    }
+
+    /* SPLITS */
+    .splits-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+        background: #D8D8D8;
+    }
+
+    .split-cell {
+        background: #fff;
+        padding: 1.25rem;
+        text-align: center;
+    }
+
+    .split-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 0.5rem;
+    }
+
+    .split-ops {
+        font-family: 'DM Serif Display', serif;
+        font-size: 2rem;
+        color: #1B6CA8;
+    }
+
+    .split-vs {
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-top: 0.25rem;
+    }
+
+    /* CONCLUSION */
+    .conclusion-box {
+        background: var(--navy);
+        color: var(--white);
+        padding: 2.5rem;
+        margin: 3rem 0 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .conclusion-box::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(rgba(201,168,76,0.06) 1px, transparent 1px);
+        background-size: 20px 20px;
+        pointer-events: none;
+    }
+
+    .conclusion-box-inner { position: relative; z-index: 1; }
+
+    .conclusion-box h3 {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+    }
+
+    .conclusion-box p {
+        font-size: 0.98rem !important;
+        line-height: 1.8 !important;
+        color: rgba(255,255,255,0.72) !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .conclusion-box p:last-child { margin-bottom: 0 !important; }
+
+    /* SOURCE BLOCK */
+    .source-block {
+        max-width: 780px;
+        margin: 2.5rem auto 0;
+        padding: 1.5rem 2rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .source-block p {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+        margin-bottom: 0.25rem;
+    }
+
+    .source-block a {
+        color: var(--navy);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    @media (max-width: 768px) {
+        .quick-stats-inner { gap: 1.5rem; }
+        .qs-divider { display: none; }
+        .stance-grid, .splits-row { grid-template-columns: 1fr; }
+        .article-body { padding: 2rem 1.25rem 2rem; }
+        .player-photo-wrap img { height: 280px; }
+        .source-block { padding: 1.5rem 1.25rem; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ARTICLE HEADER -->
+<header class="article-hero">
+    <div class="article-hero-inner">
+        <p class="article-category">Baseball Analysis · Cardinals · 2026</p>
+        <h1>Jordan Walker Is Finally the Player We All Thought He Was Going to Be</h1>
+        <p class="article-dek">The former fourth-ranked prospect in baseball has turned three years of struggle into the breakthrough season everyone expected from him — and the numbers back up every bit of it.</p>
+        <p class="article-byline">By <span>Kyle Flynn</span> &nbsp;·&nbsp; June 18, 2026</p>
+    </div>
+</header>
+
+<!-- QUICK STATS BAR -->
+<div class="quick-stats">
+    <div class="quick-stats-inner">
+        <div class="qs-item"><span class="qs-value">.292</span><span class="qs-label">Batting Avg</span></div>
+        <div class="qs-divider"></div>
+        <div class="qs-item"><span class="qs-value">.346</span><span class="qs-label">On-Base %</span></div>
+        <div class="qs-divider"></div>
+        <div class="qs-item"><span class="qs-value">.545</span><span class="qs-label">Slugging %</span></div>
+        <div class="qs-divider"></div>
+        <div class="qs-item"><span class="qs-value">.891</span><span class="qs-label">OPS</span></div>
+        <div class="qs-divider"></div>
+        <div class="qs-item"><span class="qs-value">3.4</span><span class="qs-label">WAR</span></div>
+        <div class="qs-divider"></div>
+        <div class="qs-item"><span class="qs-value">71</span><span class="qs-label">Games Played</span></div>
+    </div>
+</div>
+
+<!-- PLAYER PHOTO -->
+<div style="max-width:780px;margin:0 auto;padding:0 2rem;">
+    <div class="player-photo-wrap">
+        <img src="/static/img/jordan_walker.jpg" alt="Jordan Walker, St. Louis Cardinals #18">
+        <div class="player-photo-caption">Jordan Walker, St. Louis Cardinals — Getty Images</div>
+    </div>
+</div>
+
+<!-- ARTICLE BODY -->
+<article class="article-body">
+
+    <p>The former fourth-ranked prospect in all of baseball was supposed to be a star the moment he arrived. Three years and three negative-WAR seasons later, some had written him off. Now, in 2026, Jordan Walker is finally becoming exactly what everyone saw in him — and doing it in a way that looks permanent, not lucky.</p>
+
+    <p>With the Saint Louis Cardinals this year, Walker has been nothing but outstanding. He is putting up All-Star numbers with a slash line of .292/.346/.545 — an OPS of .891. In 71 games played, he already has a WAR of 3.4, and it is only June 18th. That wins above replacement is better than all three of his previous years in the big leagues combined.</p>
+
+    <p>But here is the real question. What happened this offseason that made Jordan Walker the player he is today? What changed?</p>
+
+    <div class="section-marker">
+        <div class="section-marker-line"></div>
+        <span class="section-marker-text">The Background</span>
+        <div class="section-marker-line"></div>
+    </div>
+
+    <p>Coming into his professional career, Jordan Walker was drafted in the first round of the 2020 draft by the St. Louis Cardinals. He played exceptional throughout the minors, earning many awards and playing in the 2022 All-Star Futures Game. This Georgia product was the fourth-ranked prospect in Major League Baseball coming into the 2023 season.</p>
+
+    <p>And the first three years of his career were — let's just say — not what we thought they were gonna be.</p>
+
+    <!-- CHART 1 — Stats Table -->
+    <div class="fg-chart">
+        <div class="fg-chart-header">
+            <span class="fg-chart-label">Table 1</span>
+            <span class="fg-chart-title">Jordan Walker — Year-by-Year Slash Line &amp; WAR, 2023–2026</span>
+        </div>
+        <div class="fg-chart-body">
+            <table class="fg-table">
+                <thead>
+                    <tr>
+                        <th>Season</th>
+                        <th>BA</th>
+                        <th>OBP</th>
+                        <th>SLG</th>
+                        <th>OPS</th>
+                        <th>WAR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2023</td>
+                        <td>.276</td>
+                        <td>.342</td>
+                        <td>.445</td>
+                        <td>.787</td>
+                        <td class="fg-negative">−0.2</td>
+                    </tr>
+                    <tr>
+                        <td>2024</td>
+                        <td>.209</td>
+                        <td>.278</td>
+                        <td>.347</td>
+                        <td>.625</td>
+                        <td class="fg-negative">−1.1</td>
+                    </tr>
+                    <tr>
+                        <td>2025</td>
+                        <td>.237</td>
+                        <td>.301</td>
+                        <td>.375</td>
+                        <td>.676</td>
+                        <td class="fg-negative">−0.5</td>
+                    </tr>
+                    <tr>
+                        <td>2026</td>
+                        <td class="fg-positive">.292</td>
+                        <td class="fg-positive">.346</td>
+                        <td class="fg-positive">.545</td>
+                        <td class="fg-positive">.891</td>
+                        <td class="fg-positive">3.4</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="fg-chart-footer">Source: Baseball Reference · FanGraphs</div>
+    </div>
+
+    <p>His first season, he hit solid — a .276 batting average, a .342 on-base percentage, and a .445 slugging percentage. But he still posted a negative WAR as a rookie. And in 2024 and 2025, that carried into back-to-back seasons also in the negatives in terms of wins above replacement. In those three years combined, Jordan Walker racked up 280 strikeouts against just 76 walks. He was chasing pitches out of the zone at a 34.1% rate. He was swinging at strikes he should have hit and taking balls he should have laid off. Statistically, he was one of the worst hitters in professional baseball. He was even labeled a bust by many baseball fans. And he heard every word of it.</p>
+
+    <!-- CHART 2 — K% vs BB% -->
+    <div class="fg-chart">
+        <div class="fg-chart-header">
+            <span class="fg-chart-label">Chart 2</span>
+            <span class="fg-chart-title">Strikeout Rate vs. Walk Rate, 2023–2026</span>
+        </div>
+        <div class="fg-chart-body">
+            <canvas id="chart2" height="100"></canvas>
+        </div>
+        <div class="fg-chart-footer">Source: FanGraphs — Plate Discipline</div>
+    </div>
+
+    <div class="section-marker">
+        <div class="section-marker-line"></div>
+        <span class="section-marker-text">What Changed</span>
+        <div class="section-marker-line"></div>
+    </div>
+
+    <p>So what actually changed? It was not one thing. It was everything — at the same time.</p>
+
+    <p>This past offseason, Jordan Walker made a trip to Driveline Baseball — one of the most respected player development facilities in the country — and went to work on a flaw that had been quietly killing his production for three years. His back hip was collapsing on his swing, preventing him from getting under the ball and elevating it. For a guy with his kind of raw power, hitting grounders to shortstop is a death sentence. They fixed it.</p>
+
+    <!-- CHART 3 — Stance -->
+    <div class="fg-chart">
+        <div class="fg-chart-header">
+            <span class="fg-chart-label">Visual 3</span>
+            <span class="fg-chart-title">Stance Overhaul — June 2025 vs. April 2026</span>
+        </div>
+        <div class="stance-grid">
+            <div class="stance-panel">
+                <div class="stance-label">June 2025 — Before Driveline</div>
+                <div class="stance-icon">🏏</div>
+                <p class="stance-desc">Open stance, back hip collapsing at contact, hands drifting away from body on load, lower half balance completely off</p>
+                <div class="stance-tags">
+                    <span class="stance-tag">Hip Collapse</span>
+                    <span class="stance-tag">Hands Drifting</span>
+                    <span class="stance-tag">Ground Ball Heavy</span>
+                </div>
+            </div>
+            <div class="stance-panel right-panel">
+                <div class="stance-label">April 2026 — Post Driveline</div>
+                <div class="stance-icon">⚾</div>
+                <p class="stance-desc">Closed stance, upright posture, hands tight to body, lower half anchored and balanced through the zone</p>
+                <div class="stance-tags">
+                    <span class="stance-tag">Hip Loaded</span>
+                    <span class="stance-tag">Hands Tight</span>
+                    <span class="stance-tag">Elevated Contact</span>
+                </div>
+            </div>
+        </div>
+        <div class="fg-chart-footer">Mechanics observed via game film — Cardinals coaching staff, Driveline Baseball</div>
+    </div>
+
+    <p>He also walked into 2026 with a new hitting coach. Cardinals hitting coach Brant Brown, along with Casey Chenoweth and Brandon Allen, went back to the film and compared 2023 to 2024. What they found was that Walker's hands were separating from his body too early and his lower half balance was completely off. They rebuilt it.</p>
+
+    <div class="pull-quote">
+        <p>"There's something he's anchored to now. When it comes to having success, you're going to get off track from time to time. But now we know what we need to get back to."</p>
+        <cite>— Oliver Marmol, St. Louis Cardinals Manager</cite>
+    </div>
+
+    <p>The numbers prove that every single adjustment worked.</p>
+
+    <div class="section-marker">
+        <div class="section-marker-line"></div>
+        <span class="section-marker-text">The Mechanics</span>
+        <div class="section-marker-line"></div>
+    </div>
+
+    <!-- CHART 4 — Attack Angle -->
+    <div class="fg-chart">
+        <div class="fg-chart-header">
+            <span class="fg-chart-label">Chart 4</span>
+            <span class="fg-chart-title">Average Attack Angle (degrees at contact), 2023–2026</span>
+        </div>
+        <div class="fg-chart-body">
+            <canvas id="chart4" height="100"></canvas>
+        </div>
+        <div class="fg-chart-footer">Source: FanGraphs — Statcast Bat Tracking</div>
+    </div>
+
+    <p>His average attack angle — the upward tilt of his bat at the moment of contact — went from 5 degrees in 2023 all the way to 8 degrees in 2026. That may sound small. It is not. That change alone flipped his fly ball rate from 22% to 40%. He went from one of the most ground ball-heavy hitters in baseball to one of the least — almost overnight.</p>
+
+    <!-- CHART 5 — FB% vs GB% -->
+    <div class="fg-chart">
+        <div class="fg-chart-header">
+            <span class="fg-chart-label">Chart 5</span>
+            <span class="fg-chart-title">Fly Ball Rate vs. Ground Ball Rate, 2023–2026</span>
+        </div>
+        <div class="fg-chart-body">
+            <canvas id="chart5" height="100"></canvas>
+        </div>
+        <div class="fg-chart-footer">Source: FanGraphs — Batted Ball Profile</div>
+    </div>
+
+    <div class="section-marker">
+        <div class="section-marker-line"></div>
+        <span class="section-marker-text">The Discipline</span>
+        <div class="section-marker-line"></div>
+    </div>
+
+    <p>His chase rate — the percentage of pitches outside the strike zone that he swings at — dropped from 34.1% in 2025 all the way down to 23.1% in 2026. His in-zone swing rate went up from 66.9% to 75%. He is swinging at the right pitches now and laying off the ones designed to get him out. His first pitch swing rate went from 36.5% last year to 44.9% this year — meaning he is being more aggressive when pitchers come after him early, and he is doing damage with it.</p>
+
+    <!-- CHART 6 — Chase vs IZ Swing -->
+    <div class="fg-chart">
+        <div class="fg-chart-header">
+            <span class="fg-chart-label">Chart 6</span>
+            <span class="fg-chart-title">Chase Rate % vs. In-Zone Swing Rate %, 2023–2026</span>
+        </div>
+        <div class="fg-chart-body">
+            <canvas id="chart6" height="110"></canvas>
+        </div>
+        <div class="fg-chart-footer">Source: FanGraphs — Plate Discipline</div>
+    </div>
+
+    <div class="section-marker">
+        <div class="section-marker-line"></div>
+        <span class="section-marker-text">The Power</span>
+        <div class="section-marker-line"></div>
+    </div>
+
+    <p>And the exit velocity? His average exit velocity is up nearly 5 miles per hour from where it was. He is sitting at 94.7 miles per hour on average, with a hard-hit rate of 52.7% and a barrel rate of 14.1. Against left-handed pitchers this year, his OPS is .953. Against right-handers, it is .855. He does not have a weakness right now.</p>
+
+    <!-- CHART 7 — Exit Velocity & Hard-Hit Rate -->
+    <div class="fg-chart">
+        <div class="fg-chart-header">
+            <span class="fg-chart-label">Chart 7</span>
+            <span class="fg-chart-title">Average Exit Velocity (mph) &amp; Hard-Hit Rate (%), 2023–2026</span>
+        </div>
+        <div class="fg-chart-body">
+            <canvas id="chart7" height="110"></canvas>
+        </div>
+        <div class="fg-chart-footer">Source: FanGraphs / Statcast — Quality of Contact</div>
+    </div>
+
+    <!-- SPLITS -->
+    <div class="fg-chart" style="margin-top:2.5rem;">
+        <div class="fg-chart-header">
+            <span class="fg-chart-label">2026</span>
+            <span class="fg-chart-title">Splits — vs. Left-Handed Pitching &amp; vs. Right-Handed Pitching</span>
+        </div>
+        <div class="splits-row">
+            <div class="split-cell">
+                <div class="split-label">vs. Left-Handed Pitchers</div>
+                <div class="split-ops">.953</div>
+                <div class="split-vs">OPS</div>
+            </div>
+            <div class="split-cell">
+                <div class="split-label">vs. Right-Handed Pitchers</div>
+                <div class="split-ops">.855</div>
+                <div class="split-vs">OPS</div>
+            </div>
+        </div>
+        <div class="fg-chart-footer">Source: Baseball Reference — Player Splits</div>
+    </div>
+
+    <div class="section-marker">
+        <div class="section-marker-line"></div>
+        <span class="section-marker-text">The Verdict</span>
+        <div class="section-marker-line"></div>
+    </div>
+
+    <p>So is this just a hot streak? Or did Jordan Walker — the fourth-ranked prospect in baseball four years ago — finally figure it out? The Driveline work, the new coaching staff, the stance overhaul, the pitch discipline, the attack angle, the fly ball rate — all of it moved in the right direction at the same time. That is not luck. That is a player who put in the work, found what was broken, fixed it, and came back ready.</p>
+
+    <p>This year, Jordan Walker has become a complete hitter. His splits are almost identical between righty and lefty matchups. He is hitting the cover off of a baseball. And it is so fun to watch this young player at 24 years old perform and finally reach his potential.</p>
+
+    <div class="conclusion-box">
+        <div class="conclusion-box-inner">
+            <h3>And believe it or not — he is not done yet.</h3>
+            <p>The Saint Louis Cardinals are five games out of the Milwaukee Brewers right now, pushing for that NL Central division lead. Jordan Walker is their catalyst. He is their offensive firepower. He is the reason this team is legitimate.</p>
+            <p>Can the Cardinals win the division — or at least grab a Wild Card spot to make the playoffs this year? Who knows. But if they do, you better believe Jordan Walker is going to be a main reason they are there.</p>
+        </div>
+    </div>
+
+</article>
+
+<!-- SOURCE CITATIONS -->
+<div class="source-block">
+    <p><strong>Photo:</strong> Jordan Walker, St. Louis Cardinals — Getty Images / Scott Kane</p>
+    <p>
+        <strong>Statistics &amp; Data:</strong>
+        <a href="https://www.fangraphs.com/statss.aspx?playerid=25764&position=OF" target="_blank" rel="noopener">FanGraphs — Jordan Walker</a> &nbsp;·&nbsp;
+        <a href="https://www.baseball-reference.com/players/w/walkejo02.shtml" target="_blank" rel="noopener">Baseball Reference — Jordan Walker</a> &nbsp;·&nbsp;
+        <a href="https://en.wikipedia.org/wiki/Jordan_Walker_(baseball)" target="_blank" rel="noopener">Wikipedia — Jordan Walker</a>
+    </p>
+    <p><strong>Mechanics &amp; Development:</strong> Driveline Baseball · Cardinals Coaching Staff Quotes (MLB.com, 2026)</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+    var FG_BLUE   = '#1B6CA8';
+    var FG_ORANGE = '#E8622A';
+    var FG_RED    = '#C0392B';
+    var FG_GREEN  = '#1A7F37';
+    var FG_GRAY   = '#888888';
+    var YEARS = ['2023', '2024', '2025', '2026'];
+
+    Chart.defaults.font.family = "'Inter', Arial, sans-serif";
+    Chart.defaults.font.size   = 12;
+    Chart.defaults.color       = '#444';
+
+    function fgScales(yCallback, yMin, yMax) {
+        return {
+            x: {
+                grid: { display: false },
+                ticks: { font: { size: 11 } }
+            },
+            y: {
+                min: yMin,
+                max: yMax,
+                grid: { color: '#EBEBEB', lineWidth: 1 },
+                ticks: {
+                    callback: yCallback || function(v) { return v; },
+                    font: { size: 10 }
+                },
+                border: { dash: [2, 2] }
+            }
+        };
+    }
+
+    function fgLegend() {
+        return {
+            position: 'top',
+            labels: { boxWidth: 10, padding: 14, font: { size: 11 } }
+        };
+    }
+
+    // CHART 2 — K% vs BB%
+    new Chart(document.getElementById('chart2'), {
+        type: 'bar',
+        data: {
+            labels: YEARS,
+            datasets: [
+                {
+                    label: 'K%',
+                    data: [27.1, 34.2, 30.4, 20.3],
+                    backgroundColor: FG_RED,
+                    borderRadius: 0,
+                    barPercentage: 0.6
+                },
+                {
+                    label: 'BB%',
+                    data: [9.0, 7.4, 7.2, 10.1],
+                    backgroundColor: FG_BLUE,
+                    borderRadius: 0,
+                    barPercentage: 0.6
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: fgLegend(),
+                tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + c.raw + '%'; } } }
+            },
+            scales: fgScales(function(v) { return v + '%'; })
+        }
+    });
+
+    // CHART 4 — Attack Angle
+    new Chart(document.getElementById('chart4'), {
+        type: 'line',
+        data: {
+            labels: YEARS,
+            datasets: [{
+                label: 'Attack Angle (°)',
+                data: [5, 5, 6, 8],
+                borderColor: FG_BLUE,
+                backgroundColor: 'rgba(27,108,168,0.1)',
+                borderWidth: 2.5,
+                pointBackgroundColor: FG_BLUE,
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: function(c) { return 'Attack Angle: ' + c.raw + '°'; } } }
+            },
+            scales: fgScales(function(v) { return v + '°'; }, 3, 10)
+        }
+    });
+
+    // CHART 5 — FB% vs GB%
+    new Chart(document.getElementById('chart5'), {
+        type: 'bar',
+        data: {
+            labels: YEARS,
+            datasets: [
+                {
+                    label: 'Fly Ball %',
+                    data: [22, 21, 22, 40],
+                    backgroundColor: FG_BLUE,
+                    borderRadius: 0,
+                    barPercentage: 0.6
+                },
+                {
+                    label: 'Ground Ball %',
+                    data: [55, 57, 54, 35],
+                    backgroundColor: FG_ORANGE,
+                    borderRadius: 0,
+                    barPercentage: 0.6
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: fgLegend(),
+                tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + c.raw + '%'; } } }
+            },
+            scales: fgScales(function(v) { return v + '%'; })
+        }
+    });
+
+    // CHART 6 — Chase Rate vs IZ Swing Rate
+    new Chart(document.getElementById('chart6'), {
+        type: 'line',
+        data: {
+            labels: YEARS,
+            datasets: [
+                {
+                    label: 'Chase Rate %',
+                    data: [35.0, 36.2, 34.1, 23.1],
+                    borderColor: FG_RED,
+                    backgroundColor: 'transparent',
+                    borderWidth: 2.5,
+                    pointBackgroundColor: FG_RED,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    tension: 0.3
+                },
+                {
+                    label: 'In-Zone Swing %',
+                    data: [65.0, 65.5, 66.9, 75.0],
+                    borderColor: FG_BLUE,
+                    backgroundColor: 'transparent',
+                    borderWidth: 2.5,
+                    pointBackgroundColor: FG_BLUE,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: fgLegend(),
+                tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + c.raw + '%'; } } }
+            },
+            scales: fgScales(function(v) { return v + '%'; })
+        }
+    });
+
+    // CHART 7 — Exit Velocity & Hard-Hit Rate (dual axis)
+    new Chart(document.getElementById('chart7'), {
+        type: 'bar',
+        data: {
+            labels: YEARS,
+            datasets: [
+                {
+                    label: 'Avg Exit Velocity (mph)',
+                    data: [89.5, 89.2, 89.8, 94.7],
+                    backgroundColor: FG_BLUE,
+                    borderRadius: 0,
+                    barPercentage: 0.55,
+                    yAxisID: 'yLeft'
+                },
+                {
+                    label: 'Hard-Hit Rate %',
+                    data: [34.2, 33.5, 38.1, 52.7],
+                    backgroundColor: FG_ORANGE,
+                    borderRadius: 0,
+                    barPercentage: 0.55,
+                    yAxisID: 'yRight'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: fgLegend() },
+            scales: {
+                x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+                yLeft: {
+                    type: 'linear',
+                    position: 'left',
+                    min: 85,
+                    grid: { color: '#EBEBEB' },
+                    ticks: { callback: function(v) { return v + ' mph'; }, font: { size: 10 } }
+                },
+                yRight: {
+                    type: 'linear',
+                    position: 'right',
+                    grid: { drawOnChartArea: false },
+                    ticks: { callback: function(v) { return v + '%'; }, font: { size: 10 } }
+                }
+            }
+        }
+    });
+}());
+</script>
+
+{% endblock %}

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Kyle Flynn{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block extra_styles %}{% endblock %}
 </head>
@@ -14,7 +14,7 @@
             <a href="/" class="nav-logo">Kyle Flynn</a>
             <ul class="nav-menu">
                 <li><a href="/" class="nav-link">Home</a></li>
-                <li><a href="/blog" class="nav-link">Projects</a></li>
+                <li><a href="/blog" class="nav-link">Blog</a></li>
                 <li><a href="/resume" class="nav-link">Resume</a></li>
                 <li><a href="/connect" class="nav-link">Contact</a></li>
             </ul>

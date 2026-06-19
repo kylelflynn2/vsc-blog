@@ -4,10 +4,50 @@
 {% block extra_styles %}
 <style>
     .project-header {
-        background: var(--navy);
+        position: relative;
+        min-height: 420px;
+        display: flex;
+        align-items: flex-end;
+        overflow: hidden;
         color: var(--white);
-        padding: 4rem 2rem;
         text-align: center;
+    }
+
+    .project-header-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 35%;
+    }
+
+    .project-header-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to bottom,
+            rgba(10, 18, 38, 0.35) 0%,
+            rgba(10, 18, 38, 0.72) 60%,
+            rgba(10, 18, 38, 0.93) 100%
+        );
+    }
+
+    .project-header-inner {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        padding: 2rem 2rem 3.5rem;
+    }
+
+    .project-header-eyebrow {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 1rem;
+        display: block;
     }
 
     .project-header h1 {
@@ -15,14 +55,23 @@
         font-size: clamp(2rem, 4vw, 3.25rem);
         margin-bottom: 1rem;
         line-height: 1.15;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.5);
     }
 
     .project-header .subtitle {
-        color: var(--gold-light);
-        font-size: 1.05rem;
-        letter-spacing: 0.05em;
+        color: rgba(255,255,255,0.75);
+        font-size: 1rem;
+        letter-spacing: 0.04em;
         max-width: 720px;
         margin: 0 auto;
+        text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    }
+
+    .project-header-gold-line {
+        width: 48px;
+        height: 3px;
+        background: var(--gold);
+        margin: 1.25rem auto 0;
     }
 
     .project-container {
@@ -460,8 +509,14 @@
 
 {% block content %}
 <section class="project-header">
-    <h1>Rebuilding the 2026 Chicago White Sox</h1>
-    <p class="subtitle">A WAR-based valuation model — eight analyses operating on the team's 2026 batting data through 63 games.</p>
+    <img src="/static/img/whitesox_stadium.jpg" alt="Guaranteed Rate Field, Chicago" class="project-header-img">
+    <div class="project-header-overlay"></div>
+    <div class="project-header-inner">
+        <span class="project-header-eyebrow">Baseball Operations · Data Analysis</span>
+        <h1>Rebuilding the 2026 Chicago White Sox</h1>
+        <p class="subtitle">A WAR-based valuation model — eight analyses operating on the team's 2026 batting data through 63 games.</p>
+        <div class="project-header-gold-line"></div>
+    </div>
 </section>
 
 <div class="project-container">
@@ -1436,6 +1491,17 @@
 
     <div style="text-align:center;padding:2.5rem 1rem 1rem;border-top:1px solid var(--border);margin-top:1rem;">
         <p style="font-size:1rem;color:var(--text-muted);font-style:italic;letter-spacing:0.03em;">More projects coming soon — stay tuned.</p>
+    </div>
+
+    <!-- SOURCE CITATIONS -->
+    <div style="border-top:1px solid var(--border);margin-top:2rem;padding:1.75rem 0 0.5rem;">
+        <p style="font-size:0.72rem;color:var(--text-muted);letter-spacing:0.05em;text-transform:uppercase;font-weight:600;margin-bottom:0.6rem;">Sources &amp; Credits</p>
+        <p style="font-size:0.82rem;color:var(--text-muted);line-height:1.8;">
+            <strong>Photo:</strong> Guaranteed Rate Field, Chicago — Getty Images &nbsp;·&nbsp;
+            <strong>Statistics:</strong>
+            <a href="https://www.fangraphs.com" target="_blank" rel="noopener" style="color:var(--navy);text-decoration:underline;text-underline-offset:3px;">FanGraphs</a> &nbsp;·&nbsp;
+            <a href="https://www.baseball-reference.com" target="_blank" rel="noopener" style="color:var(--navy);text-decoration:underline;text-underline-offset:3px;">Baseball Reference</a>
+        </p>
     </div>
 
 </div>

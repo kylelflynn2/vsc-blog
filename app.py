@@ -70,12 +70,15 @@ def load_profile():
 def load_posts():
     """Load all posts."""
     data = load_json(POSTS_FILE, [])
-    # Ensure each post has required fields
+    baseball_keywords = ['baseball', 'sabermetric', 'war', 'yankee', 'sox', 'cub', 'lineup', 'woba', 'obp', 'era', 'mlb']
     for post in data:
         if 'id' not in post:
             post['id'] = str(datetime.now().timestamp())
         if 'tags' not in post:
             post['tags'] = []
+        if 'category' not in post:
+            tags_str = ' '.join(post.get('tags', [])).lower()
+            post['category'] = 'baseball' if any(kw in tags_str for kw in baseball_keywords) else 'personal'
     return data
 
 
@@ -197,6 +200,7 @@ def add_post():
         'project_url': request.form.get('project_url', '') or None,
         'github_url': request.form.get('github_url', '') or None,
         'tags': [tag.strip() for tag in request.form.get('tags', '').split(',') if tag.strip()],
+        'category': request.form.get('category', 'baseball'),
         'image': None
     }
     
@@ -260,6 +264,12 @@ def admin_setup():
         return redirect(url_for('admin_dashboard'))
     
     return render_template('admin_setup.html')
+
+
+@app.route('/projects/jordan-walker-2026')
+def jordan_walker_2026():
+    """Jordan Walker 2026 breakout analysis."""
+    return render_template('projects/jordan_walker_2026.html')
 
 
 @app.route('/projects/yankees-baseball-operations')
