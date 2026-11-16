@@ -43,6 +43,14 @@
             linear-gradient(90deg, rgba(11,11,12,0.96) 0%, rgba(11,11,12,0.82) 38%, rgba(11,11,12,0.15) 72%, rgba(11,11,12,0.05) 100%),
             linear-gradient(0deg, rgba(11,11,12,0.92) 0%, rgba(11,11,12,0) 45%);
     }
+    /* Side variant: photo on the right, text on solid black at left */
+    .hk-hero--side .hk-hero-img { left: auto; right: 0; width: 64%; object-position: 30% 60%; }
+    .hk-hero--side::after {
+        background:
+            linear-gradient(90deg, rgba(11,11,12,1) 0%, rgba(11,11,12,1) 36%, rgba(11,11,12,0.55) 50%, rgba(11,11,12,0) 66%),
+            linear-gradient(0deg, rgba(11,11,12,0.85) 0%, rgba(11,11,12,0) 40%);
+    }
+
     .hk-hero-inner {
         position: relative; z-index: 1; width: 100%; max-width: 1180px;
         margin: 0 auto; padding: 8rem 2rem 3.5rem;
@@ -170,7 +178,7 @@
 
     /* Figures */
     .hk-figure { margin: 2.75rem 0; }
-    .hk-figure img { width: 100%; display: block; border-radius: 3px; }
+    .hk-figure img { width: 100%; display: block; border-radius: 3px; aspect-ratio: 3 / 2; object-fit: cover; object-position: 60% 30%; }
     .hk-figure figcaption, .hk-bleed figcaption {
         font-family: var(--hk-sans); font-size: 0.8rem; line-height: 1.5; color: var(--hk-muted);
         margin-top: 0.7rem; padding-left: 0.75rem; border-left: 2px solid var(--hk-red);
@@ -334,6 +342,8 @@
     @media (max-width: 720px) {
         .hk-hero-inner { padding: 7rem 1.25rem 2.5rem; }
         .hk-hero::after { background: linear-gradient(0deg, rgba(11,11,12,0.97) 0%, rgba(11,11,12,0.75) 50%, rgba(11,11,12,0.2) 100%); }
+        .hk-hero--side .hk-hero-img { width: 100%; object-position: 40% 50%; }
+        .hk-hero--side::after { background: linear-gradient(0deg, rgba(11,11,12,0.97) 0%, rgba(11,11,12,0.8) 55%, rgba(11,11,12,0.35) 100%); }
         .hk-stats-inner { grid-template-columns: 1fr; padding: 0 1.25rem; }
         .hk-stat { border-left: none; border-top: 1px solid rgba(255,255,255,0.1); padding: 1.4rem 0; }
         .hk-stat:first-child { border-top: none; }
@@ -362,8 +372,8 @@
 <div class="hk-progress" id="hkProgress" aria-hidden="true"></div>
 
 <!-- HERO -->
-<header class="hk-hero">
-    <img class="hk-hero-img" src="{{ url_for('static', filename='img/blackhawks/hero_bedard.jpg') }}" alt="Connor Bedard, wearing number 98 in the Blackhawks' white road jersey, battles Seattle's Chandler Stephenson along the boards">
+<header class="hk-hero hk-hero--side">
+    <img class="hk-hero-img" src="{{ url_for('static', filename='img/blackhawks/one_goal.jpg') }}" alt="The ONE GOAL sign with the Blackhawks logo in the United Center atrium">
     <div class="hk-hero-inner">
         <div class="hk-kicker">
             <span class="hk-chip red">Hockey Operations</span>
@@ -380,7 +390,7 @@
             </div>
         </div>
     </div>
-    <div class="hk-hero-credit">Photo: Jenn G / <a href="https://commons.wikimedia.org/wiki/File:Stephenson_bedard_2nd_11_14_(54141461892).jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, CC BY-SA 2.0</div>
+    <div class="hk-hero-credit">Photo: “Thank You (25 Millions) views” / <a href="https://commons.wikimedia.org/wiki/File:Chicago_Blackhawks_%22One_Goal%22_display_in_United_Center_atrium,_February_2019_(51160189996).jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, CC BY 2.0</div>
 </header>
 
 <!-- STAT BAND -->
@@ -435,24 +445,11 @@
 
             <p>Earlier, in March of 2026, Chicago traded Connor Murphy (March 2), Jason Dickinson and Colton Dach (March 4) and Nick Foligno (March 6) within five days, a group Blashill called “great role models” for the young players, according to SI. The team’s record was 23-28-10 after the Dickinson trade, and it finished 29-39-14, which works out to 6-11-4 over its last 21 games without those veterans. I believe that stretch showed the front office what the young group would look like without veteran leadership around it. And that group was underwhelming. So why did we think things would magically change this season without replacing those veterans?</p>
 
-            <figure class="hk-figure split">
-                <img src="{{ url_for('static', filename='img/blackhawks/warmups_2026.jpg') }}" alt="A Blackhawks forward in the red home jersey during warmups on United Center ice" loading="lazy" style="object-position: center 20%;">
-                <figcaption>
-                    <span class="hk-fig-big">6-11-4<small>Last 21 games of 2025-26</small></span>
-                    Warmups at the United Center before the Blackhawks hosted St. Louis on April 11, 2026, late in a season that ended 29-39-14. Pictured: Ilya Mikheyev. Photo: Dan Sanford / <a href="https://commons.wikimedia.org/wiki/File:Mikheyev_Blackhawks_April_2026.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, CC BY 4.0.
-                </figcaption>
-            </figure>
-
             <p>There are clear positives nonetheless. Artyom Levshunov has taken a substantial step forward. Last season, his turnovers, missed assignments and habit of leaving the front of the net had you holding your breath every other game. This season he is a far more complete defenseman. Blashill says he is more comfortable in the systems and as an NHL player, and since Bowen Byram’s injury he leads Chicago defensemen in five-on-five ice time, according to the Sun-Times. The Hockey Writers credits his offseason work for improved skating, puck handling and gap control. He is still developing, and he may yet prove to be the second-overall pick Chicago wanted, even though Ivan Demidov of Montreal looked like the clear choice in the 2024 draft until the end of last season.</p>
 
             <p>Frondell is developing the two-way game Blashill emphasizes, but at 19 years of age he has been deployed against opposing top lines every night, an unusual assignment for a player his age, and he has been consistently outmatched through the start of this season. Oliver Moore, Frank Nazar, Nick Lardis, Sam Rinzel and Wyatt Kaiser have not yet played to the level we expected of them at this point. A team cannot be built on development alone, and this group is still learning the league at the NHL level.</p>
 
             <p>That is what a roster construction problem looks like. Talented young players are asked to carry the matchups and the minutes before they are capable of doing so. Chicago has too many of the same type, young, fast and offense-first, and too few who defend, win puck battles and play with physicality.</p>
-
-            <blockquote class="hk-quote">
-                <p>Chicago has too many of the same type, young, fast and offense-first, and too few who defend.</p>
-                <cite>The core problem</cite>
-            </blockquote>
 
             <p>The clearest weakness is defense. Chicago allows the third-most expected goals against per 60 minutes at 5-on-5. The place to start is the defense. The goal in reconstructing this roster is to build a team where the young core develops alongside experienced veterans instead of carrying the team alone. That starts with a more stable defense, followed by forwards who bring size and a shoot-first mentality, so that the premium young players are protected and put in positions to succeed. Davidson has pointed the same way. In July he said, “adding some offensive talent is essential,” according to Heavy, and NHL reporter Frank Seravalli reported on Chicago Sports Network that the front office is looking for a “shoot-first scoring winger with size,” per the Sun-Times. That is where the plan begins.</p>
         </section>
@@ -469,11 +466,6 @@
             <p>The second point matters most. I believe Davidson has become very attached to the players he has drafted, or he has not yet found trades that make sense against what he believes some of these young players will become, and he may be overvaluing their full potential. Waiting only pays off if they reach it, and that is not guaranteed. With the rebuild at a standstill, Chicago has to make logical moves, not desperation moves, that let the Blackhawks compete now. To move forward, Kyle Davidson has to be willing to move on from some of his drafted prospects and draft capital.</p>
 
             <p>Chicago also cannot keep losing. This is the fifth year of the rebuild, and a young group that keeps losing will get comfortable with it, and losing will become part of its identity. The risk is the 2010s Edmonton Oilers, who missed the playoffs for ten straight seasons after 2006 and selected first overall four times in six years, according to The Hockey Writers. In a December 2014 Grantland piece, Sean McIndoe wrote that it is possible to install a losing culture, and that “an organization has lost so much for so long that it starts to have an effect on everyone who works there.” Even after the Oilers had added a generation of top picks, The Hockey News wrote in March 2019 that “there is something wrong with Edmonton’s culture and it has been wrong for a long time.” Draft capital alone does not end that cycle. Chicago needs results, traction and progress so that it can start playing winning hockey.</p>
-
-            <blockquote class="hk-quote">
-                <p>“An organization has lost so much for so long that it starts to have an effect on everyone who works there.”</p>
-                <cite>Sean McIndoe, Grantland, Dec. 2014</cite>
-            </blockquote>
         </section>
 
         <!-- 04 -->
@@ -593,6 +585,11 @@
             <h3>The Tippett offer</h3>
 
             <p>Owen Tippett of the Philadelphia Flyers is a strong skater with size and a shoot-first mentality. Philadelphia is near the bottom of the standings, as Chicago is, and reports say it is looking for a center with top-six upside. Daily Faceoff reported that the Flyers would consider moving Tippett in a deal built around a prospect center and a future first-round pick.</p>
+
+            <figure class="hk-figure">
+                <img src="{{ url_for('static', filename='img/blackhawks/tippett.jpg') }}" alt="Owen Tippett of the Philadelphia Flyers, wearing number 74, during warmups" loading="lazy">
+                <figcaption>Owen Tippett, Philadelphia Flyers. A strong skater with size and a shoot-first mentality.</figcaption>
+            </figure>
 
             <div class="hk-trade" role="group" aria-label="Proposed trade with Philadelphia">
                 <div class="hk-trade-head"><span>Trade proposal · CHI ⇄ PHI</span><span class="status">Proposed</span></div>
@@ -728,14 +725,6 @@
 
             <p>The case starts with the position itself. A center carries responsibilities beyond scoring: faceoffs, defensive-zone coverage and the toughest matchups every night. Bedard has one of the best shots in the game, and I want him focused on putting the puck in the net. A two-way center beside him would take on those responsibilities and let him play to his strength. Early in 2025-26 he had 44 points, including 19 goals, in 31 games, according to The Hockey Writers. That is a pace of roughly 116 points over 82 games, which is the production I believe a winger next to a two-way center could sustain.</p>
 
-            <figure class="hk-figure split">
-                <img src="{{ url_for('static', filename='img/blackhawks/bedard_kraken.jpg') }}" alt="Connor Bedard skating in the Blackhawks' white road jersey" loading="lazy" style="object-position: center 25%;">
-                <figcaption>
-                    <span class="hk-fig-big">~116<small>Bedard’s 82-game point pace, early 2025-26</small></span>
-                    Connor Bedard at Seattle on Nov. 14, 2024. Photo: Jenn G / <a href="https://commons.wikimedia.org/wiki/File:Connor_Bedard_(541427773851).jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, CC BY-SA 2.0.
-                </figcaption>
-            </figure>
-
             <p>Frondell fits the same logic. He has an unbelievable shot. Before the draft, his Djurgården linemate Victor Eklund said he had “a shot like a missile,” and goaltender Måns Goos said he “shoots so hard and the shot is precise,” according to Daily Faceoff. That same report noted that some scouts saw a complementary top-six piece more than a player who drives play.</p>
 
             <p>That description matches what Chicago has seen. Frondell has played center since training camp, and the Sun-Times wrote on Oct. 30 that he may not be ready to drive his own line against opposing stars every night. He played a career-low 11:44 in Detroit, and Jeff Blashill called three of the previous five games subpar. He is not yet at the level an NHL two-way center has to be, because he has been outmatched by opposing lineups. That is not a flaw in the player. It is a sign that the position asks for the part of the game he has not yet developed, while the part he has is elite.</p>
@@ -744,21 +733,6 @@
 
             <p>The idea also addresses the team’s clearest offensive problem. The power play ranked 31st at 10.6% as of Nov. 3, according to The Hockey News, and Blashill said earlier that month that “the power play is mirroring our 5-on-5 game: we can’t score,” per The Hockey News. A team in that position needs its most skilled shooters in the best positions, with centers who protect them. That is why the top-six experiment described earlier is a useful first test, and why Pettersson and Byfield are worth pricing now. It is a way to shake things up and maximize this team’s offensive production while the young core is still developing.</p>
         </section>
-
-    </article>
-</div>
-
-<!-- FULL-BLEED BREAK -->
-<figure class="hk-bleed">
-    <div class="hk-bleed-img" role="img" aria-label="The giant ONE GOAL sign with the Blackhawks logo in the United Center atrium" style="background-image:url('{{ url_for('static', filename='img/blackhawks/one_goal.jpg') }}');">
-        <div class="hk-bleed-text">One goal.<br><span>Start winning now.</span></div>
-    </div>
-    <figcaption>The “One Goal” display in the United Center atrium. Photo: “Thank You (25 Millions) views” from Fresno, USA / <a href="https://commons.wikimedia.org/wiki/File:Chicago_Blackhawks_%22One_Goal%22_display_in_United_Center_atrium,_February_2019_(51160189996).jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, CC BY 2.0.</figcaption>
-</figure>
-
-<div class="hk-layout" style="padding-top:3.5rem;">
-    <div class="hk-toc" aria-hidden="true"></div>
-    <article class="hk-article">
 
         <!-- 06 -->
         <section class="hk-section" id="conclusion">
@@ -772,11 +746,6 @@
             <p>For now, Chicago needs physical, experienced forwards on one- and two-year deals to help the young players develop. But I do not want the whole group on short-term contracts. I want players who will be long-term pieces of this core, here for three, four, five and even six years. Those players are not available right now, and when they are, I hope Chicago is all over them moving forward.</p>
 
             <p>Last summer showed what that looks like. San Jose signed Mason Marchment to a five-year, $33.75 million contract, according to The Hockey Writers. Nashville acquired Mavrik Bourque, 24, from Dallas for a 2027 second-round pick and a 2028 third-round pick, per Daily Faceoff, and then signed him to a six-year, $33 million contract, the NHLPA reported. Those are the moves I believe Chicago should have made: each team added a forward who fits its timeline and committed to him for years, without waiting for a perfect opportunity.</p>
-
-            <blockquote class="hk-quote">
-                <p>A team cannot keep stacking prospects and picks and assume it will win; they have to be used as weapons.</p>
-                <cite>Kyle Flynn</cite>
-            </blockquote>
 
             <p>A team cannot keep stacking prospects and picks and assume it will win; they have to be used as weapons. The goal is a team that fits the timeline and wins for many years, built through logical moves, not desperation moves. Chicago cannot keep losing in the fifth year of this rebuild, because a young group that keeps losing risks making losing part of its identity. That work starts now and focuses on our biggest weaknesses. It is time to start winning, and playing winning hockey, because that is what moves the team closer to the end goal: the Stanley Cup.</p>
 
@@ -859,7 +828,7 @@
         </details>
 
         <div class="hk-credits">
-            Photos via Wikimedia Commons: lead image and Bedard by Jenn G (<a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener">CC BY-SA 2.0</a>); United Center warmups by Dan Sanford (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>); “One Goal” display by “Thank You (25 Millions) views” (<a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a>). Images are cropped for layout.
+            Lead image: “One Goal” display, United Center, by “Thank You (25 Millions) views” via Wikimedia Commons (<a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a>), cropped for layout.
         </div>
     </article>
 </div>
