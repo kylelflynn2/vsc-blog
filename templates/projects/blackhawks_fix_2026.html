@@ -44,7 +44,7 @@
             linear-gradient(0deg, rgba(11,11,12,0.92) 0%, rgba(11,11,12,0) 45%);
     }
     /* Side variant: photo on the right, text on solid black at left */
-    .hk-hero--side .hk-hero-img { left: auto; right: 0; width: 64%; object-position: 38% 30%; }
+    .hk-hero--side .hk-hero-img { left: auto; right: 0; width: 64%; object-position: 55% 25%; }
     .hk-hero--side::after {
         background:
             linear-gradient(90deg, rgba(11,11,12,1) 0%, rgba(11,11,12,1) 36%, rgba(11,11,12,0.55) 50%, rgba(11,11,12,0) 66%),
@@ -356,7 +356,7 @@
     @media (max-width: 720px) {
         .hk-hero-inner { padding: 7rem 1.25rem 2.5rem; }
         .hk-hero::after { background: linear-gradient(0deg, rgba(11,11,12,0.97) 0%, rgba(11,11,12,0.75) 50%, rgba(11,11,12,0.2) 100%); }
-        .hk-hero--side .hk-hero-img { width: 100%; object-position: 42% 25%; }
+        .hk-hero--side .hk-hero-img { width: 100%; object-position: 55% 20%; }
         .hk-hero--side::after { background: linear-gradient(0deg, rgba(11,11,12,0.97) 0%, rgba(11,11,12,0.8) 55%, rgba(11,11,12,0.35) 100%); }
         .hk-stats-inner { grid-template-columns: 1fr; padding: 0 1.25rem; }
         .hk-stat { border-left: none; border-top: 1px solid rgba(255,255,255,0.1); padding: 1.4rem 0; }
@@ -387,7 +387,7 @@
 
 <!-- HERO -->
 <header class="hk-hero hk-hero--side">
-    <img class="hk-hero-img" src="{{ url_for('static', filename='img/blackhawks/bedard_home.jpg') }}" alt="Connor Bedard in the Blackhawks red home jersey with the alternate captain A, carrying the puck">
+    <img class="hk-hero-img" src="{{ url_for('static', filename='img/blackhawks/header_podium.jpg') }}" alt="A Blackhawks executive speaking at a podium microphone in front of a red backdrop">
     <div class="hk-hero-inner">
         <div class="hk-kicker">
             <span class="hk-chip red">Hockey Operations</span>
