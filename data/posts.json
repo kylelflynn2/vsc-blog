@@ -1,12 +1,34 @@
 [
   {
+    "id": "6",
+    "title": "How to Fix the Chicago Blackhawks",
+    "description": "Too young. Too one-dimensional. Time for a new direction. A hockey operations proposal for moving Chicago from rebuilding team to playoff-caliber: defense first, a Tippett trade offer, 2027 offseason targets and a plan to protect the young core.",
+    "date": "November 15, 2026",
+    "project_url": "/projects/blackhawks-fix-2026",
+    "github_url": null,
+    "tags": [
+      "Blackhawks",
+      "Hockey Operations",
+      "Roster Construction",
+      "Trade Targets",
+      "2027 Offseason"
+    ],
+    "category": "hockey",
+    "image": "/static/img/blackhawks/hero_bedard.jpg"
+  },
+  {
     "id": "5",
     "title": "From \"Bust\" to MLB Superstar: Jordan Walker Is Finally the Player We All Hoped For",
     "description": "The Cardinals' 24-year-old is putting up All-Star numbers in 2026 — a .292/.346/.545 slash line and a 3.4 WAR in just 71 games. What changed this offseason that turned a labeled bust into St. Louis's offensive catalyst?",
     "date": "June 18, 2026",
     "project_url": "/projects/jordan-walker-2026",
     "github_url": null,
-    "tags": ["Cardinals", "Player Analysis", "Hitting Mechanics", "Pitch Discipline"],
+    "tags": [
+      "Cardinals",
+      "Player Analysis",
+      "Hitting Mechanics",
+      "Pitch Discipline"
+    ],
     "category": "baseball",
     "image": null
   },
@@ -17,7 +39,13 @@
     "date": "June 8, 2026",
     "project_url": "/projects/yankees-baseball-operations",
     "github_url": null,
-    "tags": ["Yankees", "Sabermetrics", "Lineup Optimization", "Arbitration", "Payroll Analysis"],
+    "tags": [
+      "Yankees",
+      "Sabermetrics",
+      "Lineup Optimization",
+      "Arbitration",
+      "Payroll Analysis"
+    ],
     "category": "baseball",
     "image": null
   },
@@ -28,7 +56,12 @@
     "date": "June 8, 2026",
     "project_url": "/projects/cubs-2026",
     "github_url": "https://github.com/colinflynn/baseball-stats",
-    "tags": ["Baseball Analytics", "Sabermetrics", "Python", "Optimization"],
+    "tags": [
+      "Baseball Analytics",
+      "Sabermetrics",
+      "Python",
+      "Optimization"
+    ],
     "category": "baseball",
     "image": null
   },
@@ -39,7 +72,12 @@
     "date": "May 28, 2026",
     "project_url": "/projects/whitesox-2026",
     "github_url": null,
-    "tags": ["Baseball Analytics", "WAR", "Sabermetrics", "Python"],
+    "tags": [
+      "Baseball Analytics",
+      "WAR",
+      "Sabermetrics",
+      "Python"
+    ],
     "category": "baseball",
     "image": null
   }

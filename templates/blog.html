@@ -150,6 +150,28 @@
         background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
     }
 
+    .post-card[data-category="hockey"] .post-card-accent {
+        height: 4px;
+        background: #CF0A2C;
+    }
+
+    .post-card-img {
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        background: #0B0B0C;
+    }
+
+    .post-card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 70% 25%;
+        display: block;
+        transition: transform 0.4s ease;
+    }
+
+    .post-card:hover .post-card-img img { transform: scale(1.04); }
+
     .post-content {
         padding: 1.5rem;
         flex-grow: 1;
@@ -290,7 +312,7 @@
 <section class="blog-header">
     <div class="blog-header-inner">
         <h1>Blog</h1>
-        <p>Baseball operations, data analysis &amp; the business of the game</p>
+        <p>Sports operations, data analysis &amp; the business of the game</p>
         <div class="blog-header-gold-line"></div>
     </div>
 </section>
@@ -299,6 +321,7 @@
     <div class="blog-tabs">
         <button class="blog-tab active" data-filter="all">All Posts</button>
         <button class="blog-tab" data-filter="baseball">Baseball</button>
+        <button class="blog-tab" data-filter="hockey">Hockey</button>
         <button class="blog-tab" data-filter="personal">Personal</button>
     </div>
 </div>
@@ -309,6 +332,9 @@
             {% for post in posts %}
             <div class="post-card" data-category="{{ post.category | default('baseball') }}">
                 <div class="post-card-accent"></div>
+                {% if post.image %}
+                <div class="post-card-img"><img src="{{ post.image }}" alt="" loading="lazy"></div>
+                {% endif %}
                 <div class="post-content">
                     <p class="post-date">{{ post.date }}</p>
                     <h3 class="post-title">{{ post.title }}</h3>

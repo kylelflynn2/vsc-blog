@@ -1,0 +1,894 @@
+{% extends "base.html" %}
+{% block title %}How to Fix the Chicago Blackhawks · Kyle Flynn{% endblock %}
+
+{% block extra_styles %}
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --hk-red: #CF0A2C;
+        --hk-red-deep: #A00822;
+        --hk-ink: #0B0B0C;
+        --hk-ink-2: #17171A;
+        --hk-paper: #FAFAF8;
+        --hk-line: #E4E2DD;
+        --hk-muted: #6B6B70;
+        --hk-text: #1D1D20;
+        --hk-display: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
+        --hk-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+        --hk-sans: 'Inter', -apple-system, 'Segoe UI', Arial, sans-serif;
+    }
+
+    body { background: var(--hk-paper); }
+
+    /* Reading progress */
+    .hk-progress {
+        position: fixed; top: 0; left: 0; height: 4px; width: 100%;
+        background: var(--hk-red); transform-origin: 0 50%; transform: scaleX(0);
+        z-index: 2000;
+    }
+
+    /* ── HERO ── */
+    .hk-hero {
+        position: relative; min-height: min(88vh, 860px);
+        display: flex; align-items: flex-end;
+        background: var(--hk-ink); color: #fff; overflow: hidden;
+    }
+    .hk-hero-img {
+        position: absolute; inset: 0; width: 100%; height: 100%;
+        object-fit: cover; object-position: 72% 22%;
+    }
+    .hk-hero::after {
+        content: ''; position: absolute; inset: 0;
+        background:
+            linear-gradient(90deg, rgba(11,11,12,0.96) 0%, rgba(11,11,12,0.82) 38%, rgba(11,11,12,0.15) 72%, rgba(11,11,12,0.05) 100%),
+            linear-gradient(0deg, rgba(11,11,12,0.92) 0%, rgba(11,11,12,0) 45%);
+    }
+    .hk-hero-inner {
+        position: relative; z-index: 1; width: 100%; max-width: 1180px;
+        margin: 0 auto; padding: 8rem 2rem 3.5rem;
+    }
+    .hk-kicker { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.4rem; }
+    .hk-chip {
+        font-family: var(--hk-sans); font-size: 0.68rem; font-weight: 700;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        padding: 0.4rem 0.7rem; border-radius: 2px;
+    }
+    .hk-chip.red { background: var(--hk-red); color: #fff; }
+    .hk-chip.ghost { border: 1px solid rgba(255,255,255,0.35); color: rgba(255,255,255,0.85); }
+    .hk-hero h1 {
+        font-family: var(--hk-display); font-weight: 800; text-transform: uppercase;
+        font-size: clamp(3rem, 8.5vw, 7rem); line-height: 0.9; letter-spacing: -0.01em;
+        max-width: 11ch; margin: 0 0 1.4rem;
+    }
+    .hk-hero h1 em { font-style: normal; color: var(--hk-red); }
+    .hk-dek {
+        font-family: var(--hk-serif); font-size: clamp(1.1rem, 2vw, 1.4rem);
+        line-height: 1.45; color: rgba(255,255,255,0.82); max-width: 34ch; margin: 0 0 2rem;
+    }
+    .hk-byline { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; font-family: var(--hk-sans); }
+    .hk-avatar {
+        width: 44px; height: 44px; border-radius: 50%; background: var(--hk-red);
+        display: grid; place-items: center; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.04em;
+        flex-shrink: 0;
+    }
+    .hk-byline-name { font-weight: 700; font-size: 0.95rem; }
+    .hk-byline-meta { font-size: 0.78rem; color: rgba(255,255,255,0.6); margin-top: 0.15rem; }
+    .hk-hero-credit {
+        position: absolute; right: 1.25rem; bottom: 0.9rem; z-index: 1;
+        font-family: var(--hk-sans); font-size: 0.66rem; color: rgba(255,255,255,0.55);
+    }
+    .hk-hero-credit a { color: inherit; }
+
+    /* ── STAT BAND ── */
+    .hk-stats { background: var(--hk-ink); color: #fff; border-top: 1px solid rgba(255,255,255,0.08); }
+    .hk-stats-inner {
+        max-width: 1180px; margin: 0 auto; padding: 0 2rem;
+        display: grid; grid-template-columns: repeat(3, 1fr);
+    }
+    .hk-stat { padding: 2rem 1.75rem 2.1rem; border-left: 1px solid rgba(255,255,255,0.1); }
+    .hk-stat:first-child { border-left: none; padding-left: 0; }
+    .hk-stat-value {
+        font-family: var(--hk-display); font-weight: 800; font-size: clamp(2.8rem, 5vw, 4rem);
+        line-height: 1; color: var(--hk-red); display: block;
+    }
+    .hk-stat-label {
+        font-family: var(--hk-sans); font-size: 0.8rem; line-height: 1.5;
+        color: rgba(255,255,255,0.7); display: block; margin-top: 0.6rem; max-width: 30ch;
+    }
+
+    /* ── LAYOUT ── */
+    .hk-layout {
+        max-width: 1180px; margin: 0 auto; padding: 4rem 2rem 2rem;
+        display: grid; grid-template-columns: 210px minmax(0, 720px); gap: 4rem; justify-content: center;
+    }
+    .hk-toc { position: sticky; top: 96px; align-self: start; font-family: var(--hk-sans); }
+    .hk-toc-title {
+        font-size: 0.66rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+        color: var(--hk-muted); margin-bottom: 1rem;
+    }
+    .hk-toc ol { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--hk-line); }
+    .hk-toc a {
+        display: flex; gap: 0.6rem; padding: 0.5rem 0 0.5rem 1rem; margin-left: -2px;
+        border-left: 2px solid transparent; text-decoration: none;
+        font-size: 0.85rem; color: var(--hk-muted); line-height: 1.35;
+        transition: color .2s, border-color .2s;
+    }
+    .hk-toc a span { font-family: var(--hk-display); font-weight: 700; color: #B5B3AE; }
+    .hk-toc a:hover { color: var(--hk-text); }
+    .hk-toc a.active { color: var(--hk-ink); font-weight: 600; border-left-color: var(--hk-red); }
+    .hk-toc a.active span { color: var(--hk-red); }
+
+    /* ── ARTICLE ── */
+    .hk-article { min-width: 0; }
+    .hk-article p, .hk-article li {
+        font-family: var(--hk-serif); font-size: 1.14rem; line-height: 1.75; color: var(--hk-text);
+    }
+    .hk-article p { margin: 0 0 1.5rem; }
+    .hk-article strong { font-weight: 600; color: var(--hk-ink); }
+    .hk-dropcap::first-letter {
+        font-family: var(--hk-serif); font-weight: 600; font-size: 4.4rem; float: left;
+        line-height: 0.82; margin: 0.06em 0.12em 0 0; color: var(--hk-red);
+    }
+
+    .hk-section { scroll-margin-top: 90px; }
+    .hk-section + .hk-section { margin-top: 4.5rem; }
+    .hk-section-head { margin-bottom: 1.75rem; }
+    .hk-section-num {
+        font-family: var(--hk-display); font-weight: 700; font-size: 0.95rem; letter-spacing: 0.12em;
+        color: var(--hk-red); display: flex; align-items: center; gap: 0.75rem;
+    }
+    .hk-section-num::after { content: ''; height: 2px; width: 48px; background: var(--hk-red); }
+    .hk-section-head h2 {
+        font-family: var(--hk-display); font-weight: 800; text-transform: uppercase;
+        font-size: clamp(2.2rem, 4.5vw, 3.2rem); line-height: 0.95; color: var(--hk-ink);
+        margin: 0.5rem 0 0;
+    }
+    .hk-article h3 {
+        font-family: var(--hk-display); font-weight: 700; text-transform: uppercase;
+        font-size: 1.65rem; letter-spacing: 0.01em; line-height: 1.05; color: var(--hk-ink);
+        margin: 3rem 0 1rem; padding-top: 1.25rem; border-top: 1px solid var(--hk-line);
+    }
+    .hk-article ul.hk-list { margin: 0 0 1.6rem; padding: 0; list-style: none; }
+    .hk-article ul.hk-list li { position: relative; padding-left: 1.4rem; margin-bottom: 0.75rem; }
+    .hk-article ul.hk-list li::before {
+        content: ''; position: absolute; left: 0; top: 0.72em; width: 8px; height: 8px; background: var(--hk-red);
+    }
+
+    /* Pull quote */
+    .hk-quote {
+        margin: 2.75rem 0; padding: 0.25rem 0 0.25rem 1.6rem; border-left: 5px solid var(--hk-red);
+    }
+    .hk-quote p {
+        font-family: var(--hk-display) !important; font-weight: 700; text-transform: uppercase;
+        font-size: clamp(1.6rem, 3.2vw, 2.15rem) !important; line-height: 1.1 !important;
+        color: var(--hk-ink) !important; margin: 0 0 0.75rem !important;
+    }
+    .hk-quote cite {
+        font-family: var(--hk-sans); font-style: normal; font-size: 0.75rem; font-weight: 700;
+        letter-spacing: 0.12em; text-transform: uppercase; color: var(--hk-muted);
+    }
+
+    /* Figures */
+    .hk-figure { margin: 2.75rem 0; }
+    .hk-figure img { width: 100%; display: block; border-radius: 3px; }
+    .hk-figure figcaption, .hk-bleed figcaption {
+        font-family: var(--hk-sans); font-size: 0.8rem; line-height: 1.5; color: var(--hk-muted);
+        margin-top: 0.7rem; padding-left: 0.75rem; border-left: 2px solid var(--hk-red);
+    }
+    .hk-figure figcaption a, .hk-bleed figcaption a { color: inherit; }
+    .hk-figure.split { display: grid; grid-template-columns: 0.85fr 1fr; gap: 1.5rem; align-items: end; }
+    .hk-figure.split img { aspect-ratio: 4 / 5; object-fit: cover; }
+    .hk-figure.split figcaption { margin-top: 0; }
+    .hk-figure.split .hk-fig-big {
+        font-family: var(--hk-display); font-weight: 800; font-size: 3.2rem; line-height: 0.95;
+        color: var(--hk-ink); text-transform: uppercase; display: block; margin-bottom: 0.4rem;
+    }
+    .hk-figure.split .hk-fig-big small { display: block; font-size: 1rem; color: var(--hk-red); letter-spacing: 0.08em; margin-top: 0.35rem; }
+
+    .hk-bleed { margin: 4rem 0 0; position: relative; }
+    .hk-bleed-img {
+        height: min(62vh, 560px); background-size: cover; background-position: center 55%;
+        position: relative;
+    }
+    .hk-bleed-img::after {
+        content: ''; position: absolute; inset: 0;
+        background:
+            linear-gradient(90deg, rgba(11,11,12,0.94) 0%, rgba(11,11,12,0.7) 40%, rgba(11,11,12,0.1) 75%),
+            linear-gradient(0deg, rgba(11,11,12,0.7) 0%, rgba(11,11,12,0) 50%);
+    }
+    .hk-bleed-text {
+        position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; color: #fff;
+        max-width: 1180px; margin: 0 auto; padding: 0 2rem 2.5rem;
+        font-family: var(--hk-display); font-weight: 800; text-transform: uppercase;
+        font-size: clamp(2rem, 5vw, 3.6rem); line-height: 0.95;
+    }
+    .hk-bleed-text span { color: var(--hk-red); }
+    .hk-bleed figcaption { max-width: 1180px; margin: 0.7rem auto 0; padding-left: 0.75rem; margin-left: max(2rem, calc((100% - 1180px) / 2 + 2rem)); }
+
+    /* Lineup card */
+    .hk-lineup {
+        background: var(--hk-ink); color: #fff; border-radius: 4px; padding: 1.6rem;
+        margin: 2rem 0 2.5rem; font-family: var(--hk-sans);
+    }
+    .hk-card-label {
+        font-size: 0.66rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+        color: rgba(255,255,255,0.55); margin-bottom: 1rem; display: flex; justify-content: space-between; gap: 1rem;
+    }
+    .hk-line { display: grid; grid-template-columns: 74px 1fr; gap: 0.75rem; align-items: center; margin-bottom: 0.7rem; }
+    .hk-line-tag { font-family: var(--hk-display); font-weight: 700; font-size: 1rem; letter-spacing: 0.06em; color: var(--hk-red); text-transform: uppercase; }
+    .hk-line-players { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+    .hk-player {
+        background: var(--hk-ink-2); border: 1px solid rgba(255,255,255,0.08); border-radius: 3px;
+        padding: 0.65rem 0.75rem; font-weight: 600; font-size: 0.88rem; line-height: 1.25;
+    }
+    .hk-player small { display: block; font-weight: 500; font-size: 0.68rem; color: rgba(255,255,255,0.5); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.15rem; }
+    .hk-checkers { margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    .hk-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .hk-pill {
+        font-size: 0.8rem; padding: 0.35rem 0.65rem; border-radius: 999px;
+        background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.85);
+    }
+
+    /* Untouchables */
+    .hk-core { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin: 1.5rem 0 2rem; font-family: var(--hk-sans); }
+    .hk-core-card {
+        background: #fff; border: 1px solid var(--hk-line); border-top: 4px solid var(--hk-red);
+        border-radius: 3px; padding: 0.9rem 0.85rem 1rem;
+    }
+    .hk-core-card .pos { font-size: 0.66rem; font-weight: 700; letter-spacing: 0.14em; color: var(--hk-red); text-transform: uppercase; }
+    .hk-core-card .name { font-family: var(--hk-display); font-weight: 700; font-size: 1.3rem; line-height: 1.05; text-transform: uppercase; color: var(--hk-ink); margin-top: 0.3rem; }
+    .hk-core-card.pick { background: var(--hk-ink); border-color: var(--hk-ink); border-top-color: var(--hk-red); }
+    .hk-core-card.pick .name { color: #fff; }
+
+    /* Tables */
+    .hk-table-wrap { margin: 2rem 0 2.5rem; overflow-x: auto; border: 1px solid var(--hk-line); border-radius: 4px; background: #fff; }
+    .hk-table-cap {
+        font-family: var(--hk-sans); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: #fff; background: var(--hk-ink); padding: 0.75rem 1rem;
+    }
+    .hk-table { width: 100%; border-collapse: collapse; font-family: var(--hk-sans); font-size: 0.86rem; min-width: 560px; }
+    .hk-table th {
+        text-align: left; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+        color: var(--hk-muted); padding: 0.7rem 1rem; border-bottom: 2px solid var(--hk-ink); background: #F4F3EF;
+    }
+    .hk-table td { padding: 0.8rem 1rem; border-bottom: 1px solid var(--hk-line); vertical-align: top; line-height: 1.5; color: var(--hk-text); }
+    .hk-table tr:last-child td { border-bottom: none; }
+    .hk-table td:first-child { font-weight: 700; color: var(--hk-ink); white-space: nowrap; }
+    .hk-table .hl { background: #FDF1F3; }
+    .hk-table .badge { display: inline-block; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.15rem 0.4rem; border-radius: 2px; background: var(--hk-red); color: #fff; margin-left: 0.4rem; }
+
+    /* Trade card */
+    .hk-trade { margin: 2rem 0 2.5rem; border-radius: 4px; overflow: hidden; border: 1px solid var(--hk-line); font-family: var(--hk-sans); }
+    .hk-trade-head {
+        background: var(--hk-ink); color: #fff; padding: 0.8rem 1.2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+        font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .hk-trade-head .status { color: var(--hk-red); }
+    .hk-trade-body { display: grid; grid-template-columns: 1fr auto 1fr; background: #fff; }
+    .hk-trade-side { padding: 1.5rem 1.4rem; }
+    .hk-trade-side.chi { background: var(--hk-red); color: #fff; }
+    .hk-trade-team { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.75; margin-bottom: 0.9rem; }
+    .hk-trade-asset { font-family: var(--hk-display); font-weight: 700; font-size: 1.6rem; line-height: 1.05; text-transform: uppercase; }
+    .hk-trade-detail { font-size: 0.85rem; line-height: 1.5; margin-top: 0.35rem; opacity: 0.85; }
+    .hk-trade-side .hk-trade-asset + .hk-trade-asset { margin-top: 0.9rem; }
+    .hk-trade-swap {
+        display: grid; place-items: center; padding: 0 0.9rem; background: #fff;
+        font-family: var(--hk-display); font-weight: 800; font-size: 1.6rem; color: var(--hk-red);
+    }
+
+    /* Avoid + team cards */
+    .hk-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0 2rem; }
+    .hk-avoid { background: #fff; border: 1px solid var(--hk-line); border-radius: 4px; padding: 1.4rem; }
+    .hk-avoid-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.8rem; }
+    .hk-avoid-name { font-family: var(--hk-display); font-weight: 700; font-size: 1.55rem; line-height: 1; text-transform: uppercase; color: var(--hk-ink); }
+    .hk-avoid-team { font-family: var(--hk-sans); font-size: 0.75rem; color: var(--hk-muted); margin-top: 0.3rem; }
+    .hk-pass {
+        font-family: var(--hk-sans); font-size: 0.66rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+        border: 2px solid var(--hk-red); color: var(--hk-red); padding: 0.25rem 0.5rem; border-radius: 2px; white-space: nowrap;
+    }
+    .hk-avoid p { font-size: 1rem !important; line-height: 1.65 !important; margin: 0 !important; }
+
+    .hk-teams { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin: 1.5rem 0 1.25rem; }
+    .hk-team { background: #fff; border: 1px solid var(--hk-line); border-radius: 4px; padding: 1rem; font-family: var(--hk-sans); }
+    .hk-team-name { font-family: var(--hk-display); font-weight: 700; font-size: 1.2rem; text-transform: uppercase; color: var(--hk-ink); line-height: 1.1; }
+    .hk-team-flag { display: inline-block; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; background: var(--hk-red); padding: 0.15rem 0.35rem; border-radius: 2px; margin-top: 0.4rem; }
+    .hk-team p { font-family: var(--hk-sans) !important; font-size: 0.84rem !important; line-height: 1.5 !important; color: var(--hk-muted) !important; margin: 0.5rem 0 0 !important; }
+
+    /* Free-agent board */
+    .hk-fa { margin: 1.5rem 0 2rem; border: 1px solid var(--hk-line); border-radius: 4px; background: #fff; overflow: hidden; }
+    .hk-fa-row { display: grid; grid-template-columns: 200px 1fr; gap: 1rem; padding: 1rem 1.2rem; border-bottom: 1px solid var(--hk-line); }
+    .hk-fa-row:last-child { border-bottom: none; }
+    .hk-fa-name { font-family: var(--hk-display); font-weight: 700; font-size: 1.25rem; text-transform: uppercase; color: var(--hk-ink); line-height: 1.05; }
+    .hk-fa-meta { font-family: var(--hk-sans); font-size: 0.72rem; color: var(--hk-red); font-weight: 700; letter-spacing: 0.06em; margin-top: 0.25rem; }
+    .hk-fa-row p { font-size: 1rem !important; line-height: 1.6 !important; margin: 0 !important; }
+    .hk-fa-row.top { background: var(--hk-ink); }
+    .hk-fa-row.top .hk-fa-name, .hk-fa-row.top p { color: #fff !important; }
+
+    /* Author + sources */
+    .hk-endcard {
+        margin-top: 4rem; background: var(--hk-ink); color: #fff; border-radius: 4px; padding: 1.75rem;
+        display: grid; grid-template-columns: auto 1fr; gap: 1.2rem; align-items: start; font-family: var(--hk-sans);
+    }
+    .hk-endcard .hk-avatar { width: 56px; height: 56px; font-size: 1rem; }
+    .hk-endcard-name { font-family: var(--hk-display); font-weight: 700; font-size: 1.4rem; text-transform: uppercase; }
+    .hk-endcard p { font-family: var(--hk-sans) !important; font-size: 0.9rem !important; line-height: 1.6 !important; color: rgba(255,255,255,0.75) !important; margin: 0.35rem 0 0 !important; }
+    .hk-endcard .disclaimer { font-size: 0.75rem !important; color: rgba(255,255,255,0.5) !important; margin-top: 0.9rem !important; }
+
+    .hk-sources { margin-top: 2rem; border-top: 2px solid var(--hk-ink); font-family: var(--hk-sans); }
+    .hk-sources summary {
+        cursor: pointer; list-style: none; padding: 1.1rem 0; display: flex; justify-content: space-between; align-items: center;
+        font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--hk-ink);
+    }
+    .hk-sources summary::-webkit-details-marker { display: none; }
+    .hk-sources summary::after { content: '+'; font-size: 1.3rem; color: var(--hk-red); font-weight: 400; }
+    .hk-sources[open] summary::after { content: '−'; }
+    .hk-sources ol { columns: 2; column-gap: 2rem; margin: 0 0 1.5rem; padding-left: 1.4rem; }
+    .hk-sources li { font-family: var(--hk-sans) !important; font-size: 0.8rem !important; line-height: 1.5 !important; color: var(--hk-muted) !important; margin-bottom: 0.35rem; break-inside: avoid; }
+    .hk-credits { font-size: 0.75rem; line-height: 1.6; color: var(--hk-muted); padding-bottom: 3rem; }
+    .hk-credits a { color: inherit; }
+
+    @media (max-width: 1000px) {
+        .hk-layout { grid-template-columns: minmax(0, 720px); }
+        .hk-toc { display: none; }
+    }
+    @media (max-width: 720px) {
+        .hk-hero-inner { padding: 7rem 1.25rem 2.5rem; }
+        .hk-hero::after { background: linear-gradient(0deg, rgba(11,11,12,0.97) 0%, rgba(11,11,12,0.75) 50%, rgba(11,11,12,0.2) 100%); }
+        .hk-stats-inner { grid-template-columns: 1fr; padding: 0 1.25rem; }
+        .hk-stat { border-left: none; border-top: 1px solid rgba(255,255,255,0.1); padding: 1.4rem 0; }
+        .hk-stat:first-child { border-top: none; }
+        .hk-layout { padding: 2.75rem 1.25rem 1rem; }
+        .hk-article p, .hk-article li { font-size: 1.06rem; }
+        .hk-core { grid-template-columns: repeat(2, 1fr); }
+        .hk-grid-2, .hk-teams { grid-template-columns: 1fr; }
+        .hk-figure.split { grid-template-columns: 1fr; }
+        .hk-trade-body { grid-template-columns: 1fr; }
+        .hk-trade-swap { padding: 0.5rem; transform: rotate(90deg); }
+        .hk-line { grid-template-columns: 1fr; gap: 0.35rem; }
+        .hk-line-players { grid-template-columns: 1fr; }
+        .hk-fa-row { grid-template-columns: 1fr; gap: 0.4rem; }
+        .hk-sources ol { columns: 1; }
+        .hk-bleed-text { padding: 0 1.25rem 1.75rem; }
+        .hk-bleed figcaption { margin-left: 1.25rem; margin-right: 1.25rem; }
+        .hk-endcard { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto !important; } }
+    html { scroll-behavior: smooth; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="hk-progress" id="hkProgress" aria-hidden="true"></div>
+
+<!-- HERO -->
+<header class="hk-hero">
+    <img class="hk-hero-img" src="{{ url_for('static', filename='img/blackhawks/hero_bedard.jpg') }}" alt="Connor Bedard, wearing number 98 in the Blackhawks' white road jersey, battles Seattle's Chandler Stephenson along the boards">
+    <div class="hk-hero-inner">
+        <div class="hk-kicker">
+            <span class="hk-chip red">Hockey Operations</span>
+            <span class="hk-chip ghost">Analysis</span>
+            <span class="hk-chip ghost">2026-27</span>
+        </div>
+        <h1>How to Fix the Chicago <em>Blackhawks</em></h1>
+        <p class="hk-dek">Too young. Too one-dimensional. Time for a new direction.</p>
+        <div class="hk-byline">
+            <div class="hk-avatar" aria-hidden="true">KF</div>
+            <div>
+                <div class="hk-byline-name">Kyle Flynn</div>
+                <div class="hk-byline-meta">Finance graduate, Concordia University Wisconsin &nbsp;·&nbsp; Nov. 15, 2026 &nbsp;·&nbsp; 22 min read</div>
+            </div>
+        </div>
+    </div>
+    <div class="hk-hero-credit">Photo: Jenn G / <a href="https://commons.wikimedia.org/wiki/File:Stephenson_bedard_2nd_11_14_(54141461892).jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, CC BY-SA 2.0</div>
+</header>
+
+<!-- STAT BAND -->
+<section class="hk-stats" aria-label="Key numbers">
+    <div class="hk-stats-inner">
+        <div class="hk-stat"><span class="hk-stat-value">5-13-2</span><span class="hk-stat-label">Blackhawks record after 20 games</span></div>
+        <div class="hk-stat"><span class="hk-stat-value">3.13</span><span class="hk-stat-label">Expected goals against per 60 at 5-on-5, third-most in the NHL (Daily Faceoff, Nov. 11)</span></div>
+        <div class="hk-stat"><span class="hk-stat-value">31st</span><span class="hk-stat-label">Power-play rank at 10.6%, as of Nov. 3 (The Hockey News)</span></div>
+    </div>
+</section>
+
+<div class="hk-layout">
+
+    <nav class="hk-toc" aria-label="In this story">
+        <div class="hk-toc-title">In this story</div>
+        <ol>
+            <li><a href="#introduction"><span>01</span>Introduction</a></li>
+            <li><a href="#where-are-we"><span>02</span>Where are we?</a></li>
+            <li><a href="#how-do-we-get-there"><span>03</span>How do we get there?</a></li>
+            <li><a href="#the-moves"><span>04</span>The moves</a></li>
+            <li><a href="#the-offseason"><span>05</span>The offseason</a></li>
+            <li><a href="#conclusion"><span>06</span>Conclusion</a></li>
+        </ol>
+    </nav>
+
+    <article class="hk-article">
+
+        <!-- 01 -->
+        <section class="hk-section" id="introduction">
+            <div class="hk-section-head">
+                <div class="hk-section-num">01</div>
+                <h2>Introduction</h2>
+            </div>
+
+            <p class="hk-dropcap">I am a recent finance graduate pursuing a career in hockey operations, and a lifelong Blackhawks fan. This proposal sets out how Chicago can move from a rebuilding team to a playoff-caliber one. It covers where the organization stands, the plan to change that and the specific moves that get it there, starting with defense.</p>
+        </section>
+
+        <!-- 02 -->
+        <section class="hk-section" id="where-are-we">
+            <div class="hk-section-head">
+                <div class="hk-section-num">02</div>
+                <h2>Where are we?</h2>
+            </div>
+
+            <p>The rebuild began about five years ago, when Kyle Davidson took over as interim general manager. He traded Alex DeBrincat, Brandon Hagel and Dominik Kubalik, accumulated high draft picks and built a pipeline of young talent. That phase worked. The next phase has stalled, and at its core this is a roster construction problem and a developmental problem.</p>
+
+            <p>The Blackhawks are 5-13-2. Connor Bedard, coach Jeff Blashill and the rest of the team came in expecting to become a winning organization and compete for a playoff spot. Kyle Davidson believed these players were ready to take the next step and did not need much veteran help. The results show how far from the case that was.</p>
+
+            <p>I did not believe they were ready, and I was surprised by Davidson’s plan. The only evidence for it was the start of the 2025-26 season, when the team looked hot out of the gate and Bedard was the third-leading scorer in the NHL with 37 points in 25 games as of Dec. 2, according to The Hockey News. Since Bedard went down in December 2025, the team has never fully recovered.</p>
+
+            <p>In the offseason, the Blackhawks added Patrick Kane, who could have signed with Buffalo to be closer to home. Hypothetically, without him, Chicago would have entered this season with Anton Frondell and Roman Kantserov as its two big additions, even though Frondell played only 12 games at the end of last season. With a 5-13-2 start, these young players have proven that they are talented but not ready.</p>
+
+            <p>Earlier, in March of 2026, Chicago traded Connor Murphy (March 2), Jason Dickinson and Colton Dach (March 4) and Nick Foligno (March 6) within five days, a group Blashill called “great role models” for the young players, according to SI. The team’s record was 23-28-10 after the Dickinson trade, and it finished 29-39-14, which works out to 6-11-4 over its last 21 games without those veterans. I believe that stretch showed the front office what the young group would look like without veteran leadership around it. And that group was underwhelming. So why did we think things would magically change this season without replacing those veterans?</p>
+
+            <figure class="hk-figure split">
+                <img src="{{ url_for('static', filename='img/blackhawks/warmups_2026.jpg') }}" alt="A Blackhawks forward in the red home jersey during warmups on United Center ice" loading="lazy" style="object-position: center 20%;">
+                <figcaption>
+                    <span class="hk-fig-big">6-11-4<small>Last 21 games of 2025-26</small></span>
+                    Warmups at the United Center before the Blackhawks hosted St. Louis on April 11, 2026, late in a season that ended 29-39-14. Pictured: Ilya Mikheyev. Photo: Dan Sanford / <a href="https://commons.wikimedia.org/wiki/File:Mikheyev_Blackhawks_April_2026.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, CC BY 4.0.
+                </figcaption>
+            </figure>
+
+            <p>There are clear positives nonetheless. Artyom Levshunov has taken a substantial step forward. Last season, his turnovers, missed assignments and habit of leaving the front of the net had you holding your breath every other game. This season he is a far more complete defenseman. Blashill says he is more comfortable in the systems and as an NHL player, and since Bowen Byram’s injury he leads Chicago defensemen in five-on-five ice time, according to the Sun-Times. The Hockey Writers credits his offseason work for improved skating, puck handling and gap control. He is still developing, and he may yet prove to be the second-overall pick Chicago wanted, even though Ivan Demidov of Montreal looked like the clear choice in the 2024 draft until the end of last season.</p>
+
+            <p>Frondell is developing the two-way game Blashill emphasizes, but at 19 years of age he has been deployed against opposing top lines every night, an unusual assignment for a player his age, and he has been consistently outmatched through the start of this season. Oliver Moore, Frank Nazar, Nick Lardis, Sam Rinzel and Wyatt Kaiser have not yet played to the level we expected of them at this point. A team cannot be built on development alone, and this group is still learning the league at the NHL level.</p>
+
+            <p>That is what a roster construction problem looks like. Talented young players are asked to carry the matchups and the minutes before they are capable of doing so. Chicago has too many of the same type, young, fast and offense-first, and too few who defend, win puck battles and play with physicality.</p>
+
+            <blockquote class="hk-quote">
+                <p>Chicago has too many of the same type, young, fast and offense-first, and too few who defend.</p>
+                <cite>The core problem</cite>
+            </blockquote>
+
+            <p>The clearest weakness is defense. Chicago allows the third-most expected goals against per 60 minutes at 5-on-5. The place to start is the defense. The goal in reconstructing this roster is to build a team where the young core develops alongside experienced veterans instead of carrying the team alone. That starts with a more stable defense, followed by forwards who bring size and a shoot-first mentality, so that the premium young players are protected and put in positions to succeed. Davidson has pointed the same way. In July he said, “adding some offensive talent is essential,” according to Heavy, and NHL reporter Frank Seravalli reported on Chicago Sports Network that the front office is looking for a “shoot-first scoring winger with size,” per the Sun-Times. That is where the plan begins.</p>
+        </section>
+
+        <!-- 03 -->
+        <section class="hk-section" id="how-do-we-get-there">
+            <div class="hk-section-head">
+                <div class="hk-section-num">03</div>
+                <h2>How do we get there?</h2>
+            </div>
+
+            <p>First, add proven NHL-caliber players to start competing and show the league that Chicago is serious. Second, protect the core and Chicago’s own 2027 first-round pick, but be willing to trade the other picks, prospects and NHL players with high trade value for veterans who can help the team win now. Third, shop the veterans who are not part of the long-term plan (Tyler Bertuzzi, Teuvo Teräväinen, Jordan Greenway and Ryan Donato) for draft picks or prospects. Fourth, use the 2027 offseason, through trades and free agency, to add experience and physicality around the young group.</p>
+
+            <p>The second point matters most. I believe Davidson has become very attached to the players he has drafted, or he has not yet found trades that make sense against what he believes some of these young players will become, and he may be overvaluing their full potential. Waiting only pays off if they reach it, and that is not guaranteed. With the rebuild at a standstill, Chicago has to make logical moves, not desperation moves, that let the Blackhawks compete now. To move forward, Kyle Davidson has to be willing to move on from some of his drafted prospects and draft capital.</p>
+
+            <p>Chicago also cannot keep losing. This is the fifth year of the rebuild, and a young group that keeps losing will get comfortable with it, and losing will become part of its identity. The risk is the 2010s Edmonton Oilers, who missed the playoffs for ten straight seasons after 2006 and selected first overall four times in six years, according to The Hockey Writers. In a December 2014 Grantland piece, Sean McIndoe wrote that it is possible to install a losing culture, and that “an organization has lost so much for so long that it starts to have an effect on everyone who works there.” Even after the Oilers had added a generation of top picks, The Hockey News wrote in March 2019 that “there is something wrong with Edmonton’s culture and it has been wrong for a long time.” Draft capital alone does not end that cycle. Chicago needs results, traction and progress so that it can start playing winning hockey.</p>
+
+            <blockquote class="hk-quote">
+                <p>“An organization has lost so much for so long that it starts to have an effect on everyone who works there.”</p>
+                <cite>Sean McIndoe, Grantland, Dec. 2014</cite>
+            </blockquote>
+        </section>
+
+        <!-- 04 -->
+        <section class="hk-section" id="the-moves">
+            <div class="hk-section-head">
+                <div class="hk-section-num">04</div>
+                <h2>The moves</h2>
+            </div>
+
+            <p>Each step below addresses the same roster construction and developmental problem, in the order I would act on it: test the current lineup, fix the defense, add size and scoring on the wings, and then build around the young group in the 2027 offseason.</p>
+
+            <h3>First, let the top six play together</h3>
+
+            <p>One thing I would do before any trade is stack the top six to see how Chicago’s best offensive producers play together. The team is limited and struggles to put the puck in the net. It has scored 46 goals in 20 games, or 2.3 per game, according to StatsCrew. As of Oct. 24 it ranked third-lowest in the NHL in goals per game (2.2) and second-lowest in shots per game (21.4), the Sun-Times reported. So the first line would be Roman Kantserov, Connor Bedard and Anton Frondell, and the second line Oliver Moore, Frank Nazar and Patrick Kane.</p>
+
+            <div class="hk-lineup" role="group" aria-label="Proposed forward lines">
+                <div class="hk-card-label"><span>Proposed forward group</span><span>Top six stacked</span></div>
+                <div class="hk-line">
+                    <div class="hk-line-tag">Line 1</div>
+                    <div class="hk-line-players">
+                        <div class="hk-player"><small>Forward</small>Roman Kantserov</div>
+                        <div class="hk-player"><small>Forward</small>Connor Bedard</div>
+                        <div class="hk-player"><small>Forward</small>Anton Frondell</div>
+                    </div>
+                </div>
+                <div class="hk-line">
+                    <div class="hk-line-tag">Line 2</div>
+                    <div class="hk-line-players">
+                        <div class="hk-player"><small>Forward</small>Oliver Moore</div>
+                        <div class="hk-player"><small>Forward</small>Frank Nazar</div>
+                        <div class="hk-player"><small>Forward</small>Patrick Kane</div>
+                    </div>
+                </div>
+                <div class="hk-checkers">
+                    <div class="hk-card-label"><span>Bottom six · checking group</span></div>
+                    <div class="hk-pills">
+                        <span class="hk-pill">Tyler Bertuzzi (when healthy)</span>
+                        <span class="hk-pill">Ryan Donato</span>
+                        <span class="hk-pill">Teuvo Teräväinen</span>
+                        <span class="hk-pill">Andrew Mangiapane</span>
+                        <span class="hk-pill">Cole Smith</span>
+                        <span class="hk-pill">Ryan Greene</span>
+                        <span class="hk-pill">Jordan Greenway</span>
+                    </div>
+                </div>
+            </div>
+
+            <p>The bottom six would be a checking group: Tyler Bertuzzi (when he is back from injury), Ryan Donato, Teuvo Teräväinen, Andrew Mangiapane, Cole Smith, Ryan Greene and Jordan Greenway. Their job is to play a sound, structured game in the defensive zone, win board battles, clear the front of the net and limit shots and chances against. When the top six have the puck, they get the offensive-zone starts and the freedom to create.</p>
+
+            <h3>Step 1: Defense</h3>
+
+            <p>The first priority is defense, and the targets are players who can help immediately: Filip Hronek, Zach Whitecloud if Calgary is willing to sell him, and the left shots Simon Edvinsson and Alexander Nikishin.</p>
+
+            <p>I would focus on Hronek and Whitecloud because both are right shots, and right-shot defensemen are very scarce. They are also more of a priority because Bowen Byram and Alex Vlasic hold the top-four left side and Levshunov is the only right shot there.</p>
+
+            <p>Hronek is the first player I would go after. He is in the prime of his career: a leader, a needle mover and a difference maker on the blue line. He put up 49 points (8 goals and 41 assists) and averaged 25:00 of ice time last season, according to CBS Sports, and this season he had 10 points in October and led Vancouver in ice time that month, per The Hockey News. He would carry the highest acquisition cost of any defenseman on this list. The obstacles are real. He holds a no-movement clause, so he would have to approve a move to one of the league’s worst teams, and Vancouver is very high on him and possibly sees him as a future captain, so it would demand a substantial package.</p>
+
+            <p>The more realistic target, and the one I think Davidson would pursue, is Zach Whitecloud if Calgary is willing to sell. Chicago will most likely have to overpay. It has no leverage, and the trade market is thin this early in the season. Kyle Davidson has also already stated publicly that he is looking to improve the roster and add help, which signals urgency, and even desperation, to the rest of the league. But Whitecloud would stabilize the defensive room and the top pair, and give the blue line an identity. His $2.75 million cap hit, per Spotrac, fits easily under the cap, but that is also why the price will be high: Daily Faceoff reported on Oct. 7 that other teams have interest, and David Pagnotta noted that many clubs would be glad to add a 29-year-old with a Stanley Cup ring at that number. I recommend acting within the next three months and offering a first-round pick plus a prospect or NHL player.</p>
+
+            <p>Edvinsson and Nikishin are younger alternatives, but as left shots they fit less than Hronek and Whitecloud. Nikishin is 24 and had 11 goals and 33 points in 81 games as a rookie. He requested a trade from Carolina this summer and signed a one-year, $3 million contract on Oct. 25, according to TSN.</p>
+
+            <h3>Step 2: Roster construction</h3>
+
+            <p>I do not believe this roster, as built, is a Stanley Cup contender. Even if every young player reaches his full potential, the pieces overlap too much. Davidson has done a strong job building this organization, but there are specific additions that would make this a serious playoff team.</p>
+
+            <p>The overlap exists on both ends. On defense, Chicago has many offensive defensemen who are strong skaters or will be, and nearly all of them are young, such as Sam Rinzel, Bowen Byram and Artyom Levshunov. Up front, Frank Nazar, Oliver Moore, Connor Bedard, Roman Kantserov and Nick Lardis are fast, high-motor goal scorers. That is a strong core, but a roster cannot consist only of that. The Sun-Times has noted that the team lacks size among its top-nine forwards, and NHL reporter Frank Seravalli reported that the front office wants a shoot-first scoring winger with size.</p>
+
+            <p>The numbers support that. Chicago’s power play ranks 31st in the league at 10.6%, which suggests that skill alone is not enough without a net-front presence. As of Nov. 3, the team was 4-10-1, and only Vancouver had fewer points. Seravalli said before the season: “They’re going to need to figure out how to create offense and win as they’re currently constituted.”</p>
+
+            <p>The system has to change. I believe Chicago is trying to play the forecheck-heavy system Carolina and Vegas run, without the roster to do it. Carolina sends two forecheckers in hard while its defensemen pinch the walls to force turnovers, according to NHL.com’s Coaches’ Room, and Vegas does it with a heavy, physical forecheck, as it showed in Game 1 of the Stanley Cup Final. Both run on size, a mobile back end and veterans who finish every pressure. Chicago has the speed and skill but not the size or the defensemen who can pinch and recover, so it gets pinned in its own end, allows the third-most expected goals against and, Blashill said, has “allowed the most 2-on-1 rushes in the league by a lot,” per Yahoo Sports. The firepower we were told to expect has not shown up either: 12 points in 20 games, a pace of about 49 over 82, after 72 points in 2025-26, according to StatsCrew. The fix is the personnel that system requires: mobile right-shot defensemen, then size and physicality up front. Until that group is in place, Chicago needs to adopt an offensive-focused system built to outscore its opponents.</p>
+
+            <h3>Players + Picks that are off the table</h3>
+
+            <p>Before any trade, the untouchables. I would add Frank Nazar to the list, unless an outstanding package were offered. He is 22, signed through 2032-33, and I believe he can become a 50-plus-point player as he grows into his game.</p>
+
+            <div class="hk-core" role="list" aria-label="Untouchables">
+                <div class="hk-core-card" role="listitem"><div class="pos">Forward</div><div class="name">Connor Bedard</div></div>
+                <div class="hk-core-card" role="listitem"><div class="pos">Forward</div><div class="name">Anton Frondell</div></div>
+                <div class="hk-core-card" role="listitem"><div class="pos">Forward</div><div class="name">Roman Kantserov</div></div>
+                <div class="hk-core-card" role="listitem"><div class="pos">Forward</div><div class="name">Frank Nazar</div></div>
+                <div class="hk-core-card" role="listitem"><div class="pos">Defense</div><div class="name">Bowen Byram</div></div>
+                <div class="hk-core-card" role="listitem"><div class="pos">Defense</div><div class="name">Artyom Levshunov</div></div>
+                <div class="hk-core-card" role="listitem"><div class="pos">Goalie</div><div class="name">Spencer Knight</div></div>
+                <div class="hk-core-card pick" role="listitem"><div class="pos">Draft pick</div><div class="name">CHI 2027 1st</div></div>
+            </div>
+
+            <p>I would also add Chicago’s own 2027 first-round pick to the list. Chicago is likely to be picking in the top five again, which would be a fifth straight top-five pick, according to The Hockey News, and a pick in that range keeps more young talent coming into the pipeline. The class gives Chicago a reason to keep it. Defenseman Landon DuPont is the “runaway favorite” to go first overall, and the top of the class is built around centers, The Hockey News reported in June. Daily Faceoff’s Steven Ellis says there is “a lot of talent down the middle in a way that we haven’t really seen in recent memory,” though he sees no clear number-one center. Not everyone is as high on the class. The Hockey Writers cited The Athletic’s Scott Wheeler describing it as “not great” and not very deep, in an Oct. 10 column. That makes a top-five pick, where the best of the class go, more valuable, not less.</p>
+
+            <h3>What we have to trade</h3>
+
+            <p>Chicago has the draft capital to make significant, roster-altering moves. In 2027 it holds three first-round picks and two seconds. Unless Chicago is getting back a proven superstar like Jason Robertson or Nikita Kucherov, its own 2027 first is untouchable, which leaves the Florida and Edmonton firsts as the ones to spend.</p>
+
+            <div class="hk-table-wrap">
+                <div class="hk-table-cap">Draft capital · 2027–2029</div>
+                <table class="hk-table">
+                    <thead>
+                        <tr><th>Draft</th><th>Round</th><th>Picks held</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr class="hl"><td>2027</td><td>1st</td><td>Chicago, Florida, Edmonton <span class="badge">Spend FLA + EDM</span></td><td>Florida’s is marked conditional. Edmonton’s came for Colton Dach and Jason Dickinson and is conditional per its link. The terms aren’t published.</td></tr>
+                        <tr><td>2027</td><td>2nd</td><td>Chicago, Vancouver</td><td></td></tr>
+                        <tr><td>2027</td><td>3rd</td><td>Chicago, Tampa Bay</td><td></td></tr>
+                        <tr><td>2027</td><td>4th</td><td>Vancouver</td><td>Re-acquired in the Lukas Reichel trade</td></tr>
+                        <tr><td>2027</td><td>6th, 7th</td><td>Chicago 6th and 7th, Ottawa 6th</td><td>Ottawa’s came in the Andre Burakovsky trade</td></tr>
+                        <tr><td>2028</td><td>1st</td><td>Chicago</td><td></td></tr>
+                        <tr><td>2028</td><td>2nd</td><td>Chicago, Edmonton</td><td>Edmonton’s came in the Connor Murphy trade and is conditional</td></tr>
+                        <tr><td>2028</td><td>3rd to 6th</td><td>Chicago 3rd, 4th, 5th, 6th; San Jose 4th</td><td></td></tr>
+                        <tr><td>2029</td><td>1st to 7th</td><td>Chicago’s own</td><td>No acquired picks</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>The organization also has prospects to trade, and I would be willing to move several of them: Sacha Boisvert, Marek Vanacker, Vaclav Nestrasil, Paul Ludwinski, Gavin Hayes, John Mustard, Parker Holmes, Martin Misiak and A.J. Spellacy. The Sun-Times’ summer rankings put Nestrasil first (19, 6-foot-6, 31 points in 34 games at UMass).</p>
+
+            <p>There are also several players on the NHL roster whom I would be comfortable moving. I know some are fan favorites, and this may come as a shock, but they still have high trade value and are not part of the core: Sam Rinzel, Nick Lardis, Oliver Moore, Wyatt Kaiser and Alex Vlasic. Vlasic is a proven NHL defenseman, and if Chicago can get better at his spot, it should.</p>
+
+            <h3>The Tippett offer</h3>
+
+            <p>Owen Tippett of the Philadelphia Flyers is a strong skater with size and a shoot-first mentality. Philadelphia is near the bottom of the standings, as Chicago is, and reports say it is looking for a center with top-six upside. Daily Faceoff reported that the Flyers would consider moving Tippett in a deal built around a prospect center and a future first-round pick.</p>
+
+            <div class="hk-trade" role="group" aria-label="Proposed trade with Philadelphia">
+                <div class="hk-trade-head"><span>Trade proposal · CHI ⇄ PHI</span><span class="status">Proposed</span></div>
+                <div class="hk-trade-body">
+                    <div class="hk-trade-side chi">
+                        <div class="hk-trade-team">Chicago receives</div>
+                        <div class="hk-trade-asset">Owen Tippett</div>
+                        <div class="hk-trade-detail">Right wing, $6.2M through 2031-32</div>
+                    </div>
+                    <div class="hk-trade-swap" aria-hidden="true">⇄</div>
+                    <div class="hk-trade-side">
+                        <div class="hk-trade-team">Chicago sends</div>
+                        <div class="hk-trade-asset">Oliver Moore</div>
+                        <div class="hk-trade-asset">Florida’s 2027 1st</div>
+                        <div class="hk-trade-detail">Plus a second- or third-round pick if needed as a sweetener</div>
+                    </div>
+                </div>
+            </div>
+
+            <p>Oliver Moore is one of my favorite Hawks at the moment, and I believe he will become a top-six player. That is why this is not an easy offer to make. But Moore is a young center who has played wing, so Philadelphia would receive the center help it wants. Daily Faceoff reported that the Flyers are skeptical he can become a long-term top-six center, which is why Florida’s first is in the deal to close the gap in value. Given where both teams sit in the standings, I believe the fit makes too much sense.</p>
+
+            <p>Matvei Michkov is the other Philadelphia winger I would ask about. Reports have said he wants a “new start” elsewhere, though Philadelphia general manager Daniel Brière has said the team has no plan to trade him. That conversation does not start unless Chicago is willing to give Philadelphia Frank Nazar, the one untouchable I would move, and I would do that for a player like Michkov.</p>
+
+            <h3>Sell the veterans who are not in the plan</h3>
+
+            <p>At the same time, Chicago should shop the veterans who are not part of the long-term plan: Tyler Bertuzzi, Teuvo Teräväinen, Jordan Greenway and Ryan Donato. They are not playing at the level we expected, but another team may still pay in draft capital or a B or C prospect. The offseason is then the time to pursue veterans who will help the young group develop.</p>
+
+            <h3>Players to avoid</h3>
+
+            <p>Two names have been linked to Chicago as trade options: Ivan Miroshnichenko of the Capitals and Dmitri Voronkov of the Blue Jackets. I would avoid both.</p>
+
+            <div class="hk-grid-2">
+                <div class="hk-avoid">
+                    <div class="hk-avoid-top">
+                        <div><div class="hk-avoid-name">Ivan Miroshnichenko</div><div class="hk-avoid-team">Washington Capitals</div></div>
+                        <span class="hk-pass">Pass</span>
+                    </div>
+                    <p>Washington’s reported price is at least a first-round pick, per Daily Faceoff’s Jeff Marek. That is too much for a 22-year-old who was drafted in the first round in 2022 and is still learning his game and his role. He has been productive in the AHL, and the Sun-Times says he skates well at 6-foot-1, 205 pounds. But he has dressed for only three games this season and has asked for a trade. Chicago already has too many developing players, so paying a first for another unknown does not address the need. A first-round pick should go to a player who has already shown what he is at the NHL level.</p>
+                </div>
+                <div class="hk-avoid">
+                    <div class="hk-avoid-top">
+                        <div><div class="hk-avoid-name">Dmitri Voronkov</div><div class="hk-avoid-team">Columbus Blue Jackets</div></div>
+                        <span class="hk-pass">Pass</span>
+                    </div>
+                    <p>He is a large net-front scorer with 21 power-play goals in 211 career games and 40 goals over the last two seasons combined. However, his skating is a concern for a team that plays at this pace. The Sun-Times says his skating and work ethic “don’t get rave reviews,” and The Hockey News described him as a “poor man’s version” of Tyler Bertuzzi. A winger of this type does not solve a roster that needs both pace and size.</p>
+                </div>
+            </div>
+
+            <h3>If Philadelphia is not ready to sell</h3>
+
+            <p>The search would then move to the offseason, when several of these forwards could be available. Lawson Crouse, Josh Anderson, Jared McCann, Ryan Hartman, Blake Coleman, Garnet Hathaway, Morgan Frost, Filip Chytil, Brendan Gallagher and Chris Kreider could each add forward depth. Their current teams may re-sign them, but this is the list of forwards I would put on the table in a hockey operations meeting and discuss as potential pursuits. At present, I believe Philadelphia is the best trade partner.</p>
+
+            <p>Chicago should also be calling on young players who fit its timeline and play for bad or rebuilding teams, or for teams that are looking to retool in the near future. Teams that fit the profile, based on The Hockey News’ October Sour Rankings and Bleacher Report’s October trade block, include:</p>
+
+            <div class="hk-teams">
+                <div class="hk-team"><div class="hk-team-name">Nashville</div><span class="hk-team-flag">Was on trade block</span><p>Acquired Shane Wright (22) from Seattle for Matthew Wood on Nov. 1, according to The Hockey News. Wright was on Bleacher Report’s trade block before the deal. If the Predators begin to lose, he becomes a name to monitor.</p></div>
+                <div class="hk-team"><div class="hk-team-name">NY Rangers</div><span class="hk-team-flag">On trade block</span><p>A retooling club, with Alexis Lafrenière (24) also on the trade block board.</p></div>
+                <div class="hk-team"><div class="hk-team-name">Vancouver</div><p>Embracing a rebuild, with Marco Rossi, Zeev Buium and Liam Ohgren.</p></div>
+                <div class="hk-team"><div class="hk-team-name">Calgary</div><p>Building for the future, with Zayne Parekh and Matt Coronato.</p></div>
+                <div class="hk-team"><div class="hk-team-name">Detroit</div><p>May have to restart its rebuild after the Dylan Larkin trade request and the Simon Edvinsson dispute.</p></div>
+                <div class="hk-team"><div class="hk-team-name">Columbus</div><p>Traded Kirill Marchenko and is getting younger.</p></div>
+            </div>
+
+            <p>Only Wright, who has since been traded, and Lafrenière were reported on the trade block. The others are names to ask about, not players reported as available.</p>
+
+            <h3>Show the league Chicago is serious</h3>
+
+            <p>Adding players such as Tippett, Whitecloud or Hronek would make the team better, more experienced and better led. It would also show the rest of the league that the Blackhawks are making moves and are a credible team. Davidson has said publicly that Chicago is “intent on improving the playing roster,” per Daily Faceoff, so the intent is already on the record.</p>
+
+            <p>The Bowen Byram trade drew criticism. Chicago sent the fourth and 45th overall picks and Louis Crevier to Buffalo for Byram and Jordan Greenway, according to The Hockey News, for a defenseman who has not been a number one. On Daily Faceoff LIVE, Tyler Yaremchuk called the deal “just underwhelming” and “a really big mistake,” as Daily Faceoff reported, and the Sun-Times noted that none of the analytics models it cited saw the deal as close to even value. The remaining moves have to be for players where Chicago knows exactly what it is getting. It may need to overpay on a few of them, to establish credibility and build leverage. Right now it has none, and few teams are selling.</p>
+        </section>
+
+        <!-- 05 -->
+        <section class="hk-section" id="the-offseason">
+            <div class="hk-section-head">
+                <div class="hk-section-num">05</div>
+                <h2>The offseason</h2>
+            </div>
+
+            <h3 style="border-top:none;padding-top:0;margin-top:0;">The 2027 offseason: targets</h3>
+
+            <p>The first moves are for this season. The next phase has to put Chicago in position to compete for a playoff spot and a deep run. In the 2027 offseason I would target teams that may not be able to re-sign their stars because of cap constraints. These are the players I would pursue.</p>
+
+            <p>Executing this plan will cost draft capital. Free agency is not what it used to be: teams increasingly trade a player, or his negotiating rights, ahead of July 1 rather than lose him for nothing. The Blackhawks should be prepared to pay in picks and prospects, and they have both. The Florida and Edmonton firsts are the primary assets and should be used aggressively as weapons, supplemented by the 2027 second- and third-round picks and, if necessary, the 2028 second and third.</p>
+
+            <div class="hk-table-wrap">
+                <div class="hk-table-cap">2027 offseason target board</div>
+                <table class="hk-table">
+                    <thead>
+                        <tr><th>Player</th><th>Team</th><th>Contract</th><th>What the reporting says</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Artturi Lehkonen</td><td>Colorado</td><td>Final year of his current deal</td><td>The Denver Gazette (Sept. 8) calls an extension “always a significantly more complicated deal.” Colorado can afford him after Cale Makar’s extension, but the question is the most it will pay. The columnist called $7M the best case.</td></tr>
+                        <tr class="hl"><td>Jason Robertson</td><td>Dallas</td><td>$12M, one year, signed July 21</td><td>He is a free agent after 2026-27 if there is no extension. He turned down a Seattle offer of roughly $15M a year for eight years, and Pierre LeBrun reported in June that Chicago had inquired.</td></tr>
+                        <tr><td>Pavel Zacha</td><td>Boston</td><td>Four years, $19M, signed in January 2023</td><td>That puts his contract through 2026-27. No recent reporting on his status was found.</td></tr>
+                        <tr><td>Shayne Gostisbehere</td><td>Carolina</td><td>$3.2M, expiring</td><td>12 points in 17 games, per The Hockey News (Nov. 5). He says he is “in no rush” to talk about a new deal.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Centers worth the price</h3>
+
+            <p>However Davidson constructs this roster, a proven center would help no matter where the young players end up. Elias Pettersson of Vancouver and Quinton Byfield of Los Angeles are first- or second-line options. Both can be difference makers who take the defensive zone and the toughest matchups. Pettersson would bring a proven, playmaking two-way center, and Byfield would add size and skating down the middle. A proven center of this caliber makes the most sense if Chicago is willing to move Frondell or even Bedard to the wing, an idea I discuss later in this article.</p>
+
+            <p>Pettersson is signed through 2032 at $11.6 million a year (eight years, $92.8 million), and his full no-movement clause took effect on July 1, 2025, so he would have to agree to any move, according to Daily Faceoff. Byfield is signed at $6.25 million a year for five years after the extension he signed with the Kings in July 2024, per Daily Faceoff. Pettersson and Byfield would each cost at least two first-round picks plus prospects, and Vancouver and Los Angeles would have to be willing to trade them. Chicago holds the picks and prospects to make those offers.</p>
+
+            <h3>Free agency: experience and physicality</h3>
+
+            <p>Chicago is set to lose Jordan Greenway, Teuvo Teräväinen and Andrew Mangiapane, who are all pending unrestricted free agents, and I do not expect to bring them back. Free agency is where the team becomes more experienced and adds physicality.</p>
+
+            <p>Lawson Crouse is the first call. If he reaches free agency, he is an ideal fit: a high-motor, physical 29-year-old who brings leadership. He scored 24 goals and added 20 assists in 2025-26 and has reached 20 goals in four of the last five seasons. Utah may want to retain him, so he is not certain to reach the market, though Yardbarker notes Utah could also let him leave if it pursues a bigger name.</p>
+
+            <p>If Crouse is not available, these are the alternatives. All are on the 2027 unrestricted free-agent lists.</p>
+
+            <div class="hk-fa" role="list" aria-label="Free-agent board">
+                <div class="hk-fa-row top" role="listitem"><div><div class="hk-fa-name">Lawson Crouse</div><div class="hk-fa-meta">First call · 29</div></div><p>A high-motor, physical forward who brings leadership. 24 goals and 20 assists in 2025-26.</p></div>
+                <div class="hk-fa-row" role="listitem"><div><div class="hk-fa-name">Ryan Hartman</div><div class="hk-fa-meta">32 in 2027</div></div><p>A versatile center or winger with physicality. In this plan he is a third-line player on a two-year contract around $3.5 million to $3.75 million.</p></div>
+                <div class="hk-fa-row" role="listitem"><div><div class="hk-fa-name">Blake Coleman</div><div class="hk-fa-meta">35 in 2027</div></div><p>A physical depth forward who plays a hard, defensive game.</p></div>
+                <div class="hk-fa-row" role="listitem"><div><div class="hk-fa-name">Josh Anderson</div><div class="hk-fa-meta">33 in 2027</div></div><p>Power-forward depth with size.</p></div>
+                <div class="hk-fa-row" role="listitem"><div><div class="hk-fa-name">Garnet Hathaway</div><div class="hk-fa-meta">35 in 2027</div></div><p>A pest and the player I would target on a one-year contract.</p></div>
+                <div class="hk-fa-row" role="listitem"><div><div class="hk-fa-name">Morgan Frost &amp; Filip Chytil</div><div class="hk-fa-meta">Center depth</div></div><p>They add center and middle-six depth.</p></div>
+                <div class="hk-fa-row" role="listitem"><div><div class="hk-fa-name">Brendan Gallagher</div><div class="hk-fa-meta">Vancouver · $3.25M · 34</div></div><p>A fourth-line option. He has one point in nine games this season, so the price must be low.</p></div>
+                <div class="hk-fa-row" role="listitem"><div><div class="hk-fa-name">Chris Kreider</div><div class="hk-fa-meta">Montreal · $2.15M · 35</div></div><p>On a one-year contract. He has a full no-move clause this season and will probably prefer to play for a contender.</p></div>
+            </div>
+
+            <p>Kreider, Gallagher, Hathaway and Coleman are players I would sign for one year. The young players need to develop year by year, and Chicago should not block that development with long contracts for veterans who are 35 or older. One- and two-year deals at most are the right structure for this group.</p>
+
+            <p>None of these players fixes the team alone. Together they give a young group more experience and more physicality, and they make Chicago a harder team to play against every night.</p>
+
+            <h3>An interesting idea</h3>
+
+            <p>Davidson is prioritizing Connor Bedard, Anton Frondell and Frank Nazar as centers. Building through the middle is a sound instinct, but I believe Bedard and Frondell could be better used as wingers, where their offensive production would be higher. This is a possibility to evaluate, not a requirement of the plan.</p>
+
+            <p>The case starts with the position itself. A center carries responsibilities beyond scoring: faceoffs, defensive-zone coverage and the toughest matchups every night. Bedard has one of the best shots in the game, and I want him focused on putting the puck in the net. A two-way center beside him would take on those responsibilities and let him play to his strength. Early in 2025-26 he had 44 points, including 19 goals, in 31 games, according to The Hockey Writers. That is a pace of roughly 116 points over 82 games, which is the production I believe a winger next to a two-way center could sustain.</p>
+
+            <figure class="hk-figure split">
+                <img src="{{ url_for('static', filename='img/blackhawks/bedard_kraken.jpg') }}" alt="Connor Bedard skating in the Blackhawks' white road jersey" loading="lazy" style="object-position: center 25%;">
+                <figcaption>
+                    <span class="hk-fig-big">~116<small>Bedard’s 82-game point pace, early 2025-26</small></span>
+                    Connor Bedard at Seattle on Nov. 14, 2024. Photo: Jenn G / <a href="https://commons.wikimedia.org/wiki/File:Connor_Bedard_(541427773851).jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, CC BY-SA 2.0.
+                </figcaption>
+            </figure>
+
+            <p>Frondell fits the same logic. He has an unbelievable shot. Before the draft, his Djurgården linemate Victor Eklund said he had “a shot like a missile,” and goaltender Måns Goos said he “shoots so hard and the shot is precise,” according to Daily Faceoff. That same report noted that some scouts saw a complementary top-six piece more than a player who drives play.</p>
+
+            <p>That description matches what Chicago has seen. Frondell has played center since training camp, and the Sun-Times wrote on Oct. 30 that he may not be ready to drive his own line against opposing stars every night. He played a career-low 11:44 in Detroit, and Jeff Blashill called three of the previous five games subpar. He is not yet at the level an NHL two-way center has to be, because he has been outmatched by opposing lineups. That is not a flaw in the player. It is a sign that the position asks for the part of the game he has not yet developed, while the part he has is elite.</p>
+
+            <p>I believe Frondell could be a solid center, but he has the tools to be a dominant winger. Blackhawk Up noted his forecheck, his ability to win puck battles and a potent one-timer that suits Bedard’s playmaking, and Frondell himself said at the draft, “Whatever Connor doesn’t play, I’ll play.” The Sun-Times also argued that a move to the wing would not abandon the long-term plan of developing him as a center, and that it could be reversed quickly. A season or two on the wing would let him score without the full defensive burden, and Chicago could revisit the position when he is ready.</p>
+
+            <p>The idea also addresses the team’s clearest offensive problem. The power play ranked 31st at 10.6% as of Nov. 3, according to The Hockey News, and Blashill said earlier that month that “the power play is mirroring our 5-on-5 game: we can’t score,” per The Hockey News. A team in that position needs its most skilled shooters in the best positions, with centers who protect them. That is why the top-six experiment described earlier is a useful first test, and why Pettersson and Byfield are worth pricing now. It is a way to shake things up and maximize this team’s offensive production while the young core is still developing.</p>
+        </section>
+
+    </article>
+</div>
+
+<!-- FULL-BLEED BREAK -->
+<figure class="hk-bleed">
+    <div class="hk-bleed-img" role="img" aria-label="The giant ONE GOAL sign with the Blackhawks logo in the United Center atrium" style="background-image:url('{{ url_for('static', filename='img/blackhawks/one_goal.jpg') }}');">
+        <div class="hk-bleed-text">One goal.<br><span>Start winning now.</span></div>
+    </div>
+    <figcaption>The “One Goal” display in the United Center atrium. Photo: “Thank You (25 Millions) views” from Fresno, USA / <a href="https://commons.wikimedia.org/wiki/File:Chicago_Blackhawks_%22One_Goal%22_display_in_United_Center_atrium,_February_2019_(51160189996).jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, CC BY 2.0.</figcaption>
+</figure>
+
+<div class="hk-layout" style="padding-top:3.5rem;">
+    <div class="hk-toc" aria-hidden="true"></div>
+    <article class="hk-article">
+
+        <!-- 06 -->
+        <section class="hk-section" id="conclusion">
+            <div class="hk-section-head">
+                <div class="hk-section-num">06</div>
+                <h2>Conclusion</h2>
+            </div>
+
+            <p>Chicago does not need to abandon its rebuild. It has a roster construction problem and a developmental one, and the fix is to surround the young core with proven, physical, experienced players: a more stable defense first, then size and a shoot-first mentality on the wings, while protecting the core and Chicago’s own 2027 first-round pick. Along the way, the club should move the veterans who are not in the plan, build the personnel to run a Carolina- or Vegas-style forecheck, and test different ways to maximize the offense, including a different look for the top six and a different position for its most skilled forwards.</p>
+
+            <p>For now, Chicago needs physical, experienced forwards on one- and two-year deals to help the young players develop. But I do not want the whole group on short-term contracts. I want players who will be long-term pieces of this core, here for three, four, five and even six years. Those players are not available right now, and when they are, I hope Chicago is all over them moving forward.</p>
+
+            <p>Last summer showed what that looks like. San Jose signed Mason Marchment to a five-year, $33.75 million contract, according to The Hockey Writers. Nashville acquired Mavrik Bourque, 24, from Dallas for a 2027 second-round pick and a 2028 third-round pick, per Daily Faceoff, and then signed him to a six-year, $33 million contract, the NHLPA reported. Those are the moves I believe Chicago should have made: each team added a forward who fits its timeline and committed to him for years, without waiting for a perfect opportunity.</p>
+
+            <blockquote class="hk-quote">
+                <p>A team cannot keep stacking prospects and picks and assume it will win; they have to be used as weapons.</p>
+                <cite>Kyle Flynn</cite>
+            </blockquote>
+
+            <p>A team cannot keep stacking prospects and picks and assume it will win; they have to be used as weapons. The goal is a team that fits the timeline and wins for many years, built through logical moves, not desperation moves. Chicago cannot keep losing in the fifth year of this rebuild, because a young group that keeps losing risks making losing part of its identity. That work starts now and focuses on our biggest weaknesses. It is time to start winning, and playing winning hockey, because that is what moves the team closer to the end goal: the Stanley Cup.</p>
+
+            <p>Finally, the Blackhawks should schedule Jonathan Toews’ long-overdue jersey retirement ceremony, which should have happened already.</p>
+        </section>
+
+        <div class="hk-endcard">
+            <div class="hk-avatar" aria-hidden="true">KF</div>
+            <div>
+                <div class="hk-endcard-name">Kyle Flynn</div>
+                <p>Finance graduate, Concordia University Wisconsin. Pursuing a career in hockey operations, and a lifelong Blackhawks fan.</p>
+                <p class="disclaimer">Independent fan analysis. Not affiliated with, endorsed by or produced by the Chicago Blackhawks or the NHL.</p>
+            </div>
+        </div>
+
+        <details class="hk-sources">
+            <summary>Sources (59)</summary>
+            <ol>
+                <li>Sun-Times: Frondell’s usage and role (Oct. 30)</li>
+                <li>SI: Blashill on the departed veterans</li>
+                <li>The Hockey News: Blackhawks penalty kill and standings (Nov. 3)</li>
+                <li>The Hockey News: the Blackhawks and their power play (Oct. 26)</li>
+                <li>Daily Faceoff: Pettersson’s no-movement clause takes effect (July 1, 2025)</li>
+                <li>Daily Faceoff: Kings sign Byfield (July 2024)</li>
+                <li>The Hockey Writers: the 2026-27 Sharks add physical players</li>
+                <li>Daily Faceoff: Predators acquire Bourque and Lyubushkin (July 1)</li>
+                <li>NHLPA: Predators sign Bourque to six years (July 2026)</li>
+                <li>The Hockey News: Byram trade terms (June 24)</li>
+                <li>Daily Faceoff: the Byram trade is underwhelming (June 24)</li>
+                <li>Sun-Times: Davidson, Byram and analytics (July 12)</li>
+                <li>The Hockey News: Sour Rankings (Oct. 15)</li>
+                <li>Bleacher Report: trade block big board (Oct. 1)</li>
+                <li>The Hockey News: Central Scouting’s 2027 ranking and the Blackhawks (Oct. 27)</li>
+                <li>The Hockey News: 2027 NHL Draft projected top 10 (June 28)</li>
+                <li>Daily Faceoff: center depth in the 2027 class (Oct. 10)</li>
+                <li>The Hockey Writers: Blackhawks should be worried about a weak 2027 class (Oct. 10)</li>
+                <li>Heavy: Davidson wants offensive talent (July 22)</li>
+                <li>StatsCrew: 2025-26 Blackhawks statistics</li>
+                <li>The Hockey News: Bedard named third star of November (Dec. 2, 2025)</li>
+                <li>Sun-Times: Levshunov looks more comfortable (Oct. 29)</li>
+                <li>CBS Sports: Filip Hronek stats</li>
+                <li>The Hockey News: Canucks month in review, October 2026</li>
+                <li>Spotrac: Zach Whitecloud contract</li>
+                <li>Daily Faceoff: Flames conversations on Zary, Whitecloud, Frost (Oct. 7)</li>
+                <li>Yahoo Sports: Blashill on 2-on-1 rushes and the system</li>
+                <li>Sun-Times: Blackhawks maintain structure, end skid (Nov. 12)</li>
+                <li>Sun-Times: trade rumors on Miroshnichenko, DeBrusk and Tippett (Nov. 1)</li>
+                <li>Sun-Times: Blackhawks prospect rankings (Aug. 16)</li>
+                <li>NHL.com: Carolina’s forecheck (Coaches’ Room)</li>
+                <li>NHL.com: Vegas’s forecheck vs. Carolina, Stanley Cup Final Game 1</li>
+                <li>The Hockey Writers: Levshunov is showing drastic improvement (Oct. 22)</li>
+                <li>Sun-Times: Blackhawks shots and scoring (Oct. 24)</li>
+                <li>StatsCrew: 2026-27 Blackhawks statistics</li>
+                <li>TSN: Nikishin signs a one-year contract (Oct. 25)</li>
+                <li>Grantland: 10 lessons from the Oilers’ misery (Dec. 2014)</li>
+                <li>The Hockey News: the Oilers need a serious culture change (Mar. 2019)</li>
+                <li>The Hockey Writers: Oilers end a decade of ineptitude</li>
+                <li>Daily Faceoff: Davidson on improving the roster (Nov. 11)</li>
+                <li>Daily Faceoff: Flyers center targets and Tippett (Oct. 27)</li>
+                <li>Sun-Times: scoring wingers the Blackhawks could target (Nov. 1)</li>
+                <li>The Hockey News: price for Miroshnichenko</li>
+                <li>The Hockey News: Voronkov trade scenarios</li>
+                <li>The Hockey News: Kantserov (Nov. 6)</li>
+                <li>The Hockey News: Blackhawks power play and record (Nov. 3)</li>
+                <li>The Rink: Seravalli on the 2026-27 Blackhawks</li>
+                <li>NHL.com: Blackhawks future draft picks</li>
+                <li>Sun-Times: Blackhawks prospect rankings (Aug. 16)</li>
+                <li>The Hockey News: Byram trade</li>
+                <li>Fox 4: Robertson one-year deal (July 21)</li>
+                <li>The Hockey News: Blackhawks interest in Robertson</li>
+                <li>Denver Gazette: the Lehkonen dilemma (Sept. 8)</li>
+                <li>The Hockey News: Gostisbehere (Nov. 5)</li>
+                <li>Yardbarker: Utah’s biggest 2027 free agent (Crouse)</li>
+                <li>Pro Hockey Rumors: 2027 NHL free agents</li>
+                <li>TSN: potential 2027 free agents (Sept. 17)</li>
+                <li>CapWages: Chris Kreider</li>
+                <li>CapWages: Brendan Gallagher</li>
+                <li>Daily Hive: Hronek’s no-movement clause</li>
+            </ol>
+        </details>
+
+        <div class="hk-credits">
+            Photos via Wikimedia Commons: lead image and Bedard by Jenn G (<a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener">CC BY-SA 2.0</a>); United Center warmups by Dan Sanford (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>); “One Goal” display by “Thank You (25 Millions) views” (<a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a>). Images are cropped for layout.
+        </div>
+    </article>
+</div>
+
+<script>
+(function () {
+    var bar = document.getElementById('hkProgress');
+    function onScroll() {
+        var h = document.documentElement;
+        var max = h.scrollHeight - h.clientHeight;
+        bar.style.transform = 'scaleX(' + (max > 0 ? h.scrollTop / max : 0) + ')';
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    var links = document.querySelectorAll('.hk-toc a');
+    if (!('IntersectionObserver' in window) || !links.length) return;
+    var map = {};
+    links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting && map[e.target.id]) {
+                links.forEach(function (a) { a.classList.remove('active'); });
+                map[e.target.id].classList.add('active');
+            }
+        });
+    }, { rootMargin: '-35% 0px -60% 0px' });
+    document.querySelectorAll('.hk-section').forEach(function (s) { io.observe(s); });
+}());
+</script>
+
+{% endblock %}

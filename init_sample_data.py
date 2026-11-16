@@ -13,7 +13,7 @@ os.makedirs(DATA_FOLDER, exist_ok=True)
 # Sample profile data
 profile_data = {
     "name": "Kyle Flynn",
-    "subtitle": "Baseball Operations & Finance",
+    "subtitle": "Career in Sports",
     "bio": "Welcome to my portfolio! I'm passionate about baseball operations, financial analysis, and data-driven decision-making. With expertise in sports analytics and organizational finance, I focus on how strategic insights can drive performance improvements.",
     "photo": None
 }

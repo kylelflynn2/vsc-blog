@@ -60,7 +60,7 @@ def load_profile():
     """Load profile data."""
     default_profile = {
         "name": "Kyle Flynn",
-        "subtitle": "Baseball Operations & Finance",
+        "subtitle": "Career in Sports",
         "bio": "Welcome to my portfolio! I'm passionate about baseball operations, financial analysis, and data-driven decision-making.",
         "photo": None
     }
@@ -270,6 +270,12 @@ def admin_setup():
 def jordan_walker_2026():
     """Jordan Walker 2026 breakout analysis."""
     return render_template('projects/jordan_walker_2026.html')
+
+
+@app.route('/projects/blackhawks-fix-2026')
+def blackhawks_fix_2026():
+    """How to Fix the Chicago Blackhawks — hockey operations analysis."""
+    return render_template('projects/blackhawks_fix_2026.html')
 
 
 @app.route('/projects/yankees-baseball-operations')
