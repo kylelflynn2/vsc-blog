@@ -44,7 +44,7 @@
             linear-gradient(0deg, rgba(11,11,12,0.92) 0%, rgba(11,11,12,0) 45%);
     }
     /* Side variant: photo on the right, text on solid black at left */
-    .hk-hero--side .hk-hero-img { left: auto; right: 0; width: 64%; object-position: 30% 60%; }
+    .hk-hero--side .hk-hero-img { left: auto; right: 0; width: 64%; object-position: 38% 30%; }
     .hk-hero--side::after {
         background:
             linear-gradient(90deg, rgba(11,11,12,1) 0%, rgba(11,11,12,1) 36%, rgba(11,11,12,0.55) 50%, rgba(11,11,12,0) 66%),
@@ -342,7 +342,7 @@
     @media (max-width: 720px) {
         .hk-hero-inner { padding: 7rem 1.25rem 2.5rem; }
         .hk-hero::after { background: linear-gradient(0deg, rgba(11,11,12,0.97) 0%, rgba(11,11,12,0.75) 50%, rgba(11,11,12,0.2) 100%); }
-        .hk-hero--side .hk-hero-img { width: 100%; object-position: 40% 50%; }
+        .hk-hero--side .hk-hero-img { width: 100%; object-position: 42% 25%; }
         .hk-hero--side::after { background: linear-gradient(0deg, rgba(11,11,12,0.97) 0%, rgba(11,11,12,0.8) 55%, rgba(11,11,12,0.35) 100%); }
         .hk-stats-inner { grid-template-columns: 1fr; padding: 0 1.25rem; }
         .hk-stat { border-left: none; border-top: 1px solid rgba(255,255,255,0.1); padding: 1.4rem 0; }
@@ -373,7 +373,7 @@
 
 <!-- HERO -->
 <header class="hk-hero hk-hero--side">
-    <img class="hk-hero-img" src="{{ url_for('static', filename='img/blackhawks/one_goal.jpg') }}" alt="The ONE GOAL sign with the Blackhawks logo in the United Center atrium">
+    <img class="hk-hero-img" src="{{ url_for('static', filename='img/blackhawks/bedard_home.jpg') }}" alt="Connor Bedard in the Blackhawks red home jersey with the alternate captain A, carrying the puck">
     <div class="hk-hero-inner">
         <div class="hk-kicker">
             <span class="hk-chip red">Hockey Operations</span>
@@ -390,7 +390,6 @@
             </div>
         </div>
     </div>
-    <div class="hk-hero-credit">Photo: “Thank You (25 Millions) views” / <a href="https://commons.wikimedia.org/wiki/File:Chicago_Blackhawks_%22One_Goal%22_display_in_United_Center_atrium,_February_2019_(51160189996).jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, CC BY 2.0</div>
 </header>
 
 <!-- STAT BAND -->
@@ -444,6 +443,11 @@
             <p>In the offseason, the Blackhawks added Patrick Kane, who could have signed with Buffalo to be closer to home. Hypothetically, without him, Chicago would have entered this season with Anton Frondell and Roman Kantserov as its two big additions, even though Frondell played only 12 games at the end of last season. With a 5-13-2 start, these young players have proven that they are talented but not ready.</p>
 
             <p>Earlier, in March of 2026, Chicago traded Connor Murphy (March 2), Jason Dickinson and Colton Dach (March 4) and Nick Foligno (March 6) within five days, a group Blashill called “great role models” for the young players, according to SI. The team’s record was 23-28-10 after the Dickinson trade, and it finished 29-39-14, which works out to 6-11-4 over its last 21 games without those veterans. I believe that stretch showed the front office what the young group would look like without veteran leadership around it. And that group was underwhelming. So why did we think things would magically change this season without replacing those veterans?</p>
+
+            <figure class="hk-figure">
+                <img src="{{ url_for('static', filename='img/blackhawks/dickinson_warmups.jpg') }}" alt="Jason Dickinson, wearing number 16 with an alternate captain A, setting out pucks before warmups as Blackhawks teammates take the ice" loading="lazy" style="object-position: 46% 30%;">
+                <figcaption>Jason Dickinson heads out for warmups. Chicago traded him, Colton Dach, Connor Murphy and Nick Foligno within five days in March 2026.</figcaption>
+            </figure>
 
             <p>There are clear positives nonetheless. Artyom Levshunov has taken a substantial step forward. Last season, his turnovers, missed assignments and habit of leaving the front of the net had you holding your breath every other game. This season he is a far more complete defenseman. Blashill says he is more comfortable in the systems and as an NHL player, and since Bowen Byram’s injury he leads Chicago defensemen in five-on-five ice time, according to the Sun-Times. The Hockey Writers credits his offseason work for improved skating, puck handling and gap control. He is still developing, and he may yet prove to be the second-overall pick Chicago wanted, even though Ivan Demidov of Montreal looked like the clear choice in the 2024 draft until the end of last season.</p>
 
@@ -725,6 +729,11 @@
 
             <p>The case starts with the position itself. A center carries responsibilities beyond scoring: faceoffs, defensive-zone coverage and the toughest matchups every night. Bedard has one of the best shots in the game, and I want him focused on putting the puck in the net. A two-way center beside him would take on those responsibilities and let him play to his strength. Early in 2025-26 he had 44 points, including 19 goals, in 31 games, according to The Hockey Writers. That is a pace of roughly 116 points over 82 games, which is the production I believe a winger next to a two-way center could sustain.</p>
 
+            <figure class="hk-figure">
+                <img src="{{ url_for('static', filename='img/blackhawks/bedard_road.jpg') }}" alt="Connor Bedard in the Blackhawks white road jersey, carrying the puck up ice" loading="lazy" style="object-position: 45% 35%;">
+                <figcaption>Connor Bedard. Early in 2025-26 he was on a pace of roughly 116 points over 82 games.</figcaption>
+            </figure>
+
             <p>Frondell fits the same logic. He has an unbelievable shot. Before the draft, his Djurgården linemate Victor Eklund said he had “a shot like a missile,” and goaltender Måns Goos said he “shoots so hard and the shot is precise,” according to Daily Faceoff. That same report noted that some scouts saw a complementary top-six piece more than a player who drives play.</p>
 
             <p>That description matches what Chicago has seen. Frondell has played center since training camp, and the Sun-Times wrote on Oct. 30 that he may not be ready to drive his own line against opposing stars every night. He played a career-low 11:44 in Detroit, and Jeff Blashill called three of the previous five games subpar. He is not yet at the level an NHL two-way center has to be, because he has been outmatched by opposing lineups. That is not a flaw in the player. It is a sign that the position asks for the part of the game he has not yet developed, while the part he has is elite.</p>
@@ -748,6 +757,11 @@
             <p>Last summer showed what that looks like. San Jose signed Mason Marchment to a five-year, $33.75 million contract, according to The Hockey Writers. Nashville acquired Mavrik Bourque, 24, from Dallas for a 2027 second-round pick and a 2028 third-round pick, per Daily Faceoff, and then signed him to a six-year, $33 million contract, the NHLPA reported. Those are the moves I believe Chicago should have made: each team added a forward who fits its timeline and committed to him for years, without waiting for a perfect opportunity.</p>
 
             <p>A team cannot keep stacking prospects and picks and assume it will win; they have to be used as weapons. The goal is a team that fits the timeline and wins for many years, built through logical moves, not desperation moves. Chicago cannot keep losing in the fifth year of this rebuild, because a young group that keeps losing risks making losing part of its identity. That work starts now and focuses on our biggest weaknesses. It is time to start winning, and playing winning hockey, because that is what moves the team closer to the end goal: the Stanley Cup.</p>
+
+            <figure class="hk-figure">
+                <img src="{{ url_for('static', filename='img/blackhawks/one_goal.jpg') }}" alt="The ONE GOAL sign with the Blackhawks logo in the United Center atrium" loading="lazy" style="object-position: 40% 75%;">
+                <figcaption>The “One Goal” display in the United Center atrium. Photo: “Thank You (25 Millions) views” / <a href="https://commons.wikimedia.org/wiki/File:Chicago_Blackhawks_%22One_Goal%22_display_in_United_Center_atrium,_February_2019_(51160189996).jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, CC BY 2.0.</figcaption>
+            </figure>
 
             <p>Finally, the Blackhawks should schedule Jonathan Toews’ long-overdue jersey retirement ceremony, which should have happened already.</p>
         </section>
@@ -828,7 +842,7 @@
         </details>
 
         <div class="hk-credits">
-            Lead image: “One Goal” display, United Center, by “Thank You (25 Millions) views” via Wikimedia Commons (<a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a>), cropped for layout.
+            “One Goal” photo by “Thank You (25 Millions) views” via Wikimedia Commons (<a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a>), cropped for layout.
         </div>
     </article>
 </div>
