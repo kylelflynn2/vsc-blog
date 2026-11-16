@@ -7,7 +7,7 @@
     <meta name="description" content="Kyle Flynn: sports operations, front-office analysis and finance. Roster construction, valuation models and analytics across MLB and the NHL.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Serif+Display&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Serif+Display&family=Barlow+Condensed:wght@600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block extra_styles %}{% endblock %}
 </head>
@@ -15,9 +15,9 @@
     {% set path = request.path %}
     <nav class="navbar" aria-label="Main">
         <div class="nav-container">
-            <a href="/" class="nav-logo" aria-label="Kyle Flynn, home">
-                <span class="nav-logo-mark" aria-hidden="true">KF</span>
+            <a href="/" class="nav-logo" aria-label="Kyle Flynn, pursuing a career in sports. Home">
                 <span class="nav-logo-text">Kyle Flynn</span>
+                <span class="nav-logo-tag" aria-hidden="true"><span class="nav-logo-dash">–</span> Pursuing a career in sports</span>
             </a>
             <input type="checkbox" id="navToggle" class="nav-toggle" aria-label="Open menu">
             <label for="navToggle" class="nav-burger" aria-hidden="true"><span></span><span></span><span></span></label>

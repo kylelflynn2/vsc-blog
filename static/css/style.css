@@ -12,6 +12,7 @@
     --ink-2: #131C2E;
     --paper: #F7F6F2;
     --display: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
+    --brand: 'Montserrat', 'Arial Black', Arial, sans-serif;
 }
 
 * {
@@ -62,32 +63,35 @@ body {
 
 .nav-logo {
     display: flex;
-    align-items: center;
-    gap: 0.7rem;
+    align-items: baseline;
+    gap: 0.6rem;
+    white-space: nowrap;
     color: var(--white);
     text-decoration: none;
 }
 
-.nav-logo-mark {
-    width: 34px;
-    height: 34px;
-    display: grid;
-    place-items: center;
-    background: var(--gold);
-    color: var(--ink);
-    font-family: var(--display);
-    font-weight: 800;
-    font-size: 1.05rem;
-    letter-spacing: 0.02em;
-    border-radius: 2px;
+.nav-logo-text {
+    font-family: var(--brand);
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    line-height: 1;
 }
 
-.nav-logo-text {
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: 1.35rem;
-    letter-spacing: 0.06em;
+.nav-logo-tag {
+    font-family: var(--brand);
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
+    color: rgba(255,255,255,0.62);
+}
+
+.nav-logo-dash { color: var(--gold); margin-right: 0.15rem; }
+
+@media (max-width: 1050px) {
+    .nav-logo-tag { display: none; }
 }
 
 .nav-menu {
@@ -287,10 +291,10 @@ body {
 }
 
 .footer-name {
-    font-family: var(--display);
-    font-weight: 800;
-    font-size: 1.6rem;
-    letter-spacing: 0.04em;
+    font-family: var(--brand);
+    font-weight: 900;
+    font-size: 1.35rem;
+    letter-spacing: 0.01em;
     text-transform: uppercase;
     color: var(--white);
 }

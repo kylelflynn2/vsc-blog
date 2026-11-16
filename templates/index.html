@@ -4,6 +4,8 @@
 {% block extra_styles %}
 <style>
   body { background: var(--paper); }
+  /* Home page display type uses the brand face (Montserrat) */
+  .hp-hero, .hp-band, .hp-section, .hp-cta-band { --display: var(--brand); }
 
   /* ── HERO ── */
   .hp-hero {
@@ -54,14 +56,13 @@
   }
   .hp-eyebrow::before { content: ''; width: 36px; height: 2px; background: var(--gold); }
   .hp-name {
-    font-family: var(--display); font-weight: 800; text-transform: uppercase;
-    font-size: clamp(4rem, 10vw, 8.5rem); line-height: 0.86; letter-spacing: -0.01em;
-    margin-bottom: 1.5rem;
+    font-family: var(--display); font-weight: 900; text-transform: uppercase; color: var(--white);
+    font-size: clamp(2.9rem, 6.4vw, 5.6rem); line-height: 0.95; letter-spacing: -0.015em;
+    margin-bottom: 1.4rem;
   }
-  .hp-name span { display: block; color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,0.9); }
   .hp-role {
-    font-family: var(--display); font-weight: 600; text-transform: uppercase;
-    font-size: clamp(1.25rem, 2.2vw, 1.7rem); letter-spacing: 0.08em; color: var(--gold-light);
+    font-family: var(--display); font-weight: 800; text-transform: uppercase;
+    font-size: clamp(0.95rem, 1.6vw, 1.2rem); letter-spacing: 0.06em; color: var(--gold-light);
     margin-bottom: 1.5rem;
   }
   .hp-bio { font-size: 1.05rem; line-height: 1.75; color: rgba(255,255,255,0.72); max-width: 56ch; margin-bottom: 2.25rem; }
@@ -103,7 +104,7 @@
     position: absolute; left: 1rem; bottom: 1rem; z-index: 1;
     font-family: var(--display); font-weight: 700; text-transform: uppercase; line-height: 1;
   }
-  .hp-card-tag .big { font-size: 1.9rem; display: block; }
+  .hp-card-tag .big { font-size: 1.35rem; font-weight: 900; display: block; }
   .hp-card-tag .small { font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; color: var(--gold-light); display: block; margin-top: 0.45rem; }
   .hp-card-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.08); margin-top: 0.9rem; }
   .hp-card-row { background: var(--ink-2); padding: 0.75rem 0.8rem; }
@@ -125,14 +126,14 @@
   }
   .hp-band-item { padding: 1.6rem 1.5rem; border-left: 1px solid rgba(11,18,32,0.18); }
   .hp-band-item:first-child { border-left: none; padding-left: 0; }
-  .hp-band-value { font-family: var(--display); font-weight: 800; font-size: 2.4rem; line-height: 1; text-transform: uppercase; }
+  .hp-band-value { font-family: var(--display); font-weight: 900; font-size: 1.85rem; line-height: 1; text-transform: uppercase; letter-spacing: -0.01em; }
   .hp-band-label { font-size: 0.8rem; font-weight: 600; line-height: 1.4; margin-top: 0.45rem; opacity: 0.85; }
 
   /* ── SECTIONS ── */
   .hp-section { max-width: 1240px; margin: 0 auto; padding: 6rem 2rem 0; }
   .hp-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2.25rem; }
   .hp-kicker { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #2563B0; margin-bottom: 0.6rem; }
-  .hp-title { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: 0.92; color: var(--ink); }
+  .hp-title { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(1.8rem, 3.6vw, 2.7rem); line-height: 1; letter-spacing: -0.01em; color: var(--ink); }
   .hp-more { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--gold); padding-bottom: 0.25rem; }
   .hp-more:hover { color: #2563B0; }
 
@@ -148,7 +149,7 @@
   .hp-feature:hover .hp-feature-img img { transform: scale(1.03); }
   .hp-feature-body { padding: 2.5rem 2.25rem; display: flex; flex-direction: column; justify-content: center; }
   .hp-feature-body .label { color: var(--gold); }
-  .hp-feature-title { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(2rem, 3.4vw, 2.9rem); line-height: 0.95; margin: 0.9rem 0 1rem; }
+  .hp-feature-title { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(1.5rem, 2.5vw, 2.1rem); line-height: 1.02; letter-spacing: -0.01em; margin: 0.9rem 0 1rem; }
   .hp-feature-desc { color: rgba(255,255,255,0.7); line-height: 1.65; font-size: 0.98rem; margin-bottom: 1.5rem; }
   .hp-read { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
 
@@ -173,17 +174,17 @@
       repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 14px),
       var(--ink);
     font-family: var(--display); font-weight: 800; text-transform: uppercase; color: var(--white);
-    font-size: 2.2rem; line-height: 0.9;
+    font-size: 1.5rem; font-weight: 900; line-height: 0.95;
   }
   .hp-tile-body { padding: 1.2rem 1.2rem 1.4rem; display: flex; flex-direction: column; gap: 0.6rem; flex: 1; }
-  .hp-tile-title { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: 1.35rem; line-height: 1.02; }
+  .hp-tile-title { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 1rem; line-height: 1.2; }
   .hp-tile-date { font-size: 0.75rem; color: #7A7A80; margin-top: auto; }
 
   /* Pillars */
   .hp-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
   .hp-pillar { background: var(--white); border: 1px solid #E6E3DA; border-top: 4px solid var(--gold); border-radius: 4px; padding: 2rem 1.75rem; }
-  .hp-pillar-num { font-family: var(--display); font-weight: 800; font-size: 1rem; letter-spacing: 0.1em; color: #2563B0; }
-  .hp-pillar h3 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 1.9rem; line-height: 1; color: var(--ink); margin: 0.5rem 0 0.9rem; }
+  .hp-pillar-num { font-family: var(--display); font-weight: 900; font-size: 0.9rem; letter-spacing: 0.1em; color: #2563B0; }
+  .hp-pillar h3 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: 1.35rem; line-height: 1.1; color: var(--ink); margin: 0.5rem 0 0.9rem; }
   .hp-pillar p { color: #4A4A52; line-height: 1.7; font-size: 0.96rem; margin-bottom: 1.1rem; }
   .hp-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
   .hp-chip { font-size: 0.74rem; font-weight: 600; padding: 0.3rem 0.6rem; border-radius: 2px; background: #F1EEE5; color: var(--ink); }
@@ -209,7 +210,7 @@
     background: radial-gradient(50% 120% at 100% 0%, rgba(75,146,219,0.22) 0%, rgba(75,146,219,0) 60%);
   }
   .hp-cta-box > * { position: relative; }
-  .hp-cta-box h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(2.2rem, 4.5vw, 3.4rem); line-height: 0.92; }
+  .hp-cta-box h2 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(1.7rem, 3.4vw, 2.6rem); line-height: 1.02; letter-spacing: -0.01em; }
   .hp-cta-box p { color: rgba(255,255,255,0.7); margin-top: 0.9rem; line-height: 1.65; max-width: 52ch; }
   .hp-cta-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 
@@ -235,7 +236,6 @@
   }
   @media (max-width: 560px) {
     .hp-grid { grid-template-columns: 1fr; }
-    .hp-name span { -webkit-text-stroke-width: 1.5px; }
   }
 </style>
 {% endblock %}
@@ -247,7 +247,7 @@
   <div class="hp-hero-inner">
     <div>
       <p class="hp-eyebrow hp-anim d1">Career in Sports</p>
-      <h1 class="hp-name hp-anim d2">Kyle<span>Flynn</span></h1>
+      <h1 class="hp-name hp-anim d2">Kyle Flynn</h1>
       <p class="hp-role hp-anim d3">{{ profile.subtitle }}</p>
       <p class="hp-bio hp-anim d4">{{ profile.bio }}</p>
       <div class="hp-cta hp-anim d5">
