@@ -3,266 +3,386 @@
 
 {% block extra_styles %}
 <style>
-  .hero {
-    min-height: calc(100vh - 64px);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  body { background: var(--paper); }
+
+  /* ── HERO ── */
+  .hp-hero {
     position: relative;
+    background: var(--ink);
+    color: var(--white);
     overflow: hidden;
-  }
-
-  .hero-left {
-    background: var(--navy);
+    min-height: min(calc(100vh - 64px), 880px);
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 5rem 4rem 5rem 5rem;
-    position: relative;
-  }
-
-  .hero-left::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px);
-    background-size: 26px 26px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .hero-left > * {
-    position: relative;
-    z-index: 1;
-  }
-
-  .hero-left::after {
-    content: '';
-    position: absolute;
-    top: 0; right: -60px; bottom: 0;
-    width: 120px;
-    background: var(--navy);
-    clip-path: polygon(0 0, 0% 100%, 100% 100%);
-    z-index: 2;
-  }
-
-  .hero-eyebrow {
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1.5rem;
-    font-weight: 500;
-    animation: fadeSlideUp 0.55s 0.1s ease both;
-  }
-
-  .hero-name {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(3rem, 5vw, 4.5rem);
-    color: var(--white);
-    line-height: 1.05;
-    margin-bottom: 1.5rem;
-    animation: fadeSlideUp 0.55s 0.22s ease both;
-  }
-
-  .hero-subtitle {
-    font-size: 1rem;
-    color: var(--gold-light);
-    letter-spacing: 0.05em;
-    margin-bottom: 2.5rem;
-    font-weight: 300;
-    animation: fadeSlideUp 0.55s 0.32s ease both;
-  }
-
-  .hero-divider {
-    width: 48px;
-    height: 2px;
-    background: var(--gold);
-    margin-bottom: 2rem;
-    animation: fadeSlideUp 0.55s 0.4s ease both;
-  }
-
-  .hero-bio {
-    font-size: 1rem;
-    line-height: 1.8;
-    color: rgba(255,255,255,0.65);
-    max-width: 420px;
-    margin-bottom: 3rem;
-    animation: fadeSlideUp 0.55s 0.48s ease both;
-  }
-
-  .hero-cta {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    animation: fadeSlideUp 0.55s 0.58s ease both;
-  }
-
-  .hero-right {
-    background: var(--cream);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 5rem 4rem;
-    position: relative;
-    z-index: 1;
   }
-
-  .profile-photo-wrap {
-    width: 240px;
-    height: 280px;
-    position: relative;
-    margin-bottom: 3rem;
-  }
-
-  .profile-photo-wrap::before {
+  .hp-hero::before {
     content: '';
-    position: absolute;
-    top: 12px; left: 12px;
-    right: -12px; bottom: -12px;
-    border: 2px solid var(--gold);
-    z-index: 0;
-  }
-
-  .profile-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: relative;
-    z-index: 1;
-  }
-
-  .profile-photo-placeholder {
-    width: 100%;
-    height: 100%;
-    background: var(--navy-light);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-  }
-
-  .placeholder-icon {
-    font-size: 4rem;
-    margin-bottom: 0.5rem;
-    opacity: 0.4;
-    color: var(--white);
-  }
-
-  .placeholder-text {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.4);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    width: 100%;
-    max-width: 320px;
-    box-shadow: 0 4px 20px rgba(26, 39, 68, 0.1);
-    animation: fadeSlideUp 0.55s 0.4s ease both;
-  }
-
-  .stat-box {
-    background: var(--cream);
-    padding: 1.25rem;
-    text-align: center;
-  }
-
-  .stat-number {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.75rem;
-    color: var(--navy);
-    display: block;
-  }
-
-  .stat-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-top: 0.25rem;
-    display: block;
-  }
-
-  .bg-diamond {
-    position: absolute;
-    opacity: 0.04;
-    font-size: 20rem;
-    right: -2rem;
-    bottom: -2rem;
-    line-height: 1;
-    color: var(--navy);
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(60% 70% at 85% 30%, rgba(201,168,76,0.16) 0%, rgba(201,168,76,0) 60%),
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px) 0 0 / 100% 64px,
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px) 0 0 / 64px 100%;
     pointer-events: none;
-    user-select: none;
   }
+  .hp-hero-inner {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 1240px; margin: 0 auto;
+    padding: 5rem 2rem 6rem;
+    display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: 4rem; align-items: center;
+  }
+  .hp-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    font-size: 0.74rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.6rem;
+  }
+  .hp-eyebrow::before { content: ''; width: 36px; height: 2px; background: var(--gold); }
+  .hp-name {
+    font-family: var(--display); font-weight: 800; text-transform: uppercase;
+    font-size: clamp(4rem, 10vw, 8.5rem); line-height: 0.86; letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+  }
+  .hp-name span { display: block; color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,0.9); }
+  .hp-role {
+    font-family: var(--display); font-weight: 600; text-transform: uppercase;
+    font-size: clamp(1.25rem, 2.2vw, 1.7rem); letter-spacing: 0.08em; color: var(--gold-light);
+    margin-bottom: 1.5rem;
+  }
+  .hp-bio { font-size: 1.05rem; line-height: 1.75; color: rgba(255,255,255,0.72); max-width: 56ch; margin-bottom: 2.25rem; }
+  .hp-cta { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .hp-btn {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 0.95rem 1.6rem; border-radius: 2px; text-decoration: none;
+    font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    transition: transform .15s ease, background .2s, border-color .2s, color .2s;
+  }
+  .hp-btn:hover { transform: translateY(-2px); }
+  .hp-btn.gold { background: var(--gold); color: var(--ink); }
+  .hp-btn.gold:hover { background: var(--gold-light); }
+  .hp-btn.ghost { border: 1px solid rgba(255,255,255,0.3); color: var(--white); }
+  .hp-btn.ghost:hover { border-color: var(--gold); color: var(--gold); }
+  .hp-btn .arrow { transition: transform .2s; }
+  .hp-btn:hover .arrow { transform: translateX(3px); }
+  .hp-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+  .hp-links a {
+    font-size: 0.74rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); text-decoration: none; transition: color .2s;
+  }
+  .hp-links a:hover { color: var(--gold); }
 
-  @media (max-width: 768px) {
-    .hero {
-      grid-template-columns: 1fr;
-    }
+  /* Player-card portrait */
+  .hp-card {
+    position: relative; justify-self: end; width: 100%; max-width: 380px;
+    background: var(--ink-2); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;
+    padding: 0.9rem; box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+  }
+  .hp-card { border-top: 3px solid var(--gold); }
+  .hp-card-photo { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 2px; background: #1b2438; }
+  .hp-card-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hp-card-photo::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(0deg, rgba(11,18,32,0.85) 0%, rgba(11,18,32,0) 45%);
+  }
+  .hp-card-tag {
+    position: absolute; left: 1rem; bottom: 1rem; z-index: 1;
+    font-family: var(--display); font-weight: 700; text-transform: uppercase; line-height: 1;
+  }
+  .hp-card-tag .big { font-size: 1.9rem; display: block; }
+  .hp-card-tag .small { font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; color: var(--gold-light); display: block; margin-top: 0.45rem; }
+  .hp-card-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.08); margin-top: 0.9rem; }
+  .hp-card-row { background: var(--ink-2); padding: 0.75rem 0.8rem; }
+  .hp-card-row .k { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+  .hp-card-row .v { font-size: 0.86rem; font-weight: 600; margin-top: 0.2rem; line-height: 1.3; }
 
-    .hero-left, .hero-right {
-      padding: 3rem 1.5rem;
-    }
+  /* Load-in motion */
+  @keyframes hpUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  .hp-anim { animation: hpUp .6s ease both; }
+  .hp-anim.d1 { animation-delay: .05s; } .hp-anim.d2 { animation-delay: .15s; } .hp-anim.d3 { animation-delay: .25s; }
+  .hp-anim.d4 { animation-delay: .35s; } .hp-anim.d5 { animation-delay: .45s; }
+  @media (prefers-reduced-motion: reduce) { .hp-anim { animation: none; } .hp-btn:hover { transform: none; } }
 
-    .profile-photo-wrap {
-      width: 180px;
-      height: 220px;
-    }
+  /* ── CREDENTIAL BAND ── */
+  .hp-band { background: var(--gold); color: var(--ink); }
+  .hp-band-inner {
+    max-width: 1240px; margin: 0 auto; padding: 0 2rem;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .hp-band-item { padding: 1.6rem 1.5rem; border-left: 1px solid rgba(11,18,32,0.18); }
+  .hp-band-item:first-child { border-left: none; padding-left: 0; }
+  .hp-band-value { font-family: var(--display); font-weight: 800; font-size: 2.4rem; line-height: 1; text-transform: uppercase; }
+  .hp-band-label { font-size: 0.8rem; font-weight: 600; line-height: 1.4; margin-top: 0.45rem; opacity: 0.85; }
+
+  /* ── SECTIONS ── */
+  .hp-section { max-width: 1240px; margin: 0 auto; padding: 6rem 2rem 0; }
+  .hp-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2.25rem; }
+  .hp-kicker { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #9A7A2C; margin-bottom: 0.6rem; }
+  .hp-title { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: 0.92; color: var(--ink); }
+  .hp-more { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--gold); padding-bottom: 0.25rem; }
+  .hp-more:hover { color: #9A7A2C; }
+
+  /* Featured work */
+  .hp-feature {
+    display: grid; grid-template-columns: 1.35fr 1fr; background: var(--ink); color: var(--white);
+    border-radius: 4px; overflow: hidden; text-decoration: none; margin-bottom: 1.25rem;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .hp-feature:hover { transform: translateY(-3px); box-shadow: 0 24px 50px rgba(11,18,32,0.25); }
+  .hp-feature-img { position: relative; min-height: 380px; background: #1b2438; overflow: hidden; }
+  .hp-feature-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; transition: transform .5s ease; }
+  .hp-feature:hover .hp-feature-img img { transform: scale(1.03); }
+  .hp-feature-body { padding: 2.5rem 2.25rem; display: flex; flex-direction: column; justify-content: center; }
+  .hp-feature-body .label { color: var(--gold); }
+  .hp-feature-title { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(2rem, 3.4vw, 2.9rem); line-height: 0.95; margin: 0.9rem 0 1rem; }
+  .hp-feature-desc { color: rgba(255,255,255,0.7); line-height: 1.65; font-size: 0.98rem; margin-bottom: 1.5rem; }
+  .hp-read { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+
+  .label { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #9A7A2C; }
+  .label .lg { background: currentColor; color: inherit; }
+  .label .pill { padding: 0.2rem 0.45rem; border-radius: 2px; background: var(--ink); color: var(--white); letter-spacing: 0.1em; }
+  .hp-feature .label .pill { background: var(--gold); color: var(--ink); }
+
+  .hp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+  .hp-tile {
+    display: flex; flex-direction: column; background: var(--white); border: 1px solid #E6E3DA; border-radius: 4px;
+    overflow: hidden; text-decoration: none; color: var(--ink); transition: transform .2s ease, box-shadow .2s ease, border-color .2s;
+  }
+  .hp-tile:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(11,18,32,0.12); border-color: transparent; }
+  .hp-tile-img { aspect-ratio: 16 / 10; position: relative; overflow: hidden; background: var(--ink); }
+  .hp-tile-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+  .hp-tile:hover .hp-tile-img img { transform: scale(1.04); }
+  .hp-tile-fallback {
+    position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 1rem;
+    background:
+      linear-gradient(135deg, rgba(201,168,76,0.22) 0%, rgba(201,168,76,0) 55%),
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 14px),
+      var(--ink);
+    font-family: var(--display); font-weight: 800; text-transform: uppercase; color: var(--white);
+    font-size: 2.2rem; line-height: 0.9;
+  }
+  .hp-tile-body { padding: 1.2rem 1.2rem 1.4rem; display: flex; flex-direction: column; gap: 0.6rem; flex: 1; }
+  .hp-tile-title { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: 1.35rem; line-height: 1.02; }
+  .hp-tile-date { font-size: 0.75rem; color: #7A7A80; margin-top: auto; }
+
+  /* Pillars */
+  .hp-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .hp-pillar { background: var(--white); border: 1px solid #E6E3DA; border-top: 4px solid var(--gold); border-radius: 4px; padding: 2rem 1.75rem; }
+  .hp-pillar-num { font-family: var(--display); font-weight: 800; font-size: 1rem; letter-spacing: 0.1em; color: #9A7A2C; }
+  .hp-pillar h3 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 1.9rem; line-height: 1; color: var(--ink); margin: 0.5rem 0 0.9rem; }
+  .hp-pillar p { color: #4A4A52; line-height: 1.7; font-size: 0.96rem; margin-bottom: 1.1rem; }
+  .hp-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .hp-chip { font-size: 0.74rem; font-weight: 600; padding: 0.3rem 0.6rem; border-radius: 2px; background: #F1EEE5; color: var(--ink); }
+
+  /* Experience */
+  .hp-exp { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .hp-exp-col { background: var(--white); border: 1px solid #E6E3DA; border-radius: 4px; padding: 1.75rem; }
+  .hp-exp-col h3 { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #9A7A2C; margin-bottom: 1.2rem; }
+  .hp-role-row { display: grid; grid-template-columns: 1fr auto; gap: 0.25rem 1rem; padding: 1rem 0; border-top: 1px solid #EEEBE3; }
+  .hp-role-row:first-of-type { border-top: none; padding-top: 0; }
+  .hp-role-title { font-weight: 700; color: var(--ink); }
+  .hp-role-org { color: #5A5A62; font-size: 0.92rem; grid-column: 1; }
+  .hp-role-date { font-size: 0.78rem; font-weight: 600; color: #7A7A80; grid-row: 1; grid-column: 2; white-space: nowrap; }
+
+  /* CTA */
+  .hp-cta-band { max-width: 1240px; margin: 6rem auto 0; padding: 0 2rem; }
+  .hp-cta-box {
+    position: relative; overflow: hidden; background: var(--ink); color: var(--white); border-radius: 4px;
+    padding: 3.5rem 3rem; display: grid; grid-template-columns: 1.4fr auto; gap: 2rem; align-items: center;
+  }
+  .hp-cta-box::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(50% 120% at 100% 0%, rgba(201,168,76,0.22) 0%, rgba(201,168,76,0) 60%);
+  }
+  .hp-cta-box > * { position: relative; }
+  .hp-cta-box h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(2.2rem, 4.5vw, 3.4rem); line-height: 0.92; }
+  .hp-cta-box p { color: rgba(255,255,255,0.7); margin-top: 0.9rem; line-height: 1.65; max-width: 52ch; }
+  .hp-cta-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1080px) {
+    .hp-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 900px) {
+    .hp-hero-inner { grid-template-columns: 1fr; gap: 3rem; padding: 3.5rem 1.25rem 4.5rem; }
+    .hp-card { justify-self: start; max-width: 340px; }
+    .hp-band-inner { grid-template-columns: repeat(2, 1fr); padding: 0 1.25rem; }
+    .hp-band-item { padding: 1.3rem 1rem; }
+    .hp-band-item:nth-child(3) { border-left: none; padding-left: 0; }
+    .hp-band-item:nth-child(n+3) { border-top: 1px solid rgba(11,18,32,0.18); }
+    .hp-band-item:nth-child(2) { padding-right: 0; }
+    .hp-section { padding: 4.5rem 1.25rem 0; }
+    .hp-feature { grid-template-columns: 1fr; }
+    .hp-feature-img { min-height: 260px; }
+    .hp-feature-body { padding: 1.75rem 1.5rem 2rem; }
+    .hp-pillars, .hp-exp { grid-template-columns: 1fr; }
+    .hp-cta-band { padding: 0 1.25rem; margin-top: 4.5rem; }
+    .hp-cta-box { grid-template-columns: 1fr; padding: 2.5rem 1.5rem; }
+  }
+  @media (max-width: 560px) {
+    .hp-grid { grid-template-columns: 1fr; }
+    .hp-name span { -webkit-text-stroke-width: 1.5px; }
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="hero">
-  <div class="hero-left">
-    <p class="hero-eyebrow">Career in Sports</p>
-    <h1 class="hero-name">{{ profile.name }}</h1>
-    <p class="hero-subtitle">{{ profile.subtitle }}</p>
-    <div class="hero-divider"></div>
-    <p class="hero-bio">{{ profile.bio }}</p>
-    <div class="hero-cta">
-      <a href="/blog" class="btn-primary">Read the Blog</a>
-      <a href="/resume" class="btn-outline">View Resume</a>
+<!-- HERO -->
+<section class="hp-hero">
+  <div class="hp-hero-inner">
+    <div>
+      <p class="hp-eyebrow hp-anim d1">Career in Sports</p>
+      <h1 class="hp-name hp-anim d2">Kyle<span>Flynn</span></h1>
+      <p class="hp-role hp-anim d3">{{ profile.subtitle }}</p>
+      <p class="hp-bio hp-anim d4">{{ profile.bio }}</p>
+      <div class="hp-cta hp-anim d5">
+        <a href="/blog" class="hp-btn gold">Read the work <span class="arrow" aria-hidden="true">→</span></a>
+        <a href="/resume" class="hp-btn ghost">View resume</a>
+      </div>
+      <div class="hp-links hp-anim d5">
+        <a href="https://www.linkedin.com/in/kyle-l-flynn/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/kylelflynn2" target="_blank" rel="noopener">GitHub</a>
+        <a href="/static/reference.pdf" target="_blank" rel="noopener">Reference</a>
+        <a href="https://cuwfalcons.com/sports/baseball/roster/kyle-flynn/12542" target="_blank" rel="noopener">Collegiate baseball profile</a>
+      </div>
     </div>
-    <div style="display:flex;gap:1.5rem;margin-top:1.25rem;">
-      <a href="https://github.com/kylelflynn2" target="_blank" style="font-size:0.8rem;color:rgba(255,255,255,0.5);text-decoration:none;letter-spacing:0.05em;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">GitHub</a>
-      <a href="https://www.linkedin.com/in/kyle-l-flynn/" target="_blank" style="font-size:0.8rem;color:rgba(255,255,255,0.5);text-decoration:none;letter-spacing:0.05em;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">LinkedIn</a>
-      <a href="/static/reference.pdf" target="_blank" rel="noopener" style="font-size:0.8rem;color:rgba(255,255,255,0.5);text-decoration:none;letter-spacing:0.05em;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Reference</a>
-      <a href="https://cuwfalcons.com/sports/baseball/roster/kyle-flynn/12542" target="_blank" rel="noopener" style="font-size:0.8rem;color:rgba(255,255,255,0.5);text-decoration:none;letter-spacing:0.05em;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Collegiate Baseball Profile</a>
+
+    <aside class="hp-card hp-anim d3" aria-label="Profile card">
+      <div class="hp-card-photo">
+        {% if profile.photo %}
+        <img src="{{ profile.photo }}" alt="{{ profile.name }}">
+        {% endif %}
+        <div class="hp-card-tag">
+          <span class="big">Kyle Flynn</span>
+          <span class="small">Finance · Analytics · Operations</span>
+        </div>
+      </div>
+      <div class="hp-card-rows">
+        <div class="hp-card-row"><div class="k">Current</div><div class="v">Financial Analyst</div></div>
+        <div class="hp-card-row"><div class="k">Based in</div><div class="v">Franklin, TN</div></div>
+        <div class="hp-card-row"><div class="k">Education</div><div class="v">B.S. Finance, Concordia Wisconsin</div></div>
+        <div class="hp-card-row"><div class="k">On the field</div><div class="v">CUW Baseball, team captain</div></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- CREDENTIAL BAND -->
+<section class="hp-band" aria-label="At a glance">
+  <div class="hp-band-inner">
+    <div class="hp-band-item"><div class="hp-band-value">{{ posts | length }}</div><div class="hp-band-label">Front-office analyses published</div></div>
+    <div class="hp-band-item"><div class="hp-band-value">MLB + NHL</div><div class="hp-band-label">Roster construction, trades and valuation</div></div>
+    <div class="hp-band-item"><div class="hp-band-value">4 Years</div><div class="hp-band-label">College baseball, varsity team captain</div></div>
+    <div class="hp-band-item"><div class="hp-band-value">FP&amp;A</div><div class="hp-band-label">Financial analyst: reporting, budgeting, EBITDA</div></div>
+  </div>
+</section>
+
+<!-- FEATURED WORK -->
+{% if posts %}
+<section class="hp-section" aria-labelledby="workTitle">
+  <div class="hp-head">
+    <div>
+      <p class="hp-kicker">Latest analysis</p>
+      <h2 class="hp-title" id="workTitle">Featured work</h2>
     </div>
+    <a href="/blog" class="hp-more">All work →</a>
   </div>
 
-  <div class="hero-right">
-    <div class="profile-photo-wrap">
-      {% if profile.photo %}
-        <img src="{{ profile.photo }}" alt="{{ profile.name }}" class="profile-photo" style="border-radius: 4px;">
-      {% else %}
-        <img src="https://media.licdn.com/dms/image/v2/D5603AQGgBQKDVifjow/profile-displayphoto-scale_400_400/B56ZrsZq24L8Ag-/0/1764902744919?e=1781740800&v=beta&t=HzaFPbd4wyFm75jP6qChkt3Cjo5wZRXKDg7xyJTiRqg" alt="{{ profile.name }}" class="profile-photo" style="border-radius: 4px;">
-      {% endif %}
+  {% set lead = posts[0] %}
+  <a class="hp-feature" href="{{ lead.project_url }}">
+    <div class="hp-feature-img">
+      {% if lead.image %}<img src="{{ lead.image }}" alt="">{% else %}<div class="hp-tile-fallback">{{ lead.team or lead.category }}</div>{% endif %}
     </div>
-    <div class="stats-row">
-      <div class="stat-box">
-        <span class="stat-number">4</span>
-        <span class="stat-label">Years of Collegiate Baseball</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-number">FP&A</span>
-        <span class="stat-label">Experience</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-number">Leader</span>
-        <span class="stat-label">Student-Athlete</span>
-      </div>
+    <div class="hp-feature-body">
+      <span class="label"><span class="pill">{{ lead.league or lead.category|upper }}</span>{{ lead.team }} · {{ lead.date }}</span>
+      <h3 class="hp-feature-title">{{ lead.title }}</h3>
+      <p class="hp-feature-desc">{{ lead.description }}</p>
+      <span class="hp-read">Read the analysis →</span>
     </div>
-    <div class="bg-diamond">◆</div>
+  </a>
+
+  <div class="hp-grid">
+    {% for post in posts[1:5] %}
+    <a class="hp-tile" href="{{ post.project_url }}">
+      <div class="hp-tile-img">
+        {% if post.image %}<img src="{{ post.image }}" alt="" loading="lazy">{% else %}<div class="hp-tile-fallback">{{ post.team or post.category }}</div>{% endif %}
+      </div>
+      <div class="hp-tile-body">
+        <span class="label"><span class="pill">{{ post.league or post.category|upper }}</span>{{ post.team }}</span>
+        <div class="hp-tile-title">{{ post.title }}</div>
+        <div class="hp-tile-date">{{ post.date }}</div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- WHAT I BRING -->
+<section class="hp-section" aria-labelledby="bringTitle">
+  <div class="hp-head">
+    <div>
+      <p class="hp-kicker">The skill set</p>
+      <h2 class="hp-title" id="bringTitle">What I bring to a front office</h2>
+    </div>
+  </div>
+  <div class="hp-pillars">
+    <div class="hp-pillar">
+      <div class="hp-pillar-num">01</div>
+      <h3>Finance &amp; valuation</h3>
+      <p>Monthly reporting, budgeting, variance analysis and EBITDA tracking as a financial analyst, applied to payroll, contracts and player value.</p>
+      <div class="hp-chips"><span class="hp-chip">Financial modeling</span><span class="hp-chip">Budgeting</span><span class="hp-chip">Payroll &amp; CBT</span><span class="hp-chip">$/WAR surplus value</span></div>
+    </div>
+    <div class="hp-pillar">
+      <div class="hp-pillar-num">02</div>
+      <h3>Analytics &amp; code</h3>
+      <p>Python, SQL and AI tools used to answer real roster questions: lineup optimization, valuation models and trade evaluation.</p>
+      <div class="hp-chips"><span class="hp-chip">Python</span><span class="hp-chip">SQL</span><span class="hp-chip">Excel &amp; VBA</span><span class="hp-chip">Sabermetrics</span><span class="hp-chip">AI tools</span></div>
+    </div>
+    <div class="hp-pillar">
+      <div class="hp-pillar-num">03</div>
+      <h3>Inside the game</h3>
+      <p>Four years of college baseball as a varsity captain, plus coaching, showcase data collection and game-day operations.</p>
+      <div class="hp-chips"><span class="hp-chip">Team captain</span><span class="hp-chip">Player development</span><span class="hp-chip">Showcase operations</span><span class="hp-chip">Game operations</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="hp-section" aria-labelledby="expTitle">
+  <div class="hp-head">
+    <div>
+      <p class="hp-kicker">Track record</p>
+      <h2 class="hp-title" id="expTitle">Experience</h2>
+    </div>
+    <a href="/resume" class="hp-more">Full resume →</a>
+  </div>
+  <div class="hp-exp">
+    <div class="hp-exp-col">
+      <h3>Sports</h3>
+      <div class="hp-role-row"><div class="hp-role-title">Baseball Coaching Volunteer</div><div class="hp-role-org">Concordia University Wisconsin Baseball</div><div class="hp-role-date">2025</div></div>
+      <div class="hp-role-row"><div class="hp-role-title">Showcase Operations Volunteer</div><div class="hp-role-org">Prep Baseball Report, Wisconsin</div><div class="hp-role-date">2023 – 2024</div></div>
+      <div class="hp-role-row"><div class="hp-role-title">Soccer Game Operations Manager</div><div class="hp-role-org">Concordia University Wisconsin</div><div class="hp-role-date">2023 – 2024</div></div>
+      <div class="hp-role-row"><div class="hp-role-title">Varsity Team Captain</div><div class="hp-role-org">Concordia University Wisconsin Baseball</div><div class="hp-role-date">4 seasons</div></div>
+    </div>
+    <div class="hp-exp-col">
+      <h3>Finance</h3>
+      <div class="hp-role-row"><div class="hp-role-title">Financial Analyst</div><div class="hp-role-org">Endodontic Practice Partners, Brentwood, TN</div><div class="hp-role-date">2026 – Present</div></div>
+      <div class="hp-role-row"><div class="hp-role-title">Financial Planning Associate</div><div class="hp-role-org">Northwestern Mutual, Whitefish Bay, WI</div><div class="hp-role-date">2025 – 2026</div></div>
+      <div class="hp-role-row"><div class="hp-role-title">B.S. Finance, Academic Honors</div><div class="hp-role-org">Concordia University Wisconsin</div><div class="hp-role-date">Dec. 2025</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="hp-cta-band">
+  <div class="hp-cta-box">
+    <div>
+      <h2>Building toward<br>the front office</h2>
+      <p>Open to conversations about hockey and baseball operations, analytics and strategy roles.</p>
+    </div>
+    <div class="hp-cta-actions">
+      <a href="/connect" class="hp-btn gold">Get in touch <span class="arrow" aria-hidden="true">→</span></a>
+      <a href="https://www.linkedin.com/in/kyle-l-flynn/" target="_blank" rel="noopener" class="hp-btn ghost">LinkedIn</a>
+    </div>
   </div>
 </section>
 {% endblock %}

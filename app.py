@@ -43,7 +43,7 @@ def load_json(filepath, default=None):
     if not os.path.exists(filepath):
         return default if default is not None else {}
     try:
-        with open(filepath, 'r') as f:
+        with open(filepath, 'r', encoding='utf-8') as f:
             return json.load(f)
     except:
         return default if default is not None else {}
@@ -52,8 +52,8 @@ def load_json(filepath, default=None):
 def save_json(filepath, data):
     """Save data to JSON file."""
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
-    with open(filepath, 'w') as f:
-        json.dump(data, f, indent=2)
+    with open(filepath, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
 
 
 def load_profile():
@@ -106,20 +106,32 @@ def login_required(f):
     return decorated_function
 
 
+def post_sort_key(post):
+    """Sort key for posts: real date when parseable, else epoch."""
+    for fmt in ('%B %d, %Y', '%b %d, %Y', '%Y-%m-%d'):
+        try:
+            return datetime.strptime(post.get('date', ''), fmt)
+        except ValueError:
+            continue
+    return datetime.min
+
+
+def sorted_posts():
+    """All posts, newest first."""
+    return sorted(load_posts(), key=post_sort_key, reverse=True)
+
+
 @app.route('/')
 def index():
     """Home page."""
     profile = load_profile()
-    return render_template('index.html', profile=profile)
+    return render_template('index.html', profile=profile, posts=sorted_posts())
 
 
 @app.route('/blog')
 def blog():
     """Blog/projects page."""
-    posts = load_posts()
-    # Sort by date descending
-    posts.sort(key=lambda x: x.get('date', ''), reverse=True)
-    return render_template('blog.html', posts=posts)
+    return render_template('blog.html', posts=sorted_posts())
 
 
 @app.route('/connect')
@@ -275,7 +287,8 @@ def jordan_walker_2026():
 @app.route('/projects/blackhawks-fix-2026')
 def blackhawks_fix_2026():
     """How to Fix the Chicago Blackhawks — hockey operations analysis."""
-    return render_template('projects/blackhawks_fix_2026.html')
+    related = [p for p in sorted_posts() if p.get('id') != '6'][:3]
+    return render_template('projects/blackhawks_fix_2026.html', related=related)
 
 
 @app.route('/projects/yankees-baseball-operations')

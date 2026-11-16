@@ -3,381 +3,179 @@
 
 {% block extra_styles %}
 <style>
-    /* BLOG HEADER */
-    .blog-header {
-        background: linear-gradient(135deg, var(--navy) 0%, #1E3055 65%, var(--navy-light) 100%);
-        color: var(--white);
-        padding: 5rem 2rem 4rem;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
+    body { background: var(--paper); }
 
-    .blog-header::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background-image: radial-gradient(rgba(201, 168, 76, 0.07) 1px, transparent 1px);
-        background-size: 24px 24px;
-        pointer-events: none;
+    /* HEADER */
+    .bl-header { position: relative; background: var(--ink); color: var(--white); overflow: hidden; }
+    .bl-header::before {
+        content: ''; position: absolute; inset: 0; pointer-events: none;
+        background:
+            radial-gradient(55% 90% at 90% 10%, rgba(201,168,76,0.16) 0%, rgba(201,168,76,0) 60%),
+            linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px) 0 0 / 100% 64px,
+            linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px) 0 0 / 64px 100%;
     }
-
-    .blog-header-inner {
-        position: relative;
-        z-index: 1;
-    }
-
-    .blog-header h1 {
-        font-family: 'DM Serif Display', serif;
-        font-size: clamp(3.5rem, 7vw, 5.5rem);
-        letter-spacing: -0.02em;
-        margin-bottom: 1rem;
-        animation: fadeSlideDown 0.6s ease both;
-    }
-
-    .blog-header p {
-        font-size: 1rem;
-        color: rgba(255,255,255,0.6);
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        animation: fadeSlideDown 0.6s 0.1s ease both;
-    }
-
-    .blog-header-gold-line {
-        width: 56px;
-        height: 3px;
-        background: var(--gold);
-        margin: 1.25rem auto 0;
-        animation: expandWidth 0.5s 0.25s ease both;
-    }
+    .bl-header-inner { position: relative; max-width: 1240px; margin: 0 auto; padding: 5rem 2rem 4rem; }
+    .bl-kicker { display: inline-flex; align-items: center; gap: 0.75rem; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
+    .bl-kicker::before { content: ''; width: 36px; height: 2px; background: var(--gold); }
+    .bl-header h1 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(3.2rem, 8vw, 6.5rem); line-height: 0.88; }
+    .bl-header p { color: rgba(255,255,255,0.68); font-size: 1.05rem; line-height: 1.7; max-width: 58ch; margin-top: 1.25rem; }
+    .bl-counts { display: flex; gap: 2.5rem; margin-top: 2rem; flex-wrap: wrap; }
+    .bl-count .n { font-family: var(--display); font-weight: 800; font-size: 2.2rem; line-height: 1; color: var(--gold); }
+    .bl-count .t { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-top: 0.3rem; }
 
     /* TABS */
-    .blog-tabs-wrap {
-        background: var(--white);
-        border-bottom: 2px solid var(--border);
-        position: sticky;
-        top: 64px;
-        z-index: 90;
+    .bl-tabs-wrap { background: var(--white); border-bottom: 1px solid #E6E3DA; position: sticky; top: 64px; z-index: 90; }
+    .bl-tabs { max-width: 1240px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 0.25rem; overflow-x: auto; }
+    .bl-tab {
+        background: none; border: none; padding: 1.1rem 1.1rem; white-space: nowrap;
+        font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+        color: #7A7A80; cursor: pointer; position: relative; transition: color 0.2s;
     }
-
-    .blog-tabs {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 0 2rem;
-        display: flex;
-        gap: 0;
-    }
-
-    .blog-tab {
-        background: none;
-        border: none;
-        padding: 1rem 1.75rem;
-        font-family: 'Inter', sans-serif;
-        font-size: 0.8rem;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-        cursor: pointer;
-        position: relative;
-        transition: color 0.2s;
-    }
-
-    .blog-tab::after {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: var(--gold);
-        transform: scaleX(0);
-        transition: transform 0.25s ease;
-    }
-
-    .blog-tab:hover {
-        color: var(--navy);
-    }
-
-    .blog-tab.active {
-        color: var(--navy);
-    }
-
-    .blog-tab.active::after {
-        transform: scaleX(1);
-    }
-
-    /* CONTAINER */
-    .blog-container {
-        max-width: 1000px;
-        margin: 3.5rem auto;
-        padding: 0 2rem;
-    }
+    .bl-tab::after { content: ''; position: absolute; left: 1.1rem; right: 1.1rem; bottom: -1px; height: 3px; background: var(--gold); transform: scaleX(0); transition: transform .25s ease; }
+    .bl-tab:hover, .bl-tab.active { color: var(--ink); }
+    .bl-tab.active::after { transform: scaleX(1); }
+    .bl-tab .c { font-weight: 600; color: #A8A8AE; margin-left: 0.3rem; }
 
     /* GRID */
-    .blog-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 2rem;
-        margin-bottom: 4rem;
-    }
-
-    /* POST CARDS */
+    .bl-container { max-width: 1240px; margin: 0 auto; padding: 3rem 2rem 1rem; }
+    .bl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
     .post-card {
-        background: var(--white);
-        border: 1px solid var(--border);
-        border-radius: 4px;
-        overflow: hidden;
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
-        display: flex;
-        flex-direction: column;
-        animation: cardFadeIn 0.45s ease both;
+        position: relative; display: flex; flex-direction: column; background: var(--white);
+        border: 1px solid #E6E3DA; border-radius: 4px; overflow: hidden;
+        transition: transform .2s ease, box-shadow .2s ease, border-color .2s;
     }
-
-    .post-card:nth-child(1) { animation-delay: 0.05s; }
-    .post-card:nth-child(2) { animation-delay: 0.12s; }
-    .post-card:nth-child(3) { animation-delay: 0.19s; }
-    .post-card:nth-child(4) { animation-delay: 0.26s; }
-    .post-card:nth-child(5) { animation-delay: 0.33s; }
-
-    .post-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 16px 40px rgba(26, 39, 68, 0.16);
+    .post-card[hidden] { display: none; }
+    .post-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(11,18,32,0.12); border-color: transparent; }
+    .post-card.lead { grid-column: span 3; flex-direction: row; background: var(--ink); color: var(--white); border: none; }
+    .pc-img { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--ink); }
+    .pc-img img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; transition: transform .5s ease; }
+    .post-card:hover .pc-img img { transform: scale(1.04); }
+    .post-card.lead .pc-img { aspect-ratio: auto; flex: 1.3; min-height: 380px; }
+    .pc-fallback {
+        position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 1.1rem;
+        background:
+            linear-gradient(135deg, rgba(201,168,76,0.22) 0%, rgba(201,168,76,0) 55%),
+            repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 14px),
+            var(--ink);
+        font-family: var(--display); font-weight: 800; text-transform: uppercase; color: var(--white); font-size: 2.4rem; line-height: 0.9;
     }
+    .pc-body { padding: 1.4rem 1.4rem 1.5rem; display: flex; flex-direction: column; gap: 0.7rem; flex: 1; }
+    .post-card.lead .pc-body { flex: 1; padding: 2.5rem 2.25rem; justify-content: center; }
+    .pc-meta { display: flex; align-items: center; gap: 0.55rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #9A7A2C; flex-wrap: wrap; }
+    .pc-pill { padding: 0.2rem 0.45rem; border-radius: 2px; background: var(--ink); color: var(--white); letter-spacing: 0.1em; }
+    .post-card.lead .pc-pill { background: var(--gold); color: var(--ink); }
+    .post-card.lead .pc-meta { color: var(--gold); }
+    .pc-date { color: #8A8A90; font-weight: 600; }
+    .post-card.lead .pc-date { color: rgba(255,255,255,0.55); }
+    .pc-title { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 1.6rem; line-height: 0.98; color: var(--ink); }
+    .post-card.lead .pc-title { font-size: clamp(2.1rem, 3.6vw, 3rem); color: var(--white); }
+    .pc-title a { color: inherit; text-decoration: none; }
+    .pc-title a::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+    .pc-desc { color: #4A4A52; font-size: 0.93rem; line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .post-card.lead .pc-desc { color: rgba(255,255,255,0.7); -webkit-line-clamp: 5; font-size: 1rem; }
+    .pc-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .pc-tag { font-size: 0.7rem; font-weight: 600; padding: 0.25rem 0.5rem; border-radius: 2px; background: #F1EEE5; color: var(--ink); }
+    .post-card.lead .pc-tag { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85); }
+    .pc-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 0.5rem; }
+    .pc-read { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); }
+    .post-card.lead .pc-read { color: var(--gold); }
+    .pc-gh { position: relative; z-index: 2; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #7A7A80; text-decoration: none; border-bottom: 1px solid currentColor; }
+    .pc-gh:hover { color: var(--ink); }
 
-    .post-card-accent {
-        height: 3px;
-        background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+    .bl-empty { display: none; text-align: center; padding: 4rem 1rem; color: #7A7A80; }
+    .bl-empty h3 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 2rem; color: var(--ink); margin-bottom: 0.4rem; }
+    .bl-more { text-align: center; padding: 3rem 1rem 1rem; color: #8A8A90; font-size: 0.9rem; }
+
+    @media (max-width: 1000px) {
+        .bl-grid { grid-template-columns: repeat(2, 1fr); }
+        .post-card.lead { grid-column: span 2; }
     }
-
-    .post-card[data-category="hockey"] .post-card-accent {
-        height: 4px;
-        background: #CF0A2C;
-    }
-
-    .post-card-img {
-        aspect-ratio: 16 / 9;
-        overflow: hidden;
-        background: #0B0B0C;
-    }
-
-    .post-card-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: 70% 25%;
-        display: block;
-        transition: transform 0.4s ease;
-    }
-
-    .post-card:hover .post-card-img img { transform: scale(1.04); }
-
-    .post-content {
-        padding: 1.5rem;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .post-date {
-        font-size: 0.75rem;
-        color: var(--text-muted);
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        margin-bottom: 0.5rem;
-    }
-
-    .post-title {
-        font-family: 'DM Serif Display', serif;
-        font-size: 1.65rem;
-        color: var(--navy);
-        margin-bottom: 0.75rem;
-        line-height: 1.2;
-        letter-spacing: -0.01em;
-    }
-
-    .post-description {
-        color: var(--text-muted);
-        font-size: 0.93rem;
-        line-height: 1.7;
-        margin-bottom: 1rem;
-        flex-grow: 1;
-    }
-
-    .post-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-        margin-bottom: 1.25rem;
-    }
-
-    .post-tag {
-        display: inline-block;
-        background: var(--cream);
-        color: var(--navy);
-        padding: 0.2rem 0.65rem;
-        border-radius: 20px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-    }
-
-    .post-links {
-        display: flex;
-        gap: 0.75rem;
-    }
-
-    .post-link {
-        flex: 1;
-        padding: 0.55rem 1rem;
-        text-align: center;
-        background: var(--navy);
-        color: var(--white);
-        text-decoration: none;
-        font-size: 0.78rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        border-radius: 3px;
-        transition: background 0.2s, transform 0.15s;
-    }
-
-    .post-link:hover {
-        background: var(--navy-light);
-        transform: translateY(-1px);
-    }
-
-    /* EMPTY STATES */
-    .empty-state,
-    .empty-category {
-        text-align: center;
-        padding: 5rem 2rem;
-        color: var(--text-muted);
-    }
-
-    .empty-state-icon {
-        font-size: 3.5rem;
-        margin-bottom: 1rem;
-        opacity: 0.25;
-    }
-
-    .empty-state h2,
-    .empty-category h3 {
-        font-family: 'DM Serif Display', serif;
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
-        color: var(--text-dark);
-    }
-
-    .empty-category {
-        display: none;
-    }
-
-    /* KEYFRAMES */
-    @keyframes fadeSlideDown {
-        from { opacity: 0; transform: translateY(-14px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes expandWidth {
-        from { transform: scaleX(0); }
-        to { transform: scaleX(1); }
-    }
-
-    @keyframes cardFadeIn {
-        from { opacity: 0; transform: translateY(18px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 768px) {
-        .blog-tabs {
-            padding: 0 1rem;
-        }
-
-        .blog-tab {
-            padding: 0.85rem 1rem;
-            font-size: 0.72rem;
-        }
-
-        .blog-container {
-            padding: 0 1rem;
-            margin: 2.5rem auto;
-        }
+    @media (max-width: 720px) {
+        .bl-header-inner { padding: 3.5rem 1.25rem 3rem; }
+        .bl-tabs { padding: 0 0.75rem; }
+        .bl-container { padding: 2rem 1.25rem 1rem; }
+        .bl-grid { grid-template-columns: 1fr; }
+        .post-card.lead { grid-column: span 1; flex-direction: column; }
+        .post-card.lead .pc-img { min-height: 240px; flex: none; aspect-ratio: 16 / 10; }
+        .post-card.lead .pc-body { padding: 1.6rem 1.4rem 1.75rem; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="blog-header">
-    <div class="blog-header-inner">
-        <h1>Blog</h1>
-        <p>Sports operations, data analysis &amp; the business of the game</p>
-        <div class="blog-header-gold-line"></div>
+{% set n_baseball = posts | selectattr('category', 'equalto', 'baseball') | list | length %}
+{% set n_hockey = posts | selectattr('category', 'equalto', 'hockey') | list | length %}
+{% set n_personal = posts | selectattr('category', 'equalto', 'personal') | list | length %}
+
+<section class="bl-header">
+    <div class="bl-header-inner">
+        <p class="bl-kicker">Blog</p>
+        <h1>Front-office<br>analysis</h1>
+        <p>Roster construction, trade proposals, valuation models and lineup optimization, written the way a front office would approach the decision.</p>
+        <div class="bl-counts">
+            <div class="bl-count"><div class="n">{{ posts | length }}</div><div class="t">Analyses</div></div>
+            <div class="bl-count"><div class="n">{{ n_baseball }}</div><div class="t">MLB</div></div>
+            <div class="bl-count"><div class="n">{{ n_hockey }}</div><div class="t">NHL</div></div>
+        </div>
     </div>
 </section>
 
-<div class="blog-tabs-wrap">
-    <div class="blog-tabs">
-        <button class="blog-tab active" data-filter="all">All Posts</button>
-        <button class="blog-tab" data-filter="baseball">Baseball</button>
-        <button class="blog-tab" data-filter="hockey">Hockey</button>
-        <button class="blog-tab" data-filter="personal">Personal</button>
+<div class="bl-tabs-wrap">
+    <div class="bl-tabs" role="tablist">
+        <button class="bl-tab active" data-filter="all">All <span class="c">{{ posts | length }}</span></button>
+        <button class="bl-tab" data-filter="baseball">Baseball <span class="c">{{ n_baseball }}</span></button>
+        <button class="bl-tab" data-filter="hockey">Hockey <span class="c">{{ n_hockey }}</span></button>
+        <button class="bl-tab" data-filter="personal">Personal <span class="c">{{ n_personal }}</span></button>
     </div>
 </div>
 
-<div class="blog-container">
+<div class="bl-container">
     {% if posts %}
-        <div class="blog-grid" id="blogGrid">
-            {% for post in posts %}
-            <div class="post-card" data-category="{{ post.category | default('baseball') }}">
-                <div class="post-card-accent"></div>
-                {% if post.image %}
-                <div class="post-card-img"><img src="{{ post.image }}" alt="" loading="lazy"></div>
-                {% endif %}
-                <div class="post-content">
-                    <p class="post-date">{{ post.date }}</p>
-                    <h3 class="post-title">{{ post.title }}</h3>
-                    <p class="post-description">{{ post.description }}</p>
-                    <div class="post-tags">
-                        {% for tag in post.tags %}
-                            <span class="post-tag">{{ tag }}</span>
-                        {% endfor %}
-                    </div>
-                    <div class="post-links">
-                        {% if post.project_url %}
-                            <a href="{{ post.project_url }}" target="_blank" class="post-link">View Project</a>
-                        {% endif %}
-                        {% if post.github_url %}
-                            <a href="{{ post.github_url }}" target="_blank" class="post-link">GitHub</a>
-                        {% endif %}
-                    </div>
+    <div class="bl-grid" id="blogGrid">
+        {% for post in posts %}
+        {% set ext = post.project_url and post.project_url.startswith('http') %}
+        <article class="post-card{% if loop.first %} lead{% endif %}" data-category="{{ post.category | default('baseball') }}">
+            <div class="pc-img">
+                {% if post.image %}<img src="{{ post.image }}" alt="" {% if not loop.first %}loading="lazy"{% endif %}>{% else %}<div class="pc-fallback">{{ post.team or post.category }}</div>{% endif %}
+            </div>
+            <div class="pc-body">
+                <div class="pc-meta">
+                    <span class="pc-pill">{{ post.league or (post.category | upper) }}</span>
+                    {% if post.team %}<span>{{ post.team }}</span>{% endif %}
+                    <span class="pc-date">{{ post.date }}</span>
+                </div>
+                <h2 class="pc-title">
+                    {% if post.project_url %}<a href="{{ post.project_url }}"{% if ext %} target="_blank" rel="noopener"{% endif %}>{{ post.title }}</a>{% else %}{{ post.title }}{% endif %}
+                </h2>
+                <p class="pc-desc">{{ post.description }}</p>
+                <div class="pc-tags">
+                    {% for tag in post.tags[:4] %}<span class="pc-tag">{{ tag }}</span>{% endfor %}
+                </div>
+                <div class="pc-foot">
+                    {% if post.project_url %}<span class="pc-read">Read →</span>{% else %}<span></span>{% endif %}
+                    {% if post.github_url %}<a href="{{ post.github_url }}" target="_blank" rel="noopener" class="pc-gh">GitHub</a>{% endif %}
                 </div>
             </div>
-            {% endfor %}
-        </div>
+        </article>
+        {% endfor %}
+    </div>
 
-        <div class="empty-category" id="emptyCategoryMsg">
-            <div class="empty-state-icon">📂</div>
-            <h3>No posts in this category yet</h3>
-            <p>Check back soon.</p>
-        </div>
-
-        <div style="text-align:center;padding:2rem 1rem 3rem;border-top:1px solid var(--border);" id="moreComingMsg">
-            <p style="font-size:0.95rem;color:var(--text-muted);font-style:italic;letter-spacing:0.03em;">More posts coming soon — stay tuned.</p>
-        </div>
+    <div class="bl-empty" id="emptyCategoryMsg">
+        <h3>Nothing here yet</h3>
+        <p>New analysis in this category is coming soon.</p>
+    </div>
+    <p class="bl-more" id="moreComingMsg">More analysis coming soon.</p>
     {% else %}
-        <div class="empty-state">
-            <div class="empty-state-icon">✍️</div>
-            <h2>No Posts Yet</h2>
-            <p>Check back soon as the blog gets started.</p>
-        </div>
+    <div class="bl-empty" style="display:block;">
+        <h3>No posts yet</h3>
+        <p>Check back soon.</p>
+    </div>
     {% endif %}
 </div>
 
 <script>
 (function () {
-    var tabs = document.querySelectorAll('.blog-tab');
+    var tabs = document.querySelectorAll('.bl-tab');
     var cards = document.querySelectorAll('.post-card');
     var emptyMsg = document.getElementById('emptyCategoryMsg');
     var moreMsg = document.getElementById('moreComingMsg');
@@ -386,19 +184,15 @@
         tab.addEventListener('click', function () {
             tabs.forEach(function (t) { t.classList.remove('active'); });
             tab.classList.add('active');
-
             var filter = tab.getAttribute('data-filter');
             var visible = 0;
-
             cards.forEach(function (card) {
-                if (filter === 'all' || card.getAttribute('data-category') === filter) {
-                    card.style.display = '';
-                    visible++;
-                } else {
-                    card.style.display = 'none';
-                }
+                var show = filter === 'all' || card.getAttribute('data-category') === filter;
+                card.hidden = !show;
+                // Only the newest post in the "All" view gets the wide lead layout
+                card.classList.toggle('lead', show && filter === 'all' && card === cards[0]);
+                if (show) visible++;
             });
-
             if (emptyMsg) emptyMsg.style.display = visible === 0 ? 'block' : 'none';
             if (moreMsg) moreMsg.style.display = visible === 0 ? 'none' : '';
         });

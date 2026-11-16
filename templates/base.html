@@ -4,19 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Kyle Flynn{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <meta name="description" content="Kyle Flynn: sports operations, front-office analysis and finance. Roster construction, valuation models and analytics across MLB and the NHL.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Serif+Display&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block extra_styles %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar">
+    {% set path = request.path %}
+    <nav class="navbar" aria-label="Main">
         <div class="nav-container">
-            <a href="/" class="nav-logo">Kyle Flynn</a>
+            <a href="/" class="nav-logo" aria-label="Kyle Flynn, home">
+                <span class="nav-logo-mark" aria-hidden="true">KF</span>
+                <span class="nav-logo-text">Kyle Flynn</span>
+            </a>
+            <input type="checkbox" id="navToggle" class="nav-toggle" aria-label="Open menu">
+            <label for="navToggle" class="nav-burger" aria-hidden="true"><span></span><span></span><span></span></label>
             <ul class="nav-menu">
-                <li><a href="/" class="nav-link">Home</a></li>
-                <li><a href="/blog" class="nav-link">Blog</a></li>
-                <li><a href="/resume" class="nav-link">Resume</a></li>
-                <li><a href="/connect" class="nav-link">Contact</a></li>
+                <li><a href="/" class="nav-link{% if path == '/' %} active{% endif %}">Home</a></li>
+                <li><a href="/blog" class="nav-link{% if path.startswith('/blog') or path.startswith('/projects') or path.startswith('/cubs') %} active{% endif %}">Blog</a></li>
+                <li><a href="/resume" class="nav-link{% if path.startswith('/resume') %} active{% endif %}">Resume</a></li>
+                <li><a href="/connect" class="nav-link nav-cta{% if path.startswith('/connect') %} active{% endif %}">Contact</a></li>
             </ul>
         </div>
     </nav>
@@ -24,7 +33,20 @@
     {% block content %}{% endblock %}
 
     <footer class="footer">
-        <p>&copy; 2026 Kyle Flynn. All rights reserved.</p>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-name">Kyle Flynn</div>
+                <p>Sports operations, front-office analysis and finance.</p>
+            </div>
+            <nav class="footer-links" aria-label="Footer">
+                <a href="/blog">Blog</a>
+                <a href="/resume">Resume</a>
+                <a href="/connect">Contact</a>
+                <a href="https://www.linkedin.com/in/kyle-l-flynn/" target="_blank" rel="noopener">LinkedIn</a>
+                <a href="https://github.com/kylelflynn2" target="_blank" rel="noopener">GitHub</a>
+            </nav>
+        </div>
+        <div class="footer-base">&copy; 2026 Kyle Flynn. Independent analysis, not affiliated with any team or league.</div>
     </footer>
 </body>
 </html>

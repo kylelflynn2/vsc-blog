@@ -14,7 +14,9 @@
       "2027 Offseason"
     ],
     "category": "hockey",
-    "image": "/static/img/blackhawks/bedard_home.jpg"
+    "image": "/static/img/blackhawks/bedard_home.jpg",
+    "league": "NHL",
+    "team": "Blackhawks"
   },
   {
     "id": "5",
@@ -30,7 +32,9 @@
       "Pitch Discipline"
     ],
     "category": "baseball",
-    "image": null
+    "image": "/static/img/jordan_walker.jpg",
+    "league": "MLB",
+    "team": "Cardinals"
   },
   {
     "id": "4",
@@ -47,7 +51,9 @@
       "Payroll Analysis"
     ],
     "category": "baseball",
-    "image": null
+    "image": null,
+    "league": "MLB",
+    "team": "Yankees"
   },
   {
     "id": "3",
@@ -63,7 +69,9 @@
       "Optimization"
     ],
     "category": "baseball",
-    "image": null
+    "image": null,
+    "league": "MLB",
+    "team": "Cubs"
   },
   {
     "id": "2",
@@ -79,6 +87,8 @@
       "Python"
     ],
     "category": "baseball",
-    "image": null
+    "image": "/static/img/whitesox_stadium.jpg",
+    "league": "MLB",
+    "team": "White Sox"
   }
 ]
