@@ -203,16 +203,13 @@
   .hp-cta-band { max-width: 1240px; margin: 6rem auto 0; padding: 0 2rem; }
   .hp-cta-box {
     position: relative; overflow: hidden; background: var(--ink); color: var(--white); border-radius: 4px;
-    padding: 3.5rem 3rem; display: grid; grid-template-columns: 1.4fr auto; gap: 2rem; align-items: center;
+    padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;
   }
   .hp-cta-box::before {
     content: ''; position: absolute; inset: 0;
     background: radial-gradient(50% 120% at 100% 0%, rgba(75,146,219,0.22) 0%, rgba(75,146,219,0) 60%);
   }
   .hp-cta-box > * { position: relative; }
-  .hp-cta-box h2 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(1.7rem, 3.4vw, 2.6rem); line-height: 1.02; letter-spacing: -0.01em; }
-  .hp-cta-box p { color: rgba(255,255,255,0.7); margin-top: 0.9rem; line-height: 1.65; max-width: 52ch; }
-  .hp-cta-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 1080px) {
@@ -232,7 +229,7 @@
     .hp-feature-body { padding: 1.75rem 1.5rem 2rem; }
     .hp-pillars, .hp-exp { grid-template-columns: 1fr; }
     .hp-cta-band { padding: 0 1.25rem; margin-top: 4.5rem; }
-    .hp-cta-box { grid-template-columns: 1fr; padding: 2.5rem 1.5rem; }
+    .hp-cta-box { padding: 1.5rem; }
   }
   @media (max-width: 560px) {
     .hp-grid { grid-template-columns: 1fr; }
@@ -393,14 +390,8 @@
 <!-- CTA -->
 <section class="hp-cta-band">
   <div class="hp-cta-box">
-    <div>
-      <h2>Building toward<br>the front office</h2>
-      <p>Open to conversations about hockey and baseball operations, analytics and strategy roles.</p>
-    </div>
-    <div class="hp-cta-actions">
-      <a href="/connect" class="hp-btn gold">Get in touch <span class="arrow" aria-hidden="true">→</span></a>
-      <a href="https://www.linkedin.com/in/kyle-l-flynn/" target="_blank" rel="noopener" class="hp-btn ghost">LinkedIn</a>
-    </div>
+    <a href="/connect" class="hp-btn gold">Get in touch <span class="arrow" aria-hidden="true">→</span></a>
+    <a href="https://www.linkedin.com/in/kyle-l-flynn/" target="_blank" rel="noopener" class="hp-btn ghost">LinkedIn</a>
   </div>
 </section>
 {% endblock %}
