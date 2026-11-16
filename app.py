@@ -8,7 +8,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_file
 
 import whitesox_analysis
-from cubs import cubs_bp
 
 app = Flask(__name__)
 app.jinja_env.globals['enumerate'] = enumerate
@@ -31,7 +30,6 @@ CONFIG_FILE = os.path.join(DATA_FOLDER, 'config.json')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
-app.register_blueprint(cubs_bp)
 
 
 def allowed_file(filename):

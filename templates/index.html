@@ -15,17 +15,33 @@
     display: flex;
     align-items: center;
   }
+  .hp-hero-bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: 55% 45%;
+    filter: grayscale(0.35) brightness(0.55) contrast(1.05);
+  }
+  .hp-hero::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(11,18,32,0.94) 0%, rgba(11,18,32,0.82) 45%, rgba(11,18,32,0.55) 100%),
+      linear-gradient(0deg, rgba(11,18,32,0.9) 0%, rgba(11,18,32,0) 40%);
+  }
+  .hp-hero-credit {
+    position: absolute; right: 1rem; bottom: 0.75rem; z-index: 2;
+    font-size: 0.64rem; color: rgba(255,255,255,0.45);
+  }
+  .hp-hero-credit a { color: inherit; }
   .hp-hero::before {
     content: '';
-    position: absolute; inset: 0;
+    position: absolute; inset: 0; z-index: 1;
     background:
-      radial-gradient(60% 70% at 85% 30%, rgba(201,168,76,0.16) 0%, rgba(201,168,76,0) 60%),
+      radial-gradient(60% 70% at 85% 30%, rgba(75,146,219,0.16) 0%, rgba(75,146,219,0) 60%),
       linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px) 0 0 / 100% 64px,
       linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px) 0 0 / 64px 100%;
     pointer-events: none;
   }
   .hp-hero-inner {
-    position: relative; z-index: 1;
+    position: relative; z-index: 2;
     width: 100%; max-width: 1240px; margin: 0 auto;
     padding: 5rem 2rem 6rem;
     display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
@@ -115,10 +131,10 @@
   /* ── SECTIONS ── */
   .hp-section { max-width: 1240px; margin: 0 auto; padding: 6rem 2rem 0; }
   .hp-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2.25rem; }
-  .hp-kicker { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #9A7A2C; margin-bottom: 0.6rem; }
+  .hp-kicker { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #2563B0; margin-bottom: 0.6rem; }
   .hp-title { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: 0.92; color: var(--ink); }
   .hp-more { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--gold); padding-bottom: 0.25rem; }
-  .hp-more:hover { color: #9A7A2C; }
+  .hp-more:hover { color: #2563B0; }
 
   /* Featured work */
   .hp-feature {
@@ -136,12 +152,12 @@
   .hp-feature-desc { color: rgba(255,255,255,0.7); line-height: 1.65; font-size: 0.98rem; margin-bottom: 1.5rem; }
   .hp-read { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
 
-  .label { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #9A7A2C; }
+  .label { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #2563B0; }
   .label .lg { background: currentColor; color: inherit; }
   .label .pill { padding: 0.2rem 0.45rem; border-radius: 2px; background: var(--ink); color: var(--white); letter-spacing: 0.1em; }
   .hp-feature .label .pill { background: var(--gold); color: var(--ink); }
 
-  .hp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+  .hp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; }
   .hp-tile {
     display: flex; flex-direction: column; background: var(--white); border: 1px solid #E6E3DA; border-radius: 4px;
     overflow: hidden; text-decoration: none; color: var(--ink); transition: transform .2s ease, box-shadow .2s ease, border-color .2s;
@@ -153,7 +169,7 @@
   .hp-tile-fallback {
     position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 1rem;
     background:
-      linear-gradient(135deg, rgba(201,168,76,0.22) 0%, rgba(201,168,76,0) 55%),
+      linear-gradient(135deg, rgba(75,146,219,0.22) 0%, rgba(75,146,219,0) 55%),
       repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 14px),
       var(--ink);
     font-family: var(--display); font-weight: 800; text-transform: uppercase; color: var(--white);
@@ -166,7 +182,7 @@
   /* Pillars */
   .hp-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
   .hp-pillar { background: var(--white); border: 1px solid #E6E3DA; border-top: 4px solid var(--gold); border-radius: 4px; padding: 2rem 1.75rem; }
-  .hp-pillar-num { font-family: var(--display); font-weight: 800; font-size: 1rem; letter-spacing: 0.1em; color: #9A7A2C; }
+  .hp-pillar-num { font-family: var(--display); font-weight: 800; font-size: 1rem; letter-spacing: 0.1em; color: #2563B0; }
   .hp-pillar h3 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 1.9rem; line-height: 1; color: var(--ink); margin: 0.5rem 0 0.9rem; }
   .hp-pillar p { color: #4A4A52; line-height: 1.7; font-size: 0.96rem; margin-bottom: 1.1rem; }
   .hp-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
@@ -175,7 +191,7 @@
   /* Experience */
   .hp-exp { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
   .hp-exp-col { background: var(--white); border: 1px solid #E6E3DA; border-radius: 4px; padding: 1.75rem; }
-  .hp-exp-col h3 { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #9A7A2C; margin-bottom: 1.2rem; }
+  .hp-exp-col h3 { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #2563B0; margin-bottom: 1.2rem; }
   .hp-role-row { display: grid; grid-template-columns: 1fr auto; gap: 0.25rem 1rem; padding: 1rem 0; border-top: 1px solid #EEEBE3; }
   .hp-role-row:first-of-type { border-top: none; padding-top: 0; }
   .hp-role-title { font-weight: 700; color: var(--ink); }
@@ -190,7 +206,7 @@
   }
   .hp-cta-box::before {
     content: ''; position: absolute; inset: 0;
-    background: radial-gradient(50% 120% at 100% 0%, rgba(201,168,76,0.22) 0%, rgba(201,168,76,0) 60%);
+    background: radial-gradient(50% 120% at 100% 0%, rgba(75,146,219,0.22) 0%, rgba(75,146,219,0) 60%);
   }
   .hp-cta-box > * { position: relative; }
   .hp-cta-box h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(2.2rem, 4.5vw, 3.4rem); line-height: 0.92; }
@@ -227,6 +243,7 @@
 {% block content %}
 <!-- HERO -->
 <section class="hp-hero">
+  <img class="hp-hero-bg" src="{{ url_for('static', filename='img/home/nashville_skyline.jpg') }}" alt="" aria-hidden="true">
   <div class="hp-hero-inner">
     <div>
       <p class="hp-eyebrow hp-anim d1">Career in Sports</p>
@@ -259,10 +276,11 @@
         <div class="hp-card-row"><div class="k">Current</div><div class="v">Financial Analyst</div></div>
         <div class="hp-card-row"><div class="k">Based in</div><div class="v">Franklin, TN</div></div>
         <div class="hp-card-row"><div class="k">Education</div><div class="v">B.S. Finance, Concordia Wisconsin</div></div>
-        <div class="hp-card-row"><div class="k">On the field</div><div class="v">CUW Baseball, team captain</div></div>
+        <div class="hp-card-row"><div class="k">On the field</div><div class="v">CUW Baseball<br>Team Captain</div></div>
       </div>
     </aside>
   </div>
+  <div class="hp-hero-credit">Nashville skyline: Quintin Soloviev / <a href="https://commons.wikimedia.org/wiki/File:Nashville,_TN_skyline.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a></div>
 </section>
 
 <!-- CREDENTIAL BAND -->
@@ -270,7 +288,7 @@
   <div class="hp-band-inner">
     <div class="hp-band-item"><div class="hp-band-value">{{ posts | length }}</div><div class="hp-band-label">Front-office analyses published</div></div>
     <div class="hp-band-item"><div class="hp-band-value">MLB + NHL</div><div class="hp-band-label">Roster construction, trades and valuation</div></div>
-    <div class="hp-band-item"><div class="hp-band-value">4 Years</div><div class="hp-band-label">College baseball, varsity team captain</div></div>
+    <div class="hp-band-item"><div class="hp-band-value">4 Years</div><div class="hp-band-label">College baseball, Team Captain</div></div>
     <div class="hp-band-item"><div class="hp-band-value">FP&amp;A</div><div class="hp-band-label">Financial analyst: reporting, budgeting, EBITDA</div></div>
   </div>
 </section>
@@ -341,7 +359,7 @@
       <div class="hp-pillar-num">03</div>
       <h3>Inside the game</h3>
       <p>Four years of college baseball as a varsity captain, plus coaching, showcase data collection and game-day operations.</p>
-      <div class="hp-chips"><span class="hp-chip">Team captain</span><span class="hp-chip">Player development</span><span class="hp-chip">Showcase operations</span><span class="hp-chip">Game operations</span></div>
+      <div class="hp-chips"><span class="hp-chip">Team Captain</span><span class="hp-chip">Player development</span><span class="hp-chip">Showcase operations</span><span class="hp-chip">Game operations</span></div>
     </div>
   </div>
 </section>

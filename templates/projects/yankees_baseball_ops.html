@@ -5,7 +5,7 @@
 <style>
   :root {
     --ny: #0A1628;
-    --gold: #C9A84C;
+    --gold: #4B92DB;
     --red: #C8102E;
     --green: #2E7D32;
     --cream: #f8f5ee;
@@ -22,6 +22,10 @@
     position: relative;
     overflow: hidden;
   }
+  .lead-photo { max-width: 1000px; margin: -2rem auto 0; padding: 0 2rem; position: relative; z-index: 1; }
+  .lead-photo img { width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 60%; border-radius: 4px; box-shadow: 0 18px 40px rgba(12,35,64,0.18); }
+  .lead-photo figcaption { font-size: 0.78rem; color: var(--muted, #666); margin-top: 0.6rem; padding-left: 0.7rem; border-left: 2px solid var(--gold); }
+  .proj-header { padding-bottom: 5rem !important; }
   .proj-header::before {
     content: 'NYY';
     position: absolute;
@@ -465,6 +469,12 @@
     </div>
   </div>
 </section>
+
+<!-- ── LEAD PHOTO ── -->
+<figure class="lead-photo">
+  <img src="{{ url_for('static', filename='img/yankee_stadium.jpg') }}" alt="Yankee Stadium from behind home plate, with the interlocking NY logo painted on the grass">
+  <figcaption>Yankee Stadium, the Bronx.</figcaption>
+</figure>
 
 <!-- ── BODY ── -->
 <div class="proj-body">

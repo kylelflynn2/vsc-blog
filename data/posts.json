@@ -51,27 +51,9 @@
       "Payroll Analysis"
     ],
     "category": "baseball",
-    "image": null,
+    "image": "/static/img/yankee_stadium.jpg",
     "league": "MLB",
     "team": "Yankees"
-  },
-  {
-    "id": "3",
-    "title": "Cubs Optimal Lineup, Sabermetrics Not Salary",
-    "description": "OBP-first sabermetric lineup optimization for the 2026 Chicago Cubs. Generates two lineups — vs RHP and vs LHP — using platoon-adjusted OBP scoring and the Hungarian algorithm. Built from FanGraphs and Baseball Reference data. Includes interactive charts, per-player profiles, and full methodology.",
-    "date": "June 8, 2026",
-    "project_url": "/projects/cubs-2026",
-    "github_url": "https://github.com/colinflynn/baseball-stats",
-    "tags": [
-      "Baseball Analytics",
-      "Sabermetrics",
-      "Python",
-      "Optimization"
-    ],
-    "category": "baseball",
-    "image": null,
-    "league": "MLB",
-    "team": "Cubs"
   },
   {
     "id": "2",

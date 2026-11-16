@@ -23,7 +23,7 @@
             <label for="navToggle" class="nav-burger" aria-hidden="true"><span></span><span></span><span></span></label>
             <ul class="nav-menu">
                 <li><a href="/" class="nav-link{% if path == '/' %} active{% endif %}">Home</a></li>
-                <li><a href="/blog" class="nav-link{% if path.startswith('/blog') or path.startswith('/projects') or path.startswith('/cubs') %} active{% endif %}">Blog</a></li>
+                <li><a href="/blog" class="nav-link{% if path.startswith('/blog') or path.startswith('/projects') %} active{% endif %}">Blog</a></li>
                 <li><a href="/resume" class="nav-link{% if path.startswith('/resume') %} active{% endif %}">Resume</a></li>
                 <li><a href="/connect" class="nav-link nav-cta{% if path.startswith('/connect') %} active{% endif %}">Contact</a></li>
             </ul>
