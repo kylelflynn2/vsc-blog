@@ -282,6 +282,12 @@ def jordan_walker_2026():
     return render_template('projects/jordan_walker_2026.html')
 
 
+@app.route('/projects/brewers-offseason-2027')
+def brewers_offseason_2027():
+    """2027 Milwaukee Brewers Offseason Report."""
+    return render_template('projects/brewers_offseason_2027.html')
+
+
 @app.route('/projects/blackhawks-fix-2026')
 def blackhawks_fix_2026():
     """How to Fix the Chicago Blackhawks — hockey operations analysis."""

@@ -1,0 +1,613 @@
+{% extends "base.html" %}
+{% block title %}2027 Milwaukee Brewers Offseason Report · Kyle Flynn{% endblock %}
+
+{# Links for the report files. Leave empty until the file/link exists; the button only shows when set. #}
+{% set excel_url = '' %}
+{% set github_url = '' %}
+
+{% block extra_styles %}
+<style>
+    :root {
+        --br-navy: #12284B;
+        --br-navy-2: #0C1C36;
+        --br-gold: #FFC52F;
+        --br-gold-dk: #B8860B;
+        --br-paper: #F6F5F1;
+        --br-line: #E2E0DA;
+        --br-text: #253041;
+        --br-muted: #697386;
+        --br-pos: #1B7F3B;
+        --br-neg: #B42318;
+        --br-head: 'Montserrat', 'Arial Black', Arial, sans-serif;
+        --br-sans: 'Inter', -apple-system, 'Segoe UI', Arial, sans-serif;
+    }
+    body { background: var(--br-paper); }
+
+    /* ── MASTHEAD ── */
+    .br-mast { background: var(--br-navy); color: #fff; position: relative; overflow: hidden; }
+    .br-mast::before {
+        content: ''; position: absolute; inset: 0; pointer-events: none;
+        background:
+            linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px) 0 0 / 100% 48px,
+            linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px) 0 0 / 48px 100%;
+    }
+    .br-mast-inner {
+        position: relative; max-width: 1180px; margin: 0 auto; padding: 4rem 2rem 3.5rem;
+        display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 3rem; align-items: center;
+    }
+    .br-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.4rem; }
+    .br-chip {
+        font-family: var(--br-sans); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+        padding: 0.38rem 0.65rem; border-radius: 2px; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.88);
+    }
+    .br-chip.gold { background: var(--br-gold); border-color: var(--br-gold); color: var(--br-navy); }
+    .br-mast h1 {
+        font-family: var(--br-head); font-weight: 900; text-transform: uppercase;
+        font-size: clamp(2rem, 4.2vw, 3.4rem); line-height: 1.02; letter-spacing: -0.01em; margin-bottom: 1.4rem;
+    }
+    .br-mast h1 span { color: var(--br-gold); }
+    .br-byline { font-family: var(--br-sans); font-size: 0.9rem; color: rgba(255,255,255,0.7); }
+    .br-byline strong { color: #fff; }
+    .br-deadline {
+        display: inline-flex; align-items: center; gap: 0.6rem; margin-top: 1.4rem;
+        font-family: var(--br-sans); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+        background: rgba(255,197,47,0.12); border: 1px solid rgba(255,197,47,0.45); color: var(--br-gold);
+        padding: 0.55rem 0.85rem; border-radius: 2px;
+    }
+    .br-deadline .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--br-gold); box-shadow: 0 0 0 4px rgba(255,197,47,0.2); }
+    .br-mast-img { margin: 0; border-radius: 4px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.12); }
+    .br-mast-img img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+
+    /* ── KPI STRIP ── */
+    .br-kpis { background: var(--br-navy-2); color: #fff; border-top: 1px solid rgba(255,255,255,0.08); }
+    .br-kpis-inner { max-width: 1180px; margin: 0 auto; padding: 0 2rem; display: grid; grid-template-columns: repeat(4, 1fr); }
+    .br-kpi { padding: 1.5rem 1.5rem 1.6rem; border-left: 1px solid rgba(255,255,255,0.1); }
+    .br-kpi:first-child { border-left: none; padding-left: 0; }
+    .br-kpi-v { font-family: var(--br-head); font-weight: 900; font-size: 2rem; line-height: 1; color: var(--br-gold); font-variant-numeric: tabular-nums; }
+    .br-kpi-l { font-family: var(--br-sans); font-size: 0.78rem; line-height: 1.45; color: rgba(255,255,255,0.68); margin-top: 0.45rem; }
+
+    /* ── BODY ── */
+    .br-body { max-width: 880px; margin: 0 auto; padding: 3.5rem 2rem 2rem; }
+    .br-body p, .br-body li { font-family: var(--br-sans); font-size: 1.02rem; line-height: 1.78; color: var(--br-text); }
+    .br-body p { margin-bottom: 1.25rem; }
+    .br-body strong { color: var(--br-navy); }
+
+    .br-sec { margin-top: 3.75rem; scroll-margin-top: 84px; }
+    .br-sec-head { border-top: 3px solid var(--br-navy); padding-top: 1rem; margin-bottom: 1.4rem; display: flex; align-items: baseline; gap: 0.9rem; flex-wrap: wrap; }
+    .br-q { font-family: var(--br-sans); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--br-navy); background: var(--br-gold); padding: 0.25rem 0.5rem; border-radius: 2px; }
+    .br-sec h2 { font-family: var(--br-head); font-weight: 900; text-transform: uppercase; font-size: clamp(1.45rem, 3vw, 1.95rem); line-height: 1.1; color: var(--br-navy); letter-spacing: -0.01em; }
+    .br-body h3 { font-family: var(--br-head); font-weight: 800; text-transform: uppercase; font-size: 1.02rem; letter-spacing: 0.02em; color: var(--br-navy); margin: 2rem 0 0.8rem; }
+
+    /* Agenda */
+    .br-agenda { background: #fff; border: 1px solid var(--br-line); border-radius: 4px; margin: 1.5rem 0 1.75rem; }
+    .br-agenda-title { font-family: var(--br-sans); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--br-muted); padding: 0.9rem 1.2rem; border-bottom: 1px solid var(--br-line); }
+    .br-agenda ol { list-style: none; margin: 0; padding: 0; }
+    .br-agenda li { border-bottom: 1px solid var(--br-line); }
+    .br-agenda li:last-child { border-bottom: none; }
+    .br-agenda a { display: grid; grid-template-columns: 3rem 1fr auto; align-items: center; padding: 0.85rem 1.2rem; text-decoration: none; color: var(--br-navy); font-family: var(--br-sans); font-weight: 600; transition: background .15s; }
+    .br-agenda a:hover { background: #FBFAF6; }
+    .br-agenda .n { font-family: var(--br-head); font-weight: 900; color: var(--br-gold-dk); }
+    .br-agenda .go { color: var(--br-muted); font-size: 0.85rem; }
+
+    /* Tables */
+    .br-table-wrap { margin: 1.5rem 0 1.75rem; background: #fff; border: 1px solid var(--br-line); border-radius: 4px; overflow-x: auto; }
+    .br-table-cap { display: flex; justify-content: space-between; gap: 1rem; font-family: var(--br-sans); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #fff; background: var(--br-navy); padding: 0.7rem 1rem; }
+    .br-table-cap span:last-child { color: var(--br-gold); }
+    .br-table { width: 100%; border-collapse: collapse; font-family: var(--br-sans); font-size: 0.86rem; font-variant-numeric: tabular-nums; }
+    .br-table th { text-align: left; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--br-muted); background: #F3F2EC; padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--br-line); white-space: nowrap; }
+    .br-table td { padding: 0.7rem 0.85rem; border-bottom: 1px solid #EEECE6; color: var(--br-text); vertical-align: top; line-height: 1.45; }
+    .br-table tr:last-child td { border-bottom: none; }
+    .br-table td:first-child { font-weight: 700; color: var(--br-navy); white-space: nowrap; }
+    .br-table th.num, .br-table td.num { text-align: right; white-space: nowrap; }
+    .br-table td:nth-child(2) { white-space: nowrap; }
+    .br-table tr.total td { background: #FBF6E6; font-weight: 800; color: var(--br-navy); border-top: 2px solid var(--br-navy); }
+    .br-table tr.sub td { font-weight: 700; color: var(--br-navy); border-top: 1px solid var(--br-navy); }
+    .br-table tr.key td { background: #FBF6E6; }
+    .pos { color: var(--br-pos); font-weight: 700; }
+    .neg { color: var(--br-neg); font-weight: 700; }
+    .br-table.min { min-width: 640px; }
+
+    /* Inline WAR bars */
+    .warbar { display: flex; align-items: center; justify-content: flex-end; gap: 0.5rem; }
+    .warbar i { display: block; height: 8px; width: 64px; background: #ECEAE3; border-radius: 1px; position: relative; overflow: hidden; }
+    .warbar i::after { content: ''; position: absolute; inset: 0 auto 0 0; width: var(--w); background: var(--br-navy); }
+    .warbar.proj i::after { background: var(--br-gold); }
+
+    /* Payroll stacked bar */
+    .br-chart { background: #fff; border: 1px solid var(--br-line); border-radius: 4px; padding: 1.2rem 1.2rem 1.1rem; margin: 1.5rem 0 1.75rem; font-family: var(--br-sans); }
+    .br-chart-title { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--br-muted); margin-bottom: 0.9rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .br-chart-title b { color: var(--br-navy); }
+    .stack { display: flex; height: 34px; border-radius: 3px; overflow: hidden; gap: 2px; background: #fff; }
+    .stack span { display: block; height: 100%; }
+    .seg-g { background: var(--br-navy); }
+    .seg-a { background: #3A5A8C; }
+    .seg-p { background: #8EA3C4; }
+    .seg-b { background: #C3CEDF; }
+    .seg-r { background: var(--br-gold); }
+    .legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-top: 0.85rem; font-size: 0.8rem; color: var(--br-text); }
+    .legend span { display: inline-flex; align-items: center; gap: 0.45rem; }
+    .legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+    .legend b { font-variant-numeric: tabular-nums; }
+
+    /* Option compare bars */
+    .cmp { display: grid; gap: 1rem; }
+    .cmp-row { display: grid; grid-template-columns: 90px 1fr; gap: 0.9rem; align-items: center; }
+    .cmp-label { font-weight: 800; color: var(--br-navy); font-size: 0.85rem; }
+    .cmp-bar { position: relative; display: flex; height: 26px; border-radius: 3px; overflow: hidden; background: #ECEAE3; }
+    .cmp-bar .add { background: var(--br-gold); }
+    .cmp-bar .gap { background: repeating-linear-gradient(135deg, #D7DCE6 0 6px, #E8EBF1 6px 12px); }
+    .cmp-bar .fill { background: var(--br-navy); }
+    .cmp-bar .t { position: absolute; top: 50%; transform: translateY(-50%); font-size: 0.72rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .cmp-bar .t.in { left: 0.6rem; color: var(--br-navy); }
+    .cmp-bar .t.inw { left: 0.6rem; color: #fff; }
+    .cmp-bar .t.out { right: 0.6rem; color: var(--br-text); }
+    .cmp-bar .budget { position: absolute; top: -4px; bottom: -4px; right: 0; width: 2px; background: var(--br-neg); }
+    .cmp-note { font-size: 0.78rem; color: var(--br-muted); margin-top: 0.75rem; }
+
+    /* Fit checklist */
+    .br-checks { list-style: none; margin: 1.25rem 0 1.5rem; padding: 0; display: grid; gap: 0.6rem; }
+    .br-checks li { position: relative; background: #fff; border: 1px solid var(--br-line); border-left: 4px solid var(--br-gold); border-radius: 3px; padding: 0.85rem 1rem 0.85rem 2.6rem; line-height: 1.6 !important; font-size: 0.98rem !important; }
+    .br-checks li::before { content: '✓'; position: absolute; left: 1rem; top: 0.82rem; font-weight: 900; color: var(--br-navy); }
+
+    /* Callout used for the two signing options */
+    .br-option { margin: 2rem 0 0.5rem; display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; }
+    .br-option .tag { font-family: var(--br-head); font-weight: 900; font-size: 0.85rem; color: var(--br-navy); background: var(--br-gold); padding: 0.3rem 0.55rem; border-radius: 2px; text-transform: uppercase; }
+    .br-option .t { font-family: var(--br-sans); font-weight: 700; color: var(--br-navy); }
+
+    /* Files + sources */
+    .br-files { margin-top: 1.25rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .br-file {
+        display: inline-flex; align-items: center; gap: 0.6rem; text-decoration: none;
+        font-family: var(--br-sans); font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+        padding: 0.85rem 1.2rem; border-radius: 2px; background: var(--br-navy); color: #fff; transition: transform .15s, background .2s;
+    }
+    .br-file:hover { transform: translateY(-2px); background: #1B3A6B; }
+    .br-file.gold { background: var(--br-gold); color: var(--br-navy); }
+    .br-file.gold:hover { background: #FFD25C; }
+    .br-sources { margin-top: 1rem; padding: 0; list-style: none; }
+    .br-sources li { font-size: 0.86rem !important; line-height: 1.55 !important; color: var(--br-muted) !important; padding: 0.45rem 0; border-bottom: 1px solid #EEECE6; }
+
+    @media (max-width: 900px) {
+        .br-mast-inner { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 1.25rem 2.5rem; }
+        .br-kpis-inner { grid-template-columns: repeat(2, 1fr); padding: 0 1.25rem; }
+        .br-kpi { padding: 1.2rem 1rem; }
+        .br-kpi:nth-child(3) { border-left: none; padding-left: 0; }
+        .br-kpi:nth-child(n+3) { border-top: 1px solid rgba(255,255,255,0.1); }
+        .br-body { padding: 2.5rem 1.25rem 1rem; }
+    }
+    @media (max-width: 560px) {
+        .cmp-row { grid-template-columns: 1fr; gap: 0.35rem; }
+        .warbar i { width: 40px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- MASTHEAD -->
+<header class="br-mast">
+    <div class="br-mast-inner">
+        <div>
+            <div class="br-chips">
+                <span class="br-chip gold">Baseball Operations</span>
+                <span class="br-chip">Offseason Report</span>
+                <span class="br-chip">MLB · Brewers</span>
+            </div>
+            <h1>2027 Milwaukee Brewers <span>Offseason Report</span></h1>
+            <div class="br-byline">By <strong>Kyle Flynn</strong> &nbsp;·&nbsp; Nov. 17, 2026</div>
+            <div class="br-deadline"><span class="dot" aria-hidden="true"></span>CBA expires Dec. 1, 11:59 p.m. ET</div>
+        </div>
+        <figure class="br-mast-img">
+            <img src="{{ url_for('static', filename='img/brewers/header.jpg') }}" alt="Milwaukee Brewers ball-in-glove logo over a blurred view of the ballpark">
+        </figure>
+    </div>
+</header>
+
+<!-- KPI STRIP -->
+<section class="br-kpis" aria-label="Key figures">
+    <div class="br-kpis-inner">
+        <div class="br-kpi"><div class="br-kpi-v">7.8</div><div class="br-kpi-l">2027 projected WAR lost with six departures</div></div>
+        <div class="br-kpi"><div class="br-kpi-v">$119.4M</div><div class="br-kpi-l">Already owed for 2027</div></div>
+        <div class="br-kpi"><div class="br-kpi-v">$22.6M</div><div class="br-kpi-l">Room to spend under a $142M budget</div></div>
+        <div class="br-kpi"><div class="br-kpi-v">Dec. 1</div><div class="br-kpi-l">CBA expires; a lockout would freeze all transactions</div></div>
+    </div>
+</section>
+
+<article class="br-body">
+
+    <p>Baseball may soon come to a halt. The collective bargaining agreement between MLB and the MLB Players Association expires on Dec. 1 at 11:59 p.m. ET, and the league is widely expected to lock out the players as soon as it does. A lockout would freeze all transactions, including free agent signings and trades. Any move a team wants to make this winter has to happen before then.</p>
+
+    <p>The Milwaukee Brewers enter this offseason coming off the first World Series title in franchise history, but the championship roster is already changing. Several players will not be brought back, and Jake Bauers and Dustin May have already signed with new teams.</p>
+
+    <p>With the deadline approaching, this report answers five questions:</p>
+
+    <nav class="br-agenda" aria-label="Five questions">
+        <div class="br-agenda-title">This report answers</div>
+        <ol>
+            <li><a href="#lost"><span class="n">01</span>What did we lose?<span class="go">→</span></a></li>
+            <li><a href="#money"><span class="n">02</span>How much money do we have?<span class="go">→</span></a></li>
+            <li><a href="#sign"><span class="n">03</span>Who should we pursue?<span class="go">→</span></a></li>
+            <li><a href="#wins"><span class="n">04</span>Do they replace the wins we've lost?<span class="go">→</span></a></li>
+            <li><a href="#fit"><span class="n">05</span>Do they fit what we're trying to do?<span class="go">→</span></a></li>
+        </ol>
+    </nav>
+
+    <p>I approached this the way a front office would, building the analysis in Excel and SQL. Every number in this report comes from those files.</p>
+
+    <!-- Q1 -->
+    <section class="br-sec" id="lost">
+        <div class="br-sec-head"><span class="br-q">Question 1</span><h2>What did we lose?</h2></div>
+
+        <p>Six players have departed. They totaled 9.7 WAR in 2026, but May, Romero and Senzatela all joined Milwaukee at the Aug. 3 trade deadline, so much of that production came with other teams. What matters for 2027 is what the six would have been worth next season. FanGraphs projects them for 7.8 WAR in 2027, which is the total I set out to replace.</p>
+
+        <div class="br-table-wrap">
+            <div class="br-table-cap"><span>Departures</span><span>fWAR</span></div>
+            <table class="br-table min">
+                <thead><tr><th>Player</th><th>Pos</th><th class="num">Age '27</th><th class="num">2026 WAR</th><th class="num">2027 Proj WAR</th><th>What happened</th></tr></thead>
+                <tbody>
+                    <tr><td>Jake Bauers</td><td>1B/OF</td><td class="num">31</td><td class="num"><span class="warbar"><i style="--w:90%"></i>3.6</span></td><td class="num"><span class="warbar proj"><i style="--w:52.5%"></i>2.1</span></td><td>Declined $23.15M, signed with Boston (4 yrs / $58M)</td></tr>
+                    <tr><td>Dustin May</td><td>SP</td><td class="num">29</td><td class="num"><span class="warbar"><i style="--w:70%"></i>2.8</span></td><td class="num"><span class="warbar proj"><i style="--w:50%"></i>2.0</span></td><td>Acquired from STL at the deadline; signed with the White Sox (3 yrs / $52.5M)</td></tr>
+                    <tr><td>Brandon Woodruff</td><td>SP</td><td class="num">34</td><td class="num"><span class="warbar"><i style="--w:30%"></i>1.2</span></td><td class="num"><span class="warbar proj"><i style="--w:50%"></i>2.0</span></td><td>Free agent, shoulder kept him out after July 4</td></tr>
+                    <tr><td>Antonio Senzatela</td><td>RP</td><td class="num">32</td><td class="num"><span class="warbar"><i style="--w:27.5%"></i>1.1</span></td><td class="num"><span class="warbar proj"><i style="--w:5%"></i>0.2</span></td><td>Acquired from COL at the deadline; free agent</td></tr>
+                    <tr><td>Gary Sánchez</td><td>C</td><td class="num">34</td><td class="num"><span class="warbar"><i style="--w:20%"></i>0.8</span></td><td class="num"><span class="warbar proj"><i style="--w:27.5%"></i>1.1</span></td><td>Brewers declined their side of the mutual option</td></tr>
+                    <tr><td>JoJo Romero</td><td>RP</td><td class="num">30</td><td class="num"><span class="warbar"><i style="--w:5%"></i>0.2</span></td><td class="num"><span class="warbar proj"><i style="--w:10%"></i>0.4</span></td><td>Acquired from STL at the deadline; free agent</td></tr>
+                    <tr class="total"><td>Total</td><td></td><td></td><td class="num">9.7</td><td class="num">7.8</td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>Bauers is the most significant loss. He hit .266/.389/.484 with 26 home runs and a 143 wRC+. On the pitching side, the departures of May and Woodruff leave at least one rotation spot open.</p>
+    </section>
+
+    <!-- Q2 -->
+    <section class="br-sec" id="money">
+        <div class="br-sec-head"><span class="br-q">Question 2</span><h2>How much money do we have?</h2></div>
+
+        <p>The Brewers already owe approximately $119.4 million for 2027. With a budget of roughly $142 million, that leaves $22.6 million available to spend.</p>
+
+        <div class="br-chart" role="img" aria-label="2027 budget of 142 million dollars: 62.61 guaranteed, 42.80 arbitration, 12.00 pre-arbitration, 2.00 buyouts, 22.59 room to spend">
+            <div class="br-chart-title"><span>2027 budget allocation</span><b>$142.0M</b></div>
+            <div class="stack">
+                <span class="seg-g" style="width:44.09%"></span>
+                <span class="seg-a" style="width:30.14%"></span>
+                <span class="seg-p" style="width:8.45%"></span>
+                <span class="seg-b" style="width:1.41%"></span>
+                <span class="seg-r" style="width:15.91%"></span>
+            </div>
+            <div class="legend">
+                <span><i class="seg-g"></i>Guaranteed <b>$62.61M</b></span>
+                <span><i class="seg-a"></i>Arbitration (est.) <b>$42.80M</b></span>
+                <span><i class="seg-p"></i>Pre-arb / non-guaranteed <b>$12.00M</b></span>
+                <span><i class="seg-b"></i>Buyouts <b>$2.00M</b></span>
+                <span><i class="seg-r"></i>Room to spend <b>$22.59M</b></span>
+            </div>
+        </div>
+
+        <div class="br-table-wrap">
+            <div class="br-table-cap"><span>2027 payroll ledger</span><span>$M</span></div>
+            <table class="br-table">
+                <thead><tr><th>What they owe</th><th class="num">$M</th></tr></thead>
+                <tbody>
+                    <tr><td>Guaranteed contracts</td><td class="num">62.61</td></tr>
+                    <tr><td>Arbitration (estimated)</td><td class="num">42.80</td></tr>
+                    <tr><td>Pre-arbitration / non-guaranteed</td><td class="num">12.00</td></tr>
+                    <tr><td>Buyouts</td><td class="num">2.00</td></tr>
+                    <tr class="sub"><td>Total already owed</td><td class="num">119.41</td></tr>
+                    <tr><td>2027 budget (assumption)</td><td class="num">142.00</td></tr>
+                    <tr class="total"><td>Room to spend</td><td class="num">22.59</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>The $142 million budget is based on 2026 spending. Front Office Sports reported the Brewers' payroll at $141.9 million in September, 20th in MLB. This assumes the organization holds payroll roughly flat. If ownership spends more after a championship season, the plan only becomes easier to execute.</p>
+    </section>
+
+    <!-- Method -->
+    <section class="br-sec" id="method">
+        <div class="br-sec-head"><h2>How I valued players</h2></div>
+
+        <p>I used four measures to evaluate every option.</p>
+
+        <p><strong>1. WAR from FanGraphs.</strong> All WAR figures in this report, both 2026 results and 2027 projections, are FanGraphs WAR (fWAR). For pitchers, FanGraphs calculates WAR from FIP rather than runs allowed, which reduces the influence of defense and luck.</p>
+
+        <p><strong>2. Prices from ESPN and Spotrac.</strong> For contract costs, I used ESPN's contract projections. When ESPN did not project a player, I used Spotrac's market value. ESPN was the primary source because Spotrac's figures were often unrealistic. When neither source listed a player, I estimated a price from his 2026 salary and labeled it as an estimate.</p>
+
+        <p><strong>3. The price of a win.</strong> Teams pay more per win for better players because high-end production is scarcer. Based on last winter's signings, FanGraphs identified three price levels:</p>
+
+        <div class="br-table-wrap">
+            <div class="br-table-cap"><span>Price per win</span><span>FanGraphs</span></div>
+            <table class="br-table">
+                <thead><tr><th>Projected WAR</th><th class="num">Price per win</th></tr></thead>
+                <tbody>
+                    <tr><td>Under 1 WAR</td><td class="num">$7.37M</td></tr>
+                    <tr><td>1 to 2 WAR</td><td class="num">$8.60M</td></tr>
+                    <tr><td>2+ WAR</td><td class="num">$11.76M</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>Multiplying a player's projected WAR by his price per win gives the market value of that production. Subtracting his actual salary gives his surplus. A positive surplus means the team is getting more value than it is paying for.</p>
+
+        <p><strong>4. ERA minus FIP.</strong> FIP measures only what a pitcher controls: strikeouts, walks and home runs. When a pitcher's ERA is well above his FIP, he likely pitched through bad luck or poor defense and may be a buy-low candidate. Milwaukee has consistently targeted these pitchers and gotten more out of them.</p>
+    </section>
+
+    <!-- Free agents -->
+    <section class="br-sec" id="free-agents">
+        <div class="br-sec-head"><h2>Working through the 2027 free agents</h2></div>
+
+        <p>I began by reviewing every available 2027 free agent. The Brewers lost significant contributors from their World Series roster, and the goal is to replace them without overspending.</p>
+
+        <p>Last season the Brewers spent approximately $142 million. With Bauers, May, Woodruff and the rest of the 2027 free agents off the books, the team has roughly $22 million to spend.</p>
+
+        <p><strong>First base:</strong> This was the starting point. Jake Bauers outperformed his contract last season, and his production will be very difficult to replace. He hit .266/.389/.484 with 26 home runs, a 143 wRC+ and 3.6 WAR.</p>
+
+        <p>Nathaniel Lowe was the first option I considered. However, he projects to cost roughly $8 million, more than a third of the available budget, and FanGraphs projects him for only 0.8 WAR in 2027. I concluded that no first baseman in free agency could replace Bauers' production at a reasonable price.</p>
+
+        <p>That leaves Andrew Vaughn as the only established first baseman on the roster, and he was used primarily in a platoon role last season. The Brewers have two strong first base prospects in Blake Burke and Andrew Fischer, but neither has played in the majors. Burke was named Southern League MVP after hitting .285/.367/.603 with 30 home runs at Double-A Biloxi, then hit .236 in his first 14 games after a promotion to Triple-A Nashville. Fischer hit 46 home runs between High-A and Double-A. FanGraphs projects them for only 70 and 91 plate appearances in 2027, so neither can be counted on to replace Bauers yet.</p>
+
+        <p>One player worth pursuing on a minor-league deal is LaMonte Wade Jr. As a left-handed hitter, Wade could handle first base against right-handed pitching. This is a buy-low opportunity: if he has a breakout season similar to Bauers', it is a significant plus, and if he does not, the cost is minimal because he is on a minor-league deal. The plan would be to sign him and have him compete with Burke for a roster spot in spring training. I also reviewed the trade market for a left-handed first baseman; those options are at the end of this report.</p>
+
+        <p><strong>Starting pitching:</strong> This looked like the biggest need, with at least one rotation spot open. I started by looking at David Peterson and Kris Bubic. Bubic posted 1.1 WAR in limited time, but ESPN projects him as a reliever, and his injury history is a concern. He had Tommy John surgery in 2023 and missed the second half of 2025 with a rotator cuff strain. In 2026 he went on the IL in May with elbow soreness, then suffered a shoulder setback during his rehab that moved him to the 60-day IL. As a result, he is not the best fit.</p>
+
+        <p>Erick Fedde also caught my eye, but his 3.83 ERA sat well below his 5.01 FIP, the luckiest ERA of any pitcher I evaluated. That makes him a strong risk for a regression, so I elected to pass on pursuing him.</p>
+
+        <p>I also evaluated Zac Gallen. Milwaukee has an outstanding track record of developing pitchers, and Spotrac valued him at about $7 million, so pairing Peterson and Gallen for a combined $13 to $14 million was appealing. However, ESPN projects Gallen at $12 million, and his 5.34 FIP was the worst of any pitcher I evaluated, so he stays on the list only as a buy-low option.</p>
+
+        <p>The internal options changed the question. Misiorowski, Henderson, Gasser and Harrison give Milwaukee four starters, with Shane Drohan and Chad Patrick competing for the fifth spot. Drohan threw 124.2 innings with a 3.73 FIP in 2026, and Patrick posted a 3.40 ERA over 106 innings. If that group holds up, the Brewers do not need a starter. They can add multiple relievers instead and stay well under budget.</p>
+
+        <p>However, if Harrison does not return to form, or Drohan and Patrick are not the answer for the fifth spot, Milwaukee will need a starter. David Peterson is the best value, and Michael Soroka is the backup plan if Peterson signs elsewhere.</p>
+
+        <p><strong>Bullpen:</strong> With Romero and Senzatela gone, the Brewers need bullpen help on both sides. On the right side, Kevin Ginkel is the best fit. His 3.50 FIP was well below his 4.12 ERA, another buy-low scenario, and he projects for 0.6 WAR, the same as Jonathan Loáisiga, at roughly a third of the price. On the left side, Ashby and Hall return, with Drohan joining them if he does not win the fifth starter spot, and Tyler Alexander is a cost-effective replacement for Romero.</p>
+
+        <p><strong>The rest of the roster:</strong> For backup catcher, I wanted to get younger, so Bo Naylor takes the role rather than spending on a veteran. The Brewers also just acquired Ryan Walker, who covers Senzatela's innings in the bullpen.</p>
+
+        <p>That led to two options if Milwaukee decides it needs a starter.</p>
+    </section>
+
+    <!-- Q3 -->
+    <section class="br-sec" id="sign">
+        <div class="br-sec-head"><span class="br-q">Question 3</span><h2>Who do we sign?</h2></div>
+
+        <p>If the current rotation holds up, the Brewers can skip the starter market and sign multiple relievers. Signing Kevin Ginkel and Tyler Alexander, for example, would cost about $5.5 million combined and leave payroll roughly $17 million under budget.</p>
+
+        <p>However, if Harrison is not the guy, or Drohan and Patrick are not the answer for the fifth spot, these are the players the Brewers should go after. Both options add one starter and one reliever, with Michael Soroka as the backup plan if Peterson signs elsewhere.</p>
+
+        <div class="br-option"><span class="tag">Option A</span><span class="t">One starter and a left-handed reliever.</span></div>
+        <div class="br-table-wrap">
+            <div class="br-table-cap"><span>Option A</span><span>$13.0M · 2.3 new WAR</span></div>
+            <table class="br-table min">
+                <thead><tr><th>Player</th><th>Pos</th><th class="num">Age '27</th><th>Replaces</th><th>How</th><th class="num">2027 Proj WAR</th><th class="num">2027 $ ($M)</th></tr></thead>
+                <tbody>
+                    <tr class="key"><td>David Peterson</td><td>SP (L)</td><td class="num">31</td><td>May's starts</td><td>Free agent, 2 yrs</td><td class="num">2.0</td><td class="num">11.0</td></tr>
+                    <tr class="key"><td>Tyler Alexander</td><td>RP (L)</td><td class="num">32</td><td>Romero (lefty relief)</td><td>Free agent, 2 yrs</td><td class="num">0.2</td><td class="num">2.0</td></tr>
+                    <tr><td>Bo Naylor</td><td>C</td><td class="num">27</td><td>Sánchez (backup C)</td><td>Already on roster (acquired Aug. 2026)</td><td class="num">0.2</td><td class="num">0.0</td></tr>
+                    <tr><td>Ryan Walker</td><td>RP</td><td class="num">31</td><td>Senzatela</td><td>Already acquired (Nov. 2026)</td><td class="num">0.0</td><td class="num">0.0</td></tr>
+                    <tr><td>LaMonte Wade Jr.</td><td>1B</td><td class="num">33</td><td>Lefty half of the Vaughn platoon</td><td>Minor-league deal</td><td class="num">0.1</td><td class="num">0.0</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>David Peterson is the best value on the board. His 4.79 ERA is misleading; his FIP was 3.96, nearly a full run better, which fits the profile Milwaukee has targeted successfully. FanGraphs projects him for 2.0 WAR in 2027, worth about $23.5 million on the open market, and ESPN prices him at $11 million a year. That is $12.5 million of surplus value.</p>
+
+        <p>Tyler Alexander is a cost-effective left-hander to replace Romero. His FIP (3.10) was better than his ERA (3.70), and $2 million is a low-risk price.</p>
+
+        <p>The other three moves add nothing to payroll. To get younger at backup catcher, Bo Naylor takes over Sánchez's role. Ryan Walker is already on the roster and covers Senzatela's innings. At first base, LaMonte Wade Jr. on a minor-league deal gives Andrew Vaughn a left-handed platoon partner, with Blake Burke developing behind them.</p>
+
+        <div class="br-option"><span class="tag">Option B</span><span class="t">One starter and a right-handed reliever.</span></div>
+        <div class="br-table-wrap">
+            <div class="br-table-cap"><span>Option B</span><span>$14.5M · 2.7 new WAR</span></div>
+            <table class="br-table min">
+                <thead><tr><th>Player</th><th>Pos</th><th class="num">Age '27</th><th>Role</th><th>How</th><th class="num">2027 Proj WAR</th><th class="num">2027 $ ($M)</th></tr></thead>
+                <tbody>
+                    <tr class="key"><td>David Peterson</td><td>SP (L)</td><td class="num">31</td><td>May's starts</td><td>Free agent, 2 yrs</td><td class="num">2.0</td><td class="num">11.0</td></tr>
+                    <tr class="key"><td>Kevin Ginkel</td><td>RP (R)</td><td class="num">33</td><td>Right-handed setup</td><td>Free agent, 2 yrs</td><td class="num">0.6</td><td class="num">3.5 (est.)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>Kevin Ginkel replaces Alexander in this option, filling the right-handed setup role. He threw 67.2 innings in 2026 with a 3.50 FIP and a 26.2% strikeout rate, and projects for 0.6 WAR with a 3.64 FIP. Neither ESPN nor Spotrac lists a price for him, so I estimated $3.5 million based on his $2.7 million salary in 2026. Peterson, Naylor, Walker and Wade stay the same.</p>
+
+        <p>Michael Soroka is the backup plan in both options. If Peterson signs elsewhere, Soroka steps into his spot for only $1 million more, and he is still worth a look as a second starter if the rotation falls short. He threw 116 innings for the Diamondbacks in 2026 with a 3.41 ERA, 3.19 FIP and 2.7 WAR, and FanGraphs projects him for 1.8 WAR in 2027, worth about $15.5 million. At $12 million a year on a two-year deal, that is $3.5 million of surplus value, and adding him on top of either option would put payroll only $2.4 to $3.9 million over budget.</p>
+
+        <p>Trevor Megill is one player I would keep rather than trade. The Brewers are reportedly listening to offers for their closer, who is entering his final year of arbitration with a projected $8 million salary. However, Megill was the second most valuable pitcher on the staff in 2026, behind only Misiorowski, posting a 2.63 ERA, 1.85 FIP and 2.5 WAR over 61.2 innings. With Romero and Senzatela already gone, trading him would open another hole in a bullpen this plan is trying to fill. Keeping Megill alongside Uribe gives Milwaukee two proven late-inning arms, and his salary is already part of the arbitration estimate in the payroll above, so keeping him does not change the budget.</p>
+    </section>
+
+    <!-- Q4 -->
+    <section class="br-sec" id="wins">
+        <div class="br-sec-head"><span class="br-q">Question 4</span><h2>Do they replace the wins we lost?</h2></div>
+
+        <p>Partially. I counted only players who were not on the 2026 Brewers, since anyone already on the roster was part of last year's production. Option A adds 2.3 projected wins for $13 million, and Option B adds 2.7 for $14.5 million, against the 7.8 lost. Naylor is not counted because he joined the team in August 2026.</p>
+
+        <div class="br-table-wrap">
+            <div class="br-table-cap"><span>Option comparison</span><span>2027</span></div>
+            <table class="br-table">
+                <thead><tr><th></th><th class="num">Option A</th><th class="num">Option B</th></tr></thead>
+                <tbody>
+                    <tr><td>New money</td><td class="num">$13.0M</td><td class="num">$14.5M</td></tr>
+                    <tr><td>Payroll after moves</td><td class="num">$132.4M</td><td class="num">$133.9M</td></tr>
+                    <tr><td>Under budget</td><td class="num pos">$9.6M</td><td class="num pos">$8.1M</td></tr>
+                    <tr><td>Wins lost (2027 proj.)</td><td class="num">7.8</td><td class="num">7.8</td></tr>
+                    <tr><td>Wins added by new players (2027 proj.)</td><td class="num">2.3</td><td class="num">2.7</td></tr>
+                    <tr class="total"><td>Gap remaining</td><td class="num">5.5</td><td class="num">5.1</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="br-chart" role="img" aria-label="Of 7.8 projected wins lost, Option A adds 2.3 leaving a 5.5 gap; Option B adds 2.7 leaving a 5.1 gap. Payroll after moves is 132.4 million for A and 133.9 million for B against a 142 million budget.">
+            <div class="br-chart-title"><span>Wins added vs. 7.8 lost</span><span>
+                <span class="legend" style="margin:0;display:inline-flex;"><span><i class="seg-r"></i>Added</span><span><i style="background:repeating-linear-gradient(135deg,#D7DCE6 0 3px,#E8EBF1 3px 6px)"></i>Gap</span></span>
+            </span></div>
+            <div class="cmp">
+                <div class="cmp-row"><div class="cmp-label">Option A</div><div class="cmp-bar"><span class="add" style="width:29.49%"></span><span class="gap" style="width:70.51%"></span><span class="t in">+2.3</span><span class="t out">5.5 gap</span></div></div>
+                <div class="cmp-row"><div class="cmp-label">Option B</div><div class="cmp-bar"><span class="add" style="width:34.62%"></span><span class="gap" style="width:65.38%"></span><span class="t in">+2.7</span><span class="t out">5.1 gap</span></div></div>
+            </div>
+            <div class="br-chart-title" style="margin-top:1.4rem;"><span>Payroll after moves vs. $142M budget</span></div>
+            <div class="cmp">
+                <div class="cmp-row"><div class="cmp-label">Option A</div><div class="cmp-bar"><span class="fill" style="width:93.24%"></span><span class="t inw">$132.4M</span><span class="t out">$9.6M under</span><span class="budget" aria-hidden="true"></span></div></div>
+                <div class="cmp-row"><div class="cmp-label">Option B</div><div class="cmp-bar"><span class="fill" style="width:94.30%"></span><span class="t inw">$133.9M</span><span class="t out">$8.1M under</span><span class="budget" aria-hidden="true"></span></div></div>
+            </div>
+            <div class="cmp-note">Red line marks the $142M budget.</div>
+        </div>
+
+        <p>Both options leave the Brewers under budget, Option A by $9.6 million and Option B by $8.1 million. That leaves flexibility to add Michael Soroka or another reliever if the rotation is not producing.</p>
+
+        <p>The remaining gap of 5.1 to 5.5 wins is larger because both options rely on the internal rotation, not free agents, to cover May's and Woodruff's innings. Buying back all 7.8 wins at market prices would cost an estimated $67 to $92 million, which is beyond Milwaukee's spending model. The internal options do not close the gap on their own. Harrison, Drohan, Patrick, Vaughn and Burke were all in the organization in 2026, so their production is already counted, and FanGraphs' 2027 projections expect most of them to take a step back:</p>
+
+        <div class="br-table-wrap">
+            <div class="br-table-cap"><span>Internal options</span><span>fWAR</span></div>
+            <table class="br-table">
+                <thead><tr><th>Player</th><th class="num">2026 WAR</th><th class="num">2027 Proj WAR</th><th class="num">Change</th></tr></thead>
+                <tbody>
+                    <tr><td>Kyle Harrison</td><td class="num">1.7</td><td class="num">1.8</td><td class="num pos">+0.1</td></tr>
+                    <tr><td>Shane Drohan</td><td class="num">2.0</td><td class="num">1.1</td><td class="num neg">–0.9</td></tr>
+                    <tr><td>Chad Patrick</td><td class="num">0.7</td><td class="num">0.3</td><td class="num neg">–0.4</td></tr>
+                    <tr><td>Andrew Vaughn</td><td class="num">1.6</td><td class="num">1.2</td><td class="num neg">–0.4</td></tr>
+                    <tr><td>Blake Burke</td><td class="num">0.0 (minors)</td><td class="num">0.0</td><td class="num">0.0</td></tr>
+                    <tr class="total"><td>Total</td><td class="num">6.0</td><td class="num">4.4</td><td class="num neg">–1.6</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>As a group, those five project for 1.6 fewer wins than they produced in 2026. Across the entire roster, FanGraphs projects the current Brewers for 44.4 WAR in 2027, down from 48.7 in 2026. The rest of the gap depends on Milwaukee beating its projections, which has been the norm: FanGraphs noted that ZiPS underestimated the 2026 Brewers by more than a dozen wins. There is also upside the projections do not capture. FanGraphs projects Patrick only in relief and gives Drohan just 53 innings as a starter, so whichever of them wins the fifth spot should outperform his projection. Still, this is the strongest reason to keep Michael Soroka in mind as a second starter if the rotation starts slowly.</p>
+    </section>
+
+    <!-- Q5 -->
+    <section class="br-sec" id="fit">
+        <div class="br-sec-head"><span class="br-q">Question 5</span><h2>Do they fit what we're trying to do?</h2></div>
+
+        <p>Every move is consistent with how Milwaukee builds its roster.</p>
+
+        <ul class="br-checks">
+            <li><strong>Short-term commitments.</strong> Every deal is two years or less: Peterson, Alexander, Ginkel and Soroka for two. With a new CBA coming and the rules uncertain, this avoids locking in long-term money.</li>
+            <li><strong>Buy low on pitching.</strong> All three free agents posted a FIP better than their ERA (Peterson by 0.83, Ginkel by 0.62, Alexander by 0.60). The Brewers have built their success on acquiring these pitchers at a discount and improving them.</li>
+            <li><strong>Get younger.</strong> Using Naylor at catcher and Burke at first base, rather than paying for veterans, keeps opportunities open for the young players expected to close the remaining gap.</li>
+            <li><strong>Payroll discipline.</strong> Both options keep payroll around $132 to $134 million, $8 to $10 million under budget.</li>
+            <li><strong>Balance.</strong> Peterson is left-handed, Option A adds a lefty in Romero's role, and Option B adds the right-handed setup arm the bullpen needs. Wade gives the right-handed Vaughn a left-handed platoon partner.</li>
+            <li><strong>Completed before Dec. 1.</strong> None of these are headline signings that take all winter. All of them can be completed before a lockout freezes the market.</li>
+        </ul>
+    </section>
+
+    <!-- Passed on -->
+    <section class="br-sec" id="passed">
+        <div class="br-sec-head"><h2>Players I passed on</h2></div>
+
+        <p>I evaluated more than 30 free agents in detail. The table below explains why the main alternatives did not make the final plan.</p>
+
+        <div class="br-table-wrap">
+            <div class="br-table-cap"><span>Free agents passed on</span><span>Surplus = market value − price</span></div>
+            <table class="br-table min">
+                <thead><tr><th>Player</th><th>Pos</th><th class="num">Age '27</th><th class="num">Price ($M)</th><th class="num">Surplus ($M)</th><th>Why not</th></tr></thead>
+                <tbody>
+                    <tr><td>Michael Soroka</td><td>SP</td><td class="num">29</td><td class="num">12.0</td><td class="num pos">+3.5</td><td>Backup plan if Peterson signs elsewhere</td></tr>
+                    <tr><td>Dustin May</td><td>SP</td><td class="num">29</td><td class="num">17.5</td><td class="num pos">+6.0</td><td>Signed with the White Sox (3 yrs / $52.5M)</td></tr>
+                    <tr><td>Zac Gallen</td><td>SP</td><td class="num">31</td><td class="num">12.0</td><td class="num">—</td><td>Worst FIP in the group (5.34), but Milwaukee's development track record makes him a possible buy-low</td></tr>
+                    <tr><td>Matthew Boyd</td><td>SP</td><td class="num">36</td><td class="num">10.0</td><td class="num pos">+6.3</td><td>Age</td></tr>
+                    <tr><td>Kris Bubic</td><td>SP</td><td class="num">29</td><td class="num">9.0</td><td class="num">—</td><td>ESPN prices him as a reliever; arm injury history</td></tr>
+                    <tr><td>Casey Mize</td><td>SP</td><td class="num">30</td><td class="num">15.0</td><td class="num neg">–0.4</td><td>Price</td></tr>
+                    <tr><td>Nick Martinez</td><td>SP</td><td class="num">36</td><td class="num">17.5</td><td class="num neg">–2.9</td><td>His ERA beat his FIP, and age</td></tr>
+                    <tr><td>Erick Fedde</td><td>SP</td><td class="num">34</td><td class="num">6.0</td><td class="num neg">–2.3</td><td>Low ERA but high FIP (3.83 ERA, 5.01 FIP)</td></tr>
+                    <tr><td>Jonathan Loáisiga</td><td>RP</td><td class="num">32</td><td class="num">11.0</td><td class="num neg">–6.6</td><td>Same projection as Ginkel at roughly three times the price</td></tr>
+                    <tr><td>Alex Vesia</td><td>RP</td><td class="num">31</td><td class="num">12.5</td><td class="num neg">–9.6</td><td>Price</td></tr>
+                    <tr><td>Gregory Soto</td><td>RP</td><td class="num">32</td><td class="num">12.0</td><td class="num neg">–6.1</td><td>Three-year deal</td></tr>
+                    <tr><td>Nathaniel Lowe</td><td>1B</td><td class="num">31</td><td class="num">8.3</td><td class="num neg">–2.4</td><td>Price is high for a 0.8 WAR projection</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>Dustin May has since signed with the White Sox for three years and $52.5 million, or $17.5 million per year, well above ESPN's projection of one year and $14 million. That suggests the market is paying above projections, so Peterson and Soroka may cost somewhat more than ESPN's estimates.</p>
+
+        <p>Nathaniel Lowe was an early consideration, but with Vaughn on the roster and Burke developing, $8 million for less than one projected win did not make sense.</p>
+    </section>
+
+    <!-- Trades -->
+    <section class="br-sec" id="trades">
+        <div class="br-sec-head"><h2>Trade candidates to look into</h2></div>
+
+        <p>Free agency is not the only path to adding talent. I reviewed about 15 trade-rumor articles from the last three weeks and identified starting pitchers and first basemen whose production is worth significantly more than their salary. This section does not propose trade packages; it lists players the Brewers should look into.</p>
+
+        <div class="br-table-wrap">
+            <div class="br-table-cap"><span>Starting pitchers</span><span>Trade market</span></div>
+            <table class="br-table min">
+                <thead><tr><th>Pitcher</th><th>Team</th><th class="num">Age '27</th><th class="num">2026 WAR</th><th class="num">2027 Proj WAR</th><th class="num">2027 Salary ($M)</th><th class="num">Control thru</th></tr></thead>
+                <tbody>
+                    <tr><td>Reid Detmers</td><td>LAA</td><td class="num">27</td><td class="num">4.9</td><td class="num">3.3</td><td class="num">7.5</td><td class="num">2028</td></tr>
+                    <tr><td>George Kirby</td><td>SEA</td><td class="num">29</td><td class="num">2.5</td><td class="num">2.8</td><td class="num">9.8</td><td class="num">2028</td></tr>
+                    <tr><td>MacKenzie Gore</td><td>TEX</td><td class="num">28</td><td class="num">2.8</td><td class="num">2.4</td><td class="num">8.7</td><td class="num">2027</td></tr>
+                    <tr><td>Shane McClanahan</td><td>TB</td><td class="num">30</td><td class="num">2.4</td><td class="num">2.3</td><td class="num">6.6</td><td class="num">2027</td></tr>
+                    <tr><td>Edward Cabrera</td><td>CHC</td><td class="num">29</td><td class="num">–0.1</td><td class="num">2.0</td><td class="num">4.8</td><td class="num">2028</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>Shane McClanahan is a left-hander with a 3.50 FIP at about $6.6 million. With only one year of control remaining, the acquisition cost should be reasonable. His forearm would require a medical review, but acquiring arms below market value is the Brewers' formula.</p>
+
+        <p>George Kirby posted a 3.90 FIP, well below his 4.33 ERA, the same profile as Peterson. He offers two years of control as a mid-rotation starter, and Seattle has indicated it would move a starter for a bat.</p>
+
+        <p>MacKenzie Gore made 34 starts with a 3.87 FIP. Texas is managing payroll, and Gore would be a durable left-hander for one season.</p>
+
+        <p>Edward Cabrera is the buy-low option. His 2026 season was difficult, but FanGraphs still projects 2.0 WAR in 2027 at about $4.8 million, with control through 2028. He is a pitching-development bet.</p>
+
+        <p>Reid Detmers is the best value on the market: 4.9 WAR at about $7.5 million. He is worth inquiring about, but he would realistically be the most expensive to acquire.</p>
+
+        <p><strong>First base:</strong> I also looked for a left-handed bat to pair with Vaughn in case Wade does not work out. Three players fit.</p>
+
+        <div class="br-table-wrap">
+            <div class="br-table-cap"><span>Left-handed first basemen</span><span>Trade market</span></div>
+            <table class="br-table min">
+                <thead><tr><th>First baseman</th><th>Team</th><th class="num">Age '27</th><th>2026 line</th><th class="num">wRC+</th><th class="num">2026 WAR</th><th class="num">2027 Proj WAR</th><th class="num">2027 Salary ($M)</th><th class="num">Control thru</th></tr></thead>
+                <tbody>
+                    <tr><td>Vinnie Pasquantino</td><td>KC</td><td class="num">29</td><td>.249/.333/.428, 17 HR</td><td class="num">109</td><td class="num">1.3</td><td class="num">2.0</td><td class="num">7.1</td><td class="num">2028</td></tr>
+                    <tr><td>Kyle Stowers</td><td>MIA</td><td class="num">29</td><td>.239/.331/.459, 21 HR</td><td class="num">114</td><td class="num">1.6</td><td class="num">1.2</td><td class="num">3.2 (proj.)</td><td class="num">2029</td></tr>
+                    <tr><td>Spencer Horwitz</td><td>PIT</td><td class="num">29</td><td>.244/.344/.364, 10 HR</td><td class="num">98</td><td class="num">0.1</td><td class="num">1.2</td><td class="num">2.5 (proj.)</td><td class="num">2030</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>Kyle Stowers may be the most realistic target. The Marlins are currently listening to offers. He is a left-handed hitter with 21 home runs and a 114 wRC+, played 59 games at first base in 2026, and can also play the outfield.</p>
+
+        <p>Vinnie Pasquantino is the best hitter of the group. FanGraphs projects him for 2.0 WAR in 2027, and he will earn $7.1 million with control through 2028. However, he is an everyday first baseman rather than a platoon piece, so he would be the most expensive to acquire.</p>
+
+        <p>Spencer Horwitz is the least expensive and has excellent plate discipline. He posted an .841 OPS before wrist surgery and a .464 OPS afterward. Pittsburgh plans to use him at first base and DH, so he may not be available.</p>
+
+        <p>Replacing Wade with Stowers would add about $3.2 million in salary and about 1.1 projected wins, making him worth pursuing.</p>
+    </section>
+
+    <!-- Conclusion -->
+    <section class="br-sec" id="conclusion">
+        <div class="br-sec-head"><h2>Conclusion</h2></div>
+
+        <p>If Misiorowski, Henderson, Gasser, Harrison and either Drohan or Patrick hold up, the Brewers do not need a starter and can add relievers while staying well under budget. If they need one, Option A signs David Peterson and Tyler Alexander for $13 million and 2.3 projected wins, and Option B signs David Peterson and Kevin Ginkel for $14.5 million and 2.7 projected wins, with Michael Soroka as the backup plan. In both, Naylor takes over at backup catcher, Walker covers the bullpen innings, and Wade competes with Burke at first base on a minor-league deal. If the starters are not producing, Soroka could be added alongside Peterson, and keeping Trevor Megill holds the back of the bullpen together.</p>
+
+        <p>Neither option recovers every lost win; no plan at this budget could. The rest relies on what Milwaukee does better than almost any organization, which is getting more out of its players than the projections expect.</p>
+
+        <p>However, timing matters. If the league locks out the players on Dec. 1, no transactions can be made until a new agreement is reached. None of these moves require a long negotiation, and the Brewers can complete all of them now.</p>
+
+        <p>The Excel workbook and SQL files behind every number in this report are available on my {% if github_url %}<a href="{{ github_url }}" target="_blank" rel="noopener">GitHub</a>{% else %}GitHub{% endif %}.</p>
+
+        {% if excel_url or github_url %}
+        <div class="br-files">
+            {% if excel_url %}<a class="br-file gold" href="{{ excel_url }}" {% if excel_url.startswith('http') %}target="_blank" rel="noopener"{% else %}download{% endif %}>Excel workbook ↓</a>{% endif %}
+            {% if github_url %}<a class="br-file" href="{{ github_url }}" target="_blank" rel="noopener">GitHub: Excel + SQL →</a>{% endif %}
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- Sources -->
+    <section class="br-sec" id="sources">
+        <div class="br-sec-head"><h2>Sources</h2></div>
+        <ul class="br-sources">
+            <li>AP: MLB's 2027 season threatened with lockout looming when labor deal expires Dec. 1 (Oct. 29, 2026)</li>
+            <li>ESPN: What you need to know about MLB's looming labor battle</li>
+            <li>FanGraphs: 2026 WAR, 2027 Depth Charts projections, and price per win (Feb. 2026)</li>
+            <li>FanGraphs RosterResource: Brewers 2027 payroll (as of Nov. 16, 2026)</li>
+            <li>ESPN: Kiley McDaniel's free agent contract projections (Oct. 30, 2026)</li>
+            <li>Spotrac: free agent market values</li>
+            <li>Front Office Sports: Brewers 2026 payroll ($141.9M, Sept. 8, 2026)</li>
+            <li>FanGraphs: 2027 ZiPS Projections, Milwaukee Brewers</li>
+            <li>Brewers: Acquire Dustin May and JoJo Romero from the Cardinals (Aug. 3, 2026)</li>
+            <li>Brewers: Blake Burke named Southern League MVP (Sept. 21, 2026)</li>
+        </ul>
+    </section>
+
+</article>
+{% endblock %}

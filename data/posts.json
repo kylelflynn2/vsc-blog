@@ -1,5 +1,24 @@
 [
   {
+    "id": "7",
+    "title": "2027 Milwaukee Brewers Offseason Report",
+    "description": "The CBA expires Dec. 1 and a lockout is expected. How the World Series champions replace 7.8 projected wins with $22.6 million to spend, built in Excel and SQL.",
+    "date": "November 17, 2026",
+    "project_url": "/projects/brewers-offseason-2027",
+    "github_url": null,
+    "tags": [
+      "Brewers",
+      "Offseason Plan",
+      "Payroll",
+      "WAR Valuation",
+      "Free Agency"
+    ],
+    "category": "baseball",
+    "image": "/static/img/brewers/header.jpg",
+    "league": "MLB",
+    "team": "Brewers"
+  },
+  {
     "id": "6",
     "title": "How to Fix the Chicago Blackhawks",
     "description": "Too young. Too one-dimensional. Time for a new direction. A hockey operations proposal for moving Chicago from rebuilding team to playoff-caliber: defense first, a Tippett trade offer, 2027 offseason targets and a plan to protect the young core.",
