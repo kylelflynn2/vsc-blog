@@ -314,11 +314,11 @@
     .hk-draft td { padding: 0.75rem 0.8rem; border-bottom: 1px solid var(--hk-line); vertical-align: middle; color: var(--hk-text); }
     .hk-draft tbody tr:last-child td { border-bottom: none; }
     .hk-draft tbody tr:hover td { background: #FAF9F6; }
-    .hk-draft tr.chi td { background: #FDF1F3; }
-    .hk-draft tr.chi:hover td { background: #FBE6EA; }
-    .hk-draft tr.chi td:first-child { box-shadow: inset 4px 0 0 var(--hk-red); }
+    .hk-draft tr.mine td { background: #E7F5EA; }
+    .hk-draft tr.mine:hover td { background: #DCF0E0; }
+    .hk-draft tr.mine td:first-child { box-shadow: inset 4px 0 0 #2E8B4A; }
+    .hk-my-pick { display: inline-block; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; background: #2E8B4A; border-radius: 2px; padding: 0.1rem 0.35rem; margin-left: 0.45rem; vertical-align: 2px; }
     .hk-pick { font-family: var(--hk-display); font-weight: 800; font-size: 1.7rem; line-height: 1; color: var(--hk-ink); width: 3.2rem; }
-    .hk-draft tr.chi .hk-pick { color: var(--hk-red); }
     .hk-team-tag {
         display: inline-block; min-width: 3.1rem; text-align: center; font-weight: 800; font-size: 0.74rem; letter-spacing: 0.06em;
         padding: 0.3rem 0.45rem; border-radius: 3px; background: #EFEDE8; color: var(--hk-ink);
@@ -1315,11 +1315,12 @@
                     </thead>
                     <tbody>
                         {% for p in rows %}
-                        <tr class="{% if p.abbr == 'CHI' %}chi{% endif %}" data-team="{{ p.abbr }}">
+                        {% set mine = p.player == 'Sergei Skvortsov' %}
+                        <tr class="{% if p.abbr == 'CHI' %}chi{% endif %}{% if mine %} mine{% endif %}" data-team="{{ p.abbr }}">
                             <td class="hk-pick">{{ p.pick }}</td>
                             <td><span class="hk-team-tag" title="{{ p.team }}">{{ p.abbr }}</span>{% if p.via %}<span class="hk-via">via {{ p.via_abbr }}</span>{% endif %}</td>
                             <td>
-                                <div class="hk-pname">{{ p.player }}</div>
+                                <div class="hk-pname">{{ p.player }}{% if mine %}<span class="hk-my-pick">My pick</span>{% endif %}</div>
                                 <div class="hk-pmeta"><span class="hk-pos">{{ p.pos }}</span>{% if p.commit %}{{ p.commit }} commit{% endif %}</div>
                             </td>
                             <td style="white-space:nowrap">{{ p.ht }} / {{ p.wt }}</td>
@@ -1344,7 +1345,7 @@
         </div>
         {% endfor %}
 
-        <p class="hk-draft-notes">Source: Tankathon 2027 NHL Mock Draft, viewed {{ mock.viewed }}; prospect rankings last updated Nov. 9. “Via” marks a traded pick and the team it originally belonged to. * Four games or fewer. “25-26” marks a player whose listed stats are from 2025-26. Goalies show goals-against average and save percentage. Team abbreviations are used in place of logos.</p>
+        <p class="hk-draft-notes">Source: Tankathon 2027 NHL Mock Draft, viewed {{ mock.viewed }}; prospect rankings last updated Nov. 9. Picks 2 and 3 are switched from Tankathon’s version (Privalov to Chicago, Skvortsov to Pittsburgh) to reflect my pick of Skvortsov. “Via” marks a traded pick and the team it originally belonged to. * Four games or fewer. “25-26” marks a player whose listed stats are from 2025-26. Goalies show goals-against average and save percentage. Team abbreviations are used in place of logos.</p>
     </section>
 </div>
 
