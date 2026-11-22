@@ -163,6 +163,10 @@
         font-weight: bold;
     }
 
+    .section-note { font-size: 0.88rem; color: var(--text-muted); margin: -0.75rem 0 1.25rem; }
+    .section-note a, .job-title a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--gold); }
+    .job-title a:hover, .section-note a:hover { color: var(--gold); }
+
     .skills-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -257,16 +261,180 @@
     </div>
 
     <section class="about-section">
-        <h2>About Me</h2>
+        <h2>Summary</h2>
         <p>
-            I am a recent graduate of Concordia University Wisconsin with a degree in Finance, currently working as a Financial Analyst at Endodontic Practice Partners (EPP) in Brentwood, TN. At EPP, I focus on monthly financial reporting, budgeting, variance analysis, and EBITDA performance tracking across a multi-site dental support organization.
+            Four-year college baseball player and team captain who now works as a financial analyst building reporting and dashboards for executive leadership, and who builds baseball operations analysis in Python on my own time. I am equally comfortable in the data and in the dugout, which is what I would bring to communicating player information in a way players and coaches will actually use.
         </p>
-        <p>
-            Outside of finance, I complete projects using AI to explore Python, SQL, and other coding languages and databases to answer baseball-related questions. I enjoy learning about sabermetrics and how front offices view the game through an analytical lens. With four years of college baseball playing experience, I have a deep understanding of the game that drives my pursuit of a career in baseball operations/analytics.
-        </p>
-        <p>
-            Later in my professional career, I plan to pursue an MBA to strengthen my strategic and leadership skills and further position myself for front-office roles in baseball.
-        </p>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="resume-section">
+        <h2 class="section-title">Sports Operations Projects</h2>
+        <p class="section-note">Independent analysis published at <a href="/blog">vsc-blog.onrender.com</a></p>
+
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title"><a href="/projects/blackhawks-fix-2026">Chicago Blackhawks Roster Construction and Team-Building Analysis</a></div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="date-range">2026</div>
+                </div>
+            </div>
+            <ul class="bullets">
+                <li>Built a hockey operations proposal for moving Chicago from a rebuilding team to a playoff contender, diagnosing the roster’s construction problem with HockeyStats percentile cards, NHL EDGE and Corsi data.</li>
+                <li>Laid out a development-year plan, trade targets, a 2027 free-agent board and a draft strategy, published with interactive player-card and mock-draft views alongside the written proposal.</li>
+            </ul>
+        </div>
+
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title"><a href="/projects/yankees-baseball-operations">Yankees Baseball Operations Portfolio</a></div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="date-range">2026</div>
+                </div>
+            </div>
+            <ul class="bullets">
+                <li>Produced a full front-office style analysis covering lineup construction, payroll and Competitive Balance Tax exposure, an arbitration primer, depth chart, and a 2026-27 offseason strategic plan.</li>
+            </ul>
+        </div>
+
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title"><a href="/projects/jordan-walker-2026">Player Development Analysis: Jordan Walker</a></div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="date-range">2026</div>
+                </div>
+            </div>
+            <ul class="bullets">
+                <li>Broke down a breakout season through hitting mechanics and pitch discipline changes, translating the underlying data into a clear development narrative that a player or coach could act on.</li>
+                <li>Pulled and worked with player data from FanGraphs and Baseball Reference, publishing the methodology alongside the conclusions.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- BASEBALL EXPERIENCE -->
+    <section class="resume-section">
+        <h2 class="section-title">Baseball Experience</h2>
+
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Concordia University Wisconsin – Baseball</div>
+                    <div class="company">Four-Year Player &amp; Team Captain</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="date-range">2022 – 2025</div>
+                    <div class="location" style="margin:0;">Mequon, WI</div>
+                </div>
+            </div>
+            <ul class="bullets">
+                <li>Selected by coaches and teammates to lead the program, serving as the bridge between coaching staff and players while carrying a full course load and earning academic honors.</li>
+            </ul>
+        </div>
+
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Barnstorm Baseball</div>
+                    <div class="company">Baseball Coach</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="date-range">June 2026 – Present</div>
+                    <div class="location" style="margin:0;">Franklin, TN</div>
+                </div>
+            </div>
+            <ul class="bullets">
+                <li>Lead private lessons for athletes ages five to eighteen, breaking mechanical and approach concepts down into language a player can apply the same day.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- PROFESSIONAL EXPERIENCE -->
+    <section class="resume-section">
+        <h2 class="section-title">Professional Experience</h2>
+
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Endodontic Practice Partners</div>
+                    <div class="company">Staff Financial Analyst</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="date-range">May 2026 – Present</div>
+                    <div class="location" style="margin:0;">Brentwood, TN</div>
+                </div>
+            </div>
+            <ul class="bullets">
+                <li>Prepare and present monthly financial reporting to executives and VPs across 12 regions, analyzing treatment volume, average treatments per day, days worked, and net revenue against budget and prior-year performance, and distilling large, complex data sets into the few points leadership needs to act on.</li>
+                <li>Conduct monthly variance analysis to identify and communicate key financial drivers and discrepancies to senior finance leadership, supporting data-driven operational decisions.</li>
+                <li>Build and maintain reporting templates and dynamic dashboards in Excel, using pivot tables, XLOOKUP, VBA macros and AI to automate recurring deliverables, streamline waterfall and new associate ramp reporting, and cut manual processing time.</li>
+                <li>Develop KPI tracking frameworks and leaderboards that benchmark financial and operational performance across practices on the DSO platform.</li>
+                <li>Monitor Days Sales Outstanding (DSO) across partner practices, identifying collection trends and escalating performance issues to improve working capital efficiency.</li>
+                <li>Support the annual budgeting process with the finance team and leadership, developing site-level and consolidated operating budgets from historical trends and growth assumptions.</li>
+            </ul>
+        </div>
+
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Northwestern Mutual</div>
+                    <div class="company">Financial Planning Associate</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="date-range">May 2025 – March 2026</div>
+                    <div class="location" style="margin:0;">Whitefish Bay, WI</div>
+                </div>
+            </div>
+            <ul class="bullets">
+                <li>Built comprehensive financial models to evaluate client net worth, cash flow, insurance coverage gaps, and long-term retirement projections, supporting advisors in delivering tailored financial plans.</li>
+                <li>Presented strategic financial recommendations directly to policyowners and prospective clients, translating complex quantitative analysis into clear, actionable insurance and investment guidance.</li>
+                <li>Collaborated with a five-person advisory team to identify process improvement opportunities, contributing to office-wide growth initiatives and pipeline management strategies.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- LEADERSHIP & INVOLVEMENT -->
+    <section class="resume-section">
+        <h2 class="section-title">Leadership &amp; Involvement</h2>
+        <div class="experience-item">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Concordia University Wisconsin</div>
+                    <div class="company">Women's/Men's Soccer – Game Operations Manager</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="date-range">August 2023 – October 2024</div>
+                    <div class="location" style="margin:0;">Mequon, WI</div>
+                </div>
+            </div>
+            <ul class="bullets">
+                <li>Managed and maintained scheduling systems in Excel, ensuring accurate recordkeeping and staff communication.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="resume-section">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-item">
+                <div class="skill-category">Analytics &amp; Tools</div>
+                <div class="skill-list">Python, SQL, Excel (Advanced: VBA / Macros, Pivot Tables, VLOOKUP/XLOOKUP, Dynamic Dashboards), Power BI, PowerPoint, Adaptive Insights (Workday), Google Drive, AI tools, data visualization, dashboard and report automation</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-category">Baseball &amp; Data</div>
+                <div class="skill-list">Sabermetrics (wOBA, OBP, WAR, platoon splits, leverage), lineup optimization, player valuation and surplus value, payroll and CBT analysis, FanGraphs and Baseball Reference data, player-facing communication</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-category">Finance &amp; Strategy</div>
+                <div class="skill-list">Financial Analysis, Financial Modeling, Budgeting &amp; Forecasting, Variance Analysis, EBITDA Reporting, DSO Monitoring, Cost Analysis, KPI Development</div>
+            </div>
+        </div>
     </section>
 
     <!-- EDUCATION -->
@@ -284,124 +452,8 @@
                 </div>
             </div>
             <ul class="bullets">
-                <li>Varsity Team Captain, CUW Baseball, Academic Honors</li>
+                <li>Baseball – Team Captain &nbsp;|&nbsp; Academic Honors</li>
             </ul>
-        </div>
-    </section>
-
-    <!-- SPORTS-SPECIFIC EXPERIENCE -->
-    <section class="resume-section">
-        <h2 class="section-title">Sports-Specific Experience</h2>
-
-        <div class="experience-item">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Concordia University Wisconsin Baseball</div>
-                    <div class="company">Baseball Coaching Volunteer</div>
-                </div>
-                <div style="text-align:right;">
-                    <div class="date-range">August 2025 – October 2025</div>
-                    <div class="location" style="margin:0;">Mequon, WI</div>
-                </div>
-            </div>
-            <ul class="bullets">
-                <li>Led on-field player development &amp; practices</li>
-                <li>Facilitated hitting &amp; fielding practices outside of structured team practice</li>
-                <li>Created team practice plans along with using data analysis to improve player's performance</li>
-            </ul>
-        </div>
-
-        <div class="experience-item">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Prep Baseball Report</div>
-                    <div class="company">Vizual Edge Volunteer &amp; Showcase Operations Volunteer</div>
-                </div>
-                <div style="text-align:right;">
-                    <div class="date-range">August 2023 – August 2024</div>
-                    <div class="location" style="margin:0;">Sheboygan, WI | Wisconsin Region</div>
-                </div>
-            </div>
-            <ul class="bullets">
-                <li>Managed showcase operations and data collection</li>
-                <li>Facilitated athlete testing and maintained datasets</li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- PROFESSIONAL EXPERIENCE -->
-    <section class="resume-section">
-        <h2 class="section-title">Professional Experience</h2>
-
-        <div class="experience-item">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Endodontic Practice Partners</div>
-                    <div class="company">Financial Analyst</div>
-                </div>
-                <div style="text-align:right;">
-                    <div class="date-range">June 2026 – Present</div>
-                    <div class="location" style="margin:0;">Brentwood, TN</div>
-                </div>
-            </div>
-            <ul class="bullets">
-                <li>Prepared monthly financial reports including flash reports and month-end close reporting across a multi-site dental support organization, tracking revenue, expenses, and EBITDA performance against annual budget targets</li>
-                <li>Monitored DSO across partner practices while supporting annual budgeting, variance analysis, and monthly reporting to senior finance leadership</li>
-            </ul>
-        </div>
-
-        <div class="experience-item">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Northwestern Mutual</div>
-                    <div class="company">Financial Planning Associate</div>
-                </div>
-                <div style="text-align:right;">
-                    <div class="date-range">May 2025 – March 2026</div>
-                    <div class="location" style="margin:0;">Whitefish Bay, WI</div>
-                </div>
-            </div>
-            <ul class="bullets">
-                <li>Developed comprehensive financial models and presented strategic plans to policyowners and potential clients, demonstrating strong analytical skills and ability to articulate insurance and financial recommendations</li>
-                <li>Collaborated weekly within a 5-person team to brainstorm and implement office improvements while showcasing teamwork to enhance office growth</li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- LEADERSHIP & INVOLVEMENT -->
-    <section class="resume-section">
-        <h2 class="section-title">Leadership &amp; Involvement Experience</h2>
-
-        <div class="experience-item">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Concordia University Wisconsin</div>
-                    <div class="company">Women's/Men's Soccer Game Operations Manager</div>
-                </div>
-                <div style="text-align:right;">
-                    <div class="date-range">August 2023 – October 2024</div>
-                    <div class="location" style="margin:0;">Mequon, WI</div>
-                </div>
-            </div>
-            <ul class="bullets">
-                <li>Coordinated game-day operations and staffing</li>
-                <li>Managed scheduling systems in Excel</li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section class="resume-section">
-        <h2 class="section-title">Skills</h2>
-        <div class="skills-grid">
-            <div class="skill-item">
-                <div class="skill-category">Finance &amp; Strategy</div>
-                <div class="skill-list">Financial Analysis, Financial Modeling, Budgeting, Cost Analysis</div>
-            </div>
-            <div class="skill-item">
-                <div class="skill-category">Data &amp; Analytics</div>
-                <div class="skill-list">Excel (Advanced: Pivot Tables, VLOOKUP/XLOOKUP), VBA (Macros), Data Analysis</div>
-            </div>
         </div>
     </section>
 </div>
