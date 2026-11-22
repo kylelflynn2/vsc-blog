@@ -13,6 +13,7 @@
     --paper: #F7F6F2;
     --display: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
     --brand: 'Montserrat', 'Arial Black', Arial, sans-serif;
+    --modern: 'Inter Tight', 'Inter', -apple-system, 'Segoe UI', Arial, sans-serif;
 }
 
 * {
@@ -71,20 +72,18 @@ body {
 }
 
 .nav-logo-text {
-    font-family: var(--brand);
-    font-weight: 900;
+    font-family: var(--modern);
+    font-weight: 600;
     font-size: 1.5rem;
-    letter-spacing: 0.01em;
-    text-transform: uppercase;
+    letter-spacing: -0.02em;
     line-height: 1;
 }
 
 .nav-logo-tag {
-    font-family: var(--brand);
-    font-weight: 800;
-    font-size: 0.8rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    font-family: var(--modern);
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0;
     color: rgba(255,255,255,0.62);
 }
 
@@ -291,11 +290,10 @@ body {
 }
 
 .footer-name {
-    font-family: var(--brand);
-    font-weight: 900;
+    font-family: var(--modern);
+    font-weight: 600;
     font-size: 1.35rem;
-    letter-spacing: 0.01em;
-    text-transform: uppercase;
+    letter-spacing: -0.02em;
     color: var(--white);
 }
 
