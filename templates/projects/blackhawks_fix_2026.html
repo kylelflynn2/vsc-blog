@@ -213,6 +213,17 @@
     .hk-bleed-text span { color: var(--hk-red); }
     .hk-bleed figcaption { max-width: 1180px; margin: 0.7rem auto 0; padding-left: 0.75rem; margin-left: max(2rem, calc((100% - 1180px) / 2 + 2rem)); }
 
+    /* HockeyStats cards */
+    .hk-cards { margin: 2rem 0 2.25rem; }
+    .hk-cards-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+    .hk-cards-grid.two { grid-template-columns: 1fr 1fr; }
+    .hk-cards img { display: block; width: 100%; height: auto; border-radius: 6px; }
+    .hk-cards figcaption {
+        font-family: var(--hk-sans); font-size: 0.8rem; line-height: 1.5; color: var(--hk-muted);
+        margin-top: 0.7rem; padding-left: 0.75rem; border-left: 2px solid var(--hk-red);
+    }
+    @media (max-width: 720px) { .hk-cards-grid.two { grid-template-columns: 1fr; } }
+
     /* Lineup card */
     .hk-lineup {
         background: var(--hk-ink); color: #fff; border-radius: 4px; padding: 1.6rem;
@@ -484,9 +495,11 @@
 
             <p>I did not believe they were ready, and I was surprised by Davidson’s plan. The only evidence for it was that hot start in 2025-26. The results show how far from the case that was. Chicago is 7-14-2 through 23 games, and these young players have proven that they are talented but not ready.</p>
 
-            <p>There are clear positives. Sam Rinzel has looked great. He has 17 points in 22 games, including 12 (one goal and 11 assists) during a five-game point streak that he capped with the overtime winner in Calgary on Nov. 21, according to CBS Sports, and he has taken over the top power-play unit. Artyom Levshunov has taken a step forward. Last season his turnovers, missed assignments and habit of leaving the front of the net had you holding your breath every other game; this season he is a far more complete defenseman, though there is still plenty of room to improve. “He’s not totally there yet, but he’s more comfortable in the systems, he’s more comfortable in his skin,” Jeff Blashill said, per the Sun-Times. Roman Kantserov leads all NHL rookies in goals, with nine as of Nov. 17, according to The Hockey News, and his upside should excite Blackhawks fans thinking about the future. Frank Nazar is playing very well too, with a team-high 11 goals and 13 points in 20 games.</p>
+            <p>There are clear positives. Sam Rinzel has looked great. He has 17 points in 22 games, including 12 (one goal and 11 assists) during a five-game point streak that he capped with the overtime winner in Calgary on Nov. 21, according to CBS Sports, and he has taken over the top power-play unit. Roman Kantserov leads all NHL rookies in goals, with nine as of Nov. 17, according to The Hockey News, and his upside should excite Blackhawks fans thinking about the future. Frank Nazar is playing very well too, with a team-high 11 goals and 13 points in 20 games.</p>
 
             <p>Frondell is developing the two-way game Blashill emphasizes, but at 19 years of age he has been deployed against opposing top lines every night, an unusual assignment for a player his age, and he has been consistently outmatched through the start of this season. He also left Saturday’s game in Calgary with a new injury and is questionable for Vancouver, Yahoo Sports reported. With this struggle, I am hoping Jeff Blashill moves him to the wing. Oliver Moore has shown flashes of being the high-motor, speedy center Chicago drafted, but so far his game has looked more uncontrolled than controlled. Nick Lardis and Wyatt Kaiser have not yet played to the level we expected of them at this point. A team cannot be built on development alone, and this group is still learning the league at the NHL level.</p>
+
+            <p>From the eye test, Artyom Levshunov seems to have become a better player, and you are no longer holding your breath every time he touches the puck. “He’s not totally there yet, but he’s more comfortable in the systems, he’s more comfortable in his skin,” Jeff Blashill said, per the Sun-Times. However, when you look at his player card below, it tells a different story: a 1% projected WAR and 0% even-strength defense.</p>
 
             <p>The clearest weakness is defense. Chicago allows 4.00 goals per game, 31st in the NHL, per StatMuse. The goal in reconstructing this roster is to build a team where the young core develops alongside experienced veterans instead of carrying the team alone. That means a two-way center who takes on the defensive load, a stabilizing veteran defenseman and forwards who bring size and physicality, so that the premium young players are protected and put in positions to succeed. Davidson has pointed the same way. In July he said, “adding some offensive talent is essential,” according to Heavy, and NHL reporter Frank Seravalli reported on Chicago Sports Network that the front office is looking for a “shoot-first scoring winger with size,” per the Sun-Times. That is where the plan begins.</p>
         </section>
@@ -519,7 +532,19 @@
                 </table>
             </div>
 
-            <p>Stats are through Nov. 19 (22 games) and do not include Saturday’s win in Calgary, except Rinzel’s, which includes his goal and two assists in Calgary, per CBS Sports. The rest are from StatsCrew and Hockey-Reference, which match. Ages are as of Nov. 21, from Hockey-Reference birth dates. Levshunov’s ice-time note is from the Sun-Times (Oct. 29). HockeyStats ratings for each player will be added here.</p>
+            <p>Stats are through Nov. 19 (22 games) and do not include Saturday’s win in Calgary, except Rinzel’s, which includes his goal and two assists in Calgary, per CBS Sports. The rest are from StatsCrew and Hockey-Reference, which match. Ages are as of Nov. 21, from Hockey-Reference birth dates. Levshunov’s ice-time note is from the Sun-Times (Oct. 29).</p>
+
+            <figure class="hk-cards">
+                <div class="hk-cards-grid two">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/bedard.png') }}" alt="HockeyStats player card for Connor Bedard" loading="lazy">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/kantserov.png') }}" alt="HockeyStats player card for Roman Kantserov" loading="lazy">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/frondell.png') }}" alt="HockeyStats player card for Anton Frondell" loading="lazy">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/levshunov.png') }}" alt="HockeyStats player card for Artyom Levshunov" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>The cards show what kind of players these are. Bedard is a 90th-percentile even-strength offensive player with 96% first assists against 92nd-percentile competition, but his even-strength defense is in the 0th percentile, which is part of why I want him on the wing. Kantserov is a pure finisher: 100th percentile in goals and finishing and a 92% projected WAR, but 4% in even-strength offense and 0% in first assists, so he needs a playmaker beside him. Frondell’s card shows how hard his assignment has been: 97th-percentile competition, but 2% defense and a 7% projected WAR, even with 97% first assists. Levshunov’s card is weighted over his first two seasons, which is why his numbers have not caught up to his progress yet, but his even-strength offense has climbed from about the 14th percentile last season to the 57th this season.</p>
 
             <h3>They are still very young</h3>
 
@@ -579,6 +604,17 @@
 
             <p>The underlying numbers point to the same problem the eye test does: Chicago cannot keep the puck out of its own net, and it does not generate enough shots to make up for it. Here is what the data shows, with sources.</p>
 
+            <p>The player and team cards in this proposal come from HockeyStats.com (JFresh Hockey). Each player number is a percentile ranking among players at the same position, based on three-year weighted data, so 90% means better than 90% of the league. Projected WAR (wins above replacement) is the headline number.</p>
+
+            <figure class="hk-cards">
+                <div class="hk-cards-grid">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/team_blackhawks.png') }}" alt="HockeyStats team card for the Chicago Blackhawks: 7-14-2, 74 projected points, 0% playoff odds" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>HockeyStats’ team card tells the same story for this season. At 5-on-5, Chicago is scoring 1.91 goals per 60 minutes and allowing 3.38, a 36% goal share, and its expected goals are 1.96 for and 2.96 against per 60, a 40% share. The model projects Chicago for 74 points and gives it a 0% chance of making the playoffs, which is one more reason to treat this as a development year.</p>
+
             <h3>Defense is the biggest gap</h3>
 
             <p>Over the last 21 games of 2025-26 and the first two of this season, Chicago produced 40.1 expected goals for and allowed 66.9, an expected-goals share of 37.9%, the worst in the NHL over that stretch, the Sun-Times reported using Natural Stat Trick. The team was outscored 66-43 at 5-on-5 in those games. For comparison, the share was 43.8% over the first 61 games of 2025-26, so the drop followed the March trades. This season, Chicago is allowing 4.00 goals per game, 31st in the NHL through Nov. 21, per StatMuse.</p>
@@ -595,12 +631,15 @@
 
             <p>EDGE has Spencer Knight with 432 high-danger saves last season, second in the NHL behind Ilya Sorokin’s 452, a .847 high-danger save percentage (sixth) and a .931 save percentage in 5-on-5 close situations (tied for third). He is facing a very high volume of dangerous chances and stopping them at an elite rate. Improving the defense in front of him is the most direct way to improve the team.</p>
 
+            <p>The team card does show Chicago’s goaltending below expected this season (−0.31), so Knight has not been perfect either. But the larger problem is still the volume of chances in front of him.</p>
+
             <div class="hk-table-wrap">
                 <div class="hk-table-cap">The numbers at a glance</div>
                 <table class="hk-table">
                     <thead><tr><th>Measure</th><th>Chicago</th><th>Source</th></tr></thead>
                     <tbody>
                         <tr><td>Expected-goals share</td><td>37.9%, worst in the NHL (last 21 games of 2025-26 plus first 2 of 2026-27)</td><td>Sun-Times, Oct. 2 (Natural Stat Trick)</td></tr>
+                        <tr><td>Expected goals against per 60, 5-on-5</td><td>2.96 (40% expected-goals share)</td><td>HockeyStats, Nov. 22</td></tr>
                         <tr><td>Goals against per game</td><td>4.00, 31st</td><td>StatMuse, through Nov. 21</td></tr>
                         <tr><td>Shots per game</td><td>21.4, second-lowest</td><td>Sun-Times, Oct. 24</td></tr>
                         <tr><td>Power play</td><td>18.5%, 27th</td><td>StatMuse, through Nov. 21</td></tr>
@@ -748,11 +787,25 @@
                 <figcaption>Connor Bedard. Early in 2025-26 he was on a pace of roughly 116 points over 82 games.</figcaption>
             </figure>
 
-            <p>Quinton Byfield is the center I would pursue this offseason. Los Angeles is 7-12 and near the bottom of the Western Conference, and it looks like a team that could be heading toward a rebuild. Byfield is 24, 6-foot-5 and 230 pounds, per Hockey-Reference, and plays a two-way game. His Corsi this season is 62.9% (+15.2 relative) in 18 games, after 53.4% last season, when he had 24 goals and 49 points. He fits Chicago’s timeline, he does not have a no-movement clause, and his contract runs through 2028-29 at $6.25 million a year, according to PuckPedia.</p>
+            <figure class="hk-cards">
+                <div class="hk-cards-grid">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/byfield.png') }}" alt="HockeyStats player card for Quinton Byfield" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>Quinton Byfield is the center I would pursue this offseason. Los Angeles is 7-12 and near the bottom of the Western Conference, and it looks like a team that could be heading toward a rebuild. Byfield is 24, 6-foot-5 and 230 pounds, per Hockey-Reference, and plays a two-way game. His Corsi this season is 62.9% (+15.2 relative) in 18 games, after 53.4% last season, when he had 24 goals and 49 points. He fits Chicago’s timeline, he does not have a no-movement clause, and his contract runs through 2028-29 at $6.25 million a year, according to PuckPedia. His HockeyStats card backs it up: an 84% projected WAR, 87% even-strength offense, 68% defense and 87th-percentile competition as a first-line center.</p>
 
             <p>That contract matters. The cap is projected to rise to $113.5 million in 2027-28 and $127.5 million in 2028-29, Daily Faceoff reported, citing Elliotte Friedman. Byfield’s cap hit leaves Chicago room to pursue free agents in the summer of 2027, and the bigger jump in 2028 gives it room to go after elite talent right around the time prospects such as Vaclav Nestrasil, Ryan Roobroeck and Xavier Villeneuve, and even Sacha Boisvert and Marek Vanacker, could be ready, if they are not used as trade pieces first.</p>
 
-            <p>Elias Pettersson is the alternative, but he is harder to get. He is signed through 2032 at $11.6 million a year, and his full no-movement clause means he would have to approve any trade, according to Daily Faceoff.</p>
+            <figure class="hk-cards">
+                <div class="hk-cards-grid">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/pettersson.png') }}" alt="HockeyStats player card for Elias Pettersson" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>Elias Pettersson is the alternative, but he is harder to get. He is signed through 2032 at $11.6 million a year, and his full no-movement clause means he would have to approve any trade, according to Daily Faceoff. His card shows an 87% projected WAR and 95th-percentile competition, but his even-strength offense has fallen to the 41st percentile and his goals to the 30th, at $11.6 million for six more seasons.</p>
 
             <p>The draft capital and the prospects are there to make a Byfield offer. Players and picks who could be moved in a deal like this include:</p>
 
@@ -777,7 +830,14 @@
 
             <h3>If Bedard stays at center: Owen Tippett</h3>
 
-            <p>If Chicago cannot land a two-way center and keeps Bedard at center, a player who makes too much sense for them is Owen Tippett, a power-forward winger who can support Bedard. He is 6-foot-2, plays on a struggling Philadelphia team, and scored 28 goals and 51 points in 81 games last season, per ESPN. He is in the middle of an eight-year contract at $6.2 million a year and has a 10-team no-trade list. The Flyers have received more trade calls on him than on Travis Konecny, and they are looking for a center with top-six upside, Daily Faceoff reported. The two teams have already talked. Daily Faceoff’s Anthony Di Marco reported that the Flyers could be interested in Frank Nazar and Oliver Moore, Philly Hockey Now noted, and David Pagnotta said on DFO Insider that “Philly’s checked in” on Moore and that there has been at least one conversation about him, Broad Street Hockey reported. Chicago could build an offer around its draft capital and Moore. If Philadelphia asks for Nazar, I would pass.</p>
+            <figure class="hk-cards">
+                <div class="hk-cards-grid">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/tippett.png') }}" alt="HockeyStats player card for Owen Tippett" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>If Chicago cannot land a two-way center and keeps Bedard at center, a player who makes too much sense for them is Owen Tippett, a power-forward winger who can support Bedard. He is 6-foot-2, plays on a struggling Philadelphia team, and scored 28 goals and 51 points in 81 games last season, per ESPN. He is in the middle of an eight-year contract at $6.2 million a year and has a 10-team no-trade list. The Flyers have received more trade calls on him than on Travis Konecny, and they are looking for a center with top-six upside, Daily Faceoff reported. The two teams have already talked. Daily Faceoff’s Anthony Di Marco reported that the Flyers could be interested in Frank Nazar and Oliver Moore, Philly Hockey Now noted, and David Pagnotta said on DFO Insider that “Philly’s checked in” on Moore and that there has been at least one conversation about him, Broad Street Hockey reported. Chicago could build an offer around its draft capital and Moore. His HockeyStats card shows a 79% projected WAR, 92nd-percentile goal scoring and an 86% penalty rating, with six years left at $6.2 million. If Philadelphia asks for Nazar, I would pass.</p>
 
             <figure class="hk-figure">
                 <img src="{{ url_for('static', filename='img/blackhawks/tippett.jpg') }}" alt="Owen Tippett of the Philadelphia Flyers, wearing number 74, during warmups" loading="lazy">
@@ -786,11 +846,33 @@
 
             <h3>Other trade targets</h3>
 
-            <p>Zach Whitecloud is a defenseman I would look to pursue. He brings stability to the defense corps and veteran leadership. He is 29, has a Stanley Cup ring and carries a $2.75 million cap hit, per Spotrac, and Daily Faceoff reported on Oct. 7 that other teams have interest. I would not move a first-round pick for him, though. If that is the ask, I would pass and turn to free agency for a veteran defenseman instead.</p>
+            <figure class="hk-cards">
+                <div class="hk-cards-grid">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/whitecloud.png') }}" alt="HockeyStats player card for Zach Whitecloud" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
 
-            <p>Even with this season becoming a development year, Chicago should always be looking to add young talent that fits its timeline, and Simon Edvinsson is exactly that. He would be intriguing, and his price may be at its lowest right now. The Red Wings defenseman is an unsigned restricted free agent who must sign by Dec. 1 to be eligible to play this season, according to The Hockey News, so Detroit is running out of time. TSN reported that up to 10 teams have been in talks and that the cost would resemble the deals for Noah Dobson, Mikhail Sergachev and Bowen Byram: multiple assets, including prospects and first-round picks, per TSN. If Chicago can acquire a player like him for prospects and draft capital alone, I would pursue it. If Detroit asks for a blue-chip player such as Frank Nazar or Anton Frondell, I would pass.</p>
+            <p>Zach Whitecloud is a defenseman I would look to pursue. He brings stability to the defense corps and veteran leadership. He is 29, has a Stanley Cup ring and carries a $2.75 million cap hit, per Spotrac, and Daily Faceoff reported on Oct. 7 that other teams have interest. His card shows a 70% projected WAR with 83% even-strength defense and a 72% penalty-kill rating, though his WAR has slipped this season, with two years left at $2.8 million. I would not move a first-round pick for him, though. If that is the ask, I would pass and turn to free agency for a veteran defenseman instead.</p>
 
-            <p>Alexander Nikishin and Jesperi Kotkaniemi intrigue me as well, but the price is the problem. Nikishin signed a one-year, $3 million contract on Oct. 25 after requesting a trade, according to TSN, so he will be a restricted free agent again next summer. Before that deal, he asked for five years at $9 million a year, Elliotte Friedman reported, and Carolina has told teams that a Nikishin deal must include Kotkaniemi, per David Pagnotta. That means taking on Kotkaniemi’s $4.82 million cap hit, with a negative relative Corsi the last two seasons and a steep decline from 43 points in 2022-23 to nine last season, per Hockey-Reference.</p>
+            <figure class="hk-cards">
+                <div class="hk-cards-grid">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/edvinsson.png') }}" alt="HockeyStats player card for Simon Edvinsson" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>Even with this season becoming a development year, Chicago should always be looking to add young talent that fits its timeline, and Simon Edvinsson is exactly that. He would be intriguing, and his price may be at its lowest right now. The Red Wings defenseman is an unsigned restricted free agent who must sign by Dec. 1 to be eligible to play this season, according to The Hockey News, so Detroit is running out of time. TSN reported that up to 10 teams have been in talks and that the cost would resemble the deals for Noah Dobson, Mikhail Sergachev and Bowen Byram: multiple assets, including prospects and first-round picks, per TSN. His card shows why he is a long-term piece more than an immediate stabilizer: a 73% even-strength offensive player with a 45% projected WAR, but 22% defense. If Chicago can acquire a player like him for prospects and draft capital alone, I would pursue it. If Detroit asks for a blue-chip player such as Frank Nazar or Anton Frondell, I would pass.</p>
+
+            <figure class="hk-cards">
+                <div class="hk-cards-grid two">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/nikishin.png') }}" alt="HockeyStats player card for Alexander Nikishin" loading="lazy">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/kotkaniemi.png') }}" alt="HockeyStats player card for Jesperi Kotkaniemi" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>Alexander Nikishin and Jesperi Kotkaniemi intrigue me as well, but the price is the problem. Nikishin signed a one-year, $3 million contract on Oct. 25 after requesting a trade, according to TSN, so he will be a restricted free agent again next summer. Before that deal, he asked for five years at $9 million a year, Elliotte Friedman reported, and Carolina has told teams that a Nikishin deal must include Kotkaniemi, per David Pagnotta. That means taking on Kotkaniemi’s $4.82 million cap hit, with a negative relative Corsi the last two seasons and a steep decline from 43 points in 2022-23 to nine last season, per Hockey-Reference. Their cards confirm it: Nikishin has a 21% projected WAR and 8% even-strength defense despite 97% finishing, and Kotkaniemi has a 25% projected WAR as a fourth-liner, with four years left at $4.8 million.</p>
 
             <h3>Young players on rebuilding teams</h3>
 
@@ -845,11 +927,71 @@
 
             <p>A backup goalie would also be a big help. Drew Commesso has had middling numbers in Rockford (2-4, 2.74 goals-against average and .890 save percentage in seven games, per StatsCrew) and has not played for the Blackhawks this season. Spencer Knight has started 18 of Chicago’s 23 games. A veteran backup who could play 25 to 30 games would take a big load off Knight, and Commesso could keep developing in Rockford. Two veterans who fit are pending free agents. Philipp Grubauer, 34, is 6-5-1 with a 3.02 goals-against average and .894 save percentage for Seattle this season, after a .909 in 32 games last season, and is finishing a $5.9 million contract, per Rotowire. Anton Forsberg, 33, has an .894 in limited action for Los Angeles this season after going 16-12-5 with a .909 in 36 games last season, per Rotowire, and is finishing a $2.25 million deal, according to PuckPedia. Any backup has to fit under the cap alongside the additions above, so Forsberg may be the better option. My own estimate is that Forsberg’s next deal lands at one or two years and about $1.5 million to $2.25 million a year, and Grubauer’s at one or two years and about $2 million to $3 million, well below his current cap hit.</p>
 
+            <figure class="hk-cards">
+                <div class="hk-cards-grid two">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/forsberg.png') }}" alt="HockeyStats player card for Anton Forsberg" loading="lazy">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/grubauer.png') }}" alt="HockeyStats player card for Philipp Grubauer" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>Their cards make the choice easier. Forsberg has a 36% projected WAR, with 57% even-strength play and 91% excellent starts, while Grubauer sits at 17%, with 23% even-strength play, 10% quality starts and 1% on low-danger shots.</p>
+
             <p>No single signing fixes this team alone. Together, these players give Chicago what it is lacking: scoring, physicality, vocal leadership and high-motor veterans who can play aggressively alongside its developing young players. Jared McCann or Artturi Lehkonen could step into the top six immediately and bring that scoring. Players such as Blake Coleman, Ryan Hartman, Brandon Carlo, Brendan Gallagher and Josh Anderson bring the vocal leadership and the aggression to win puck battles and do the little things the young players are still learning to do.</p>
 
             <h3>Will players want to come to Chicago?</h3>
 
             <p>The question at the end of all of this is whether players will want to come to Chicago. It is a tough sell for a bottom-five team in the NHL. That is why Chicago needs one move that solidifies the roster and tells the rest of the league it is serious, and a trade for a center like Byfield or Pettersson is that move. Davidson has already said Chicago is “intent on improving the playing roster,” per Daily Faceoff, and a front office in that position should always be looking to add. The first big move this offseason has to back that up, and once it does, the next free agent’s decision gets easier.</p>
+
+            <h3>The players behind the plan</h3>
+
+            <p>Here is how the free agents in this plan compare on their HockeyStats cards.</p>
+
+            <figure class="hk-cards">
+                <div class="hk-cards-grid">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/robertson.png') }}" alt="HockeyStats player card for Jason Robertson" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>Jason Robertson is a clear favorite for any team in the NHL to go out and get, and his card is the best in this proposal: a 99% projected WAR, with 96% even-strength offense, power play and goals. The 27-year-old led Dallas with 45 goals and 96 points last season and is playing on a one-year deal, and the Stars want a long-term extension before July, TSN reported. If that does not happen, he is the most likely star to reach unrestricted free agency, or to have his rights dealt to a team of his choosing. Chicago inquired about him in June, Pierre LeBrun reported, per The Hockey News. But as a bottom-five team, Chicago does not look like a destination for a player like that right now.</p>
+
+            <figure class="hk-cards">
+                <div class="hk-cards-grid">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/mccann.png') }}" alt="HockeyStats player card for Jared McCann" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>Jared McCann’s card proves he is a player who could be put in this top six, either alongside Bedard or alongside Frondell on the second line: a 92% projected WAR, 87% even-strength offense and 96% first assists. His even-strength defense (46%) and his health are the questions.</p>
+
+            <figure class="hk-cards">
+                <div class="hk-cards-grid">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/lehkonen.png') }}" alt="HockeyStats player card for Artturi Lehkonen" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>Artturi Lehkonen has the most complete card of the free agents: an 87% projected WAR, 87% even-strength offense, 92% defense, 96% goals and a 91% penalty-kill rating against 95th-percentile competition, though he has also played with elite teammates (99%). He would be perfect for a top-six role alongside Bedard. If Colorado cannot sign him, it will probably sell his rights to a team of his choosing so it can get something for him. That is how the NHL works now: free agency is scarce, and a lot of players are dealt for their rights before July 1.</p>
+
+            <figure class="hk-cards">
+                <div class="hk-cards-grid two">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/hartman.png') }}" alt="HockeyStats player card for Ryan Hartman" loading="lazy">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/coleman.png') }}" alt="HockeyStats player card for Blake Coleman" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>Ryan Hartman and Blake Coleman both show they would be great leaders, but Coleman has clearly been the better player. If you want pure projected WAR and even-strength defense, Coleman clears Hartman: a 73% projected WAR and 91% defense, against Hartman’s 44% and 13%. This season’s numbers lean Coleman’s way too, with 7 goals, 13 points and 47 hits in 25 games, per Hockey-Reference, against Hartman’s 3 goals, 7 points and 21 hits in 24, per Hockey-Reference. However, Hartman brings more vocal leadership and aggression than Coleman, and that may be the bigger need for this group.</p>
+
+            <figure class="hk-cards">
+                <div class="hk-cards-grid">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/carlo.png') }}" alt="HockeyStats player card for Brandon Carlo" loading="lazy">
+                </div>
+                <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>Brandon Carlo brings veteran leadership and size on the right side, and his card fits the role exactly: 83% even-strength defense and an 88% penalty-kill rating, but 18% offense and 5% first assists, with a 52% projected WAR that has climbed this season.</p>
 
             <h3>The 2027 draft</h3>
 
@@ -858,6 +1000,15 @@
             <p>As discussed earlier, Landon DuPont is the runaway favorite to go first overall. Both Daily Faceoff and TSN rank the right-shot defenseman first. He had 18 goals and 73 points in 63 games for Everett in the WHL last season and has 15 assists in 12 games at Michigan this season, per Elite Prospects. If Chicago wins the lottery, you pick DuPont and staple a future Quinn Hughes on that right side.</p>
 
             <p>The second pick is more of a toss-up between Sergei Skvortsov, Nazar Privalov, Dima Zhilkin and Jonah Neuenschwander. Daily Faceoff ranked Skvortsov second, Privalov third and Zhilkin fourth in October, with Neuenschwander seventh; TSN had Privalov second, Skvortsov fourth and Neuenschwander ninth in September. If Chicago ends up with the second pick, my first choice is Skvortsov. He is the top-ranked winger on Daily Faceoff’s list, which praises his speed, his shot and his ability to get open against professionals, and I believe his talent and skill set will make him a star in this league. He had 19 goals and 43 points in 52 MHL games last season, and this season he has 10 points in nine MHL games, two points in 11 KHL games with Torpedo Nizhny Novgorod and seven points in three games for Russia’s under-20 team, per Elite Prospects.</p>
+
+            <figure class="hk-cards">
+                <div class="hk-cards-grid">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/tankathon_mock.png') }}" alt="Tankathon 2027 NHL mock draft, first round, picks 1 to 10" loading="lazy">
+                </div>
+                <figcaption>Source: Tankathon 2027 NHL mock draft, viewed Nov. 22.</figcaption>
+            </figure>
+
+            <p>Tankathon’s current mock draft has Chicago picking second and taking Privalov, with Skvortsov going third to Pittsburgh, Neuenschwander fourth and Zhilkin seventh. It also shows the difference in size: Privalov is 6-foot-4 and 227 pounds, Skvortsov 6-foot and 163. I would still take Skvortsov.</p>
 
             <p>If Chicago could add Skvortsov to this group, he would not only replace the kind of player it passed on in Ivan Demidov when it selected Levshunov second overall in 2024, but he would most likely give the Blackhawks the best prospect group in all of hockey.</p>
         </section>
@@ -895,8 +1046,12 @@
         </div>
 
         <details class="hk-sources">
-            <summary>Sources (106)</summary>
+            <summary>Sources (110)</summary>
             <ol>
+                <li>HockeyStats.com (JFresh Hockey): player and team cards, viewed Nov. 22</li>
+                <li>Tankathon: 2027 NHL mock draft, viewed Nov. 22</li>
+                <li>TSN: Kucherov, Hughes, Robertson and DeBrincat headline potential 2027 UFAs (Sept. 17)</li>
+                <li>The Hockey News: Blackhawks have expressed interest in Jason Robertson (June 26)</li>
                 <li>Yahoo Sports: Rinzel makes history, Frondell injured (Nov. 22)</li>
                 <li>Daily Faceoff: 2027 draft rankings, early-season top 40 (Oct. 9)</li>
                 <li>TSN: DuPont the definitive No. 1 (Sept. 10)</li>
