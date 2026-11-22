@@ -2,10 +2,11 @@
 {% block title %}Kyle Flynn · Career in Sports{% endblock %}
 
 {% block extra_styles %}
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   body { background: var(--paper); }
   /* Home page display type uses the brand face (Montserrat) */
-  .hp-hero, .hp-band, .hp-section, .hp-cta-band { --display: var(--brand); --serif: 'DM Serif Display', Georgia, 'Times New Roman', serif; }
+  .hp-hero, .hp-band, .hp-section, .hp-cta-band { --display: var(--brand); --modern: 'Inter Tight', 'Inter', -apple-system, 'Segoe UI', Arial, sans-serif; }
 
   /* ── HERO ── */
   .hp-hero {
@@ -56,13 +57,13 @@
   }
   .hp-eyebrow::before { content: ''; width: 36px; height: 2px; background: var(--gold); }
   .hp-name {
-    font-family: var(--serif); font-weight: 400; color: var(--white);
-    font-size: clamp(2.6rem, 5.4vw, 4.5rem); line-height: 1.02; letter-spacing: -0.01em;
+    font-family: var(--modern); font-weight: 600; color: var(--white);
+    font-size: clamp(2.6rem, 5.4vw, 4.5rem); line-height: 1.02; letter-spacing: -0.03em;
     margin-bottom: 1.4rem;
   }
   .hp-role {
-    font-family: 'Inter', -apple-system, 'Segoe UI', Arial, sans-serif; font-weight: 500; text-transform: uppercase;
-    font-size: clamp(0.8rem, 1.2vw, 0.92rem); letter-spacing: 0.22em; color: var(--gold-light);
+    font-family: var(--modern); font-weight: 500; text-transform: uppercase;
+    font-size: clamp(0.8rem, 1.2vw, 0.92rem); letter-spacing: 0.2em; color: var(--gold-light);
     margin-bottom: 1.5rem;
   }
   .hp-bio { font-size: 1.05rem; line-height: 1.75; color: rgba(255,255,255,0.72); max-width: 56ch; margin-bottom: 2.25rem; }
@@ -104,7 +105,7 @@
     position: absolute; left: 1rem; bottom: 1rem; z-index: 1;
     font-family: var(--display); font-weight: 700; text-transform: uppercase; line-height: 1;
   }
-  .hp-card-tag .big { font-size: 1.35rem; font-weight: 900; display: block; }
+  .hp-card-tag .big { font-family: var(--modern); font-size: 1.4rem; font-weight: 600; letter-spacing: -0.02em; text-transform: none; display: block; }
   .hp-card-tag .small { font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; color: var(--gold-light); display: block; margin-top: 0.45rem; }
   .hp-card-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.08); margin-top: 0.9rem; }
   .hp-card-row { background: var(--ink-2); padding: 0.75rem 0.8rem; }
@@ -126,14 +127,14 @@
   }
   .hp-band-item { padding: 1.6rem 1.5rem; border-left: 1px solid rgba(11,18,32,0.18); }
   .hp-band-item:first-child { border-left: none; padding-left: 0; }
-  .hp-band-value { font-family: var(--serif); font-weight: 400; font-size: 1.9rem; line-height: 1; letter-spacing: 0; }
-  .hp-band-label { font-size: 0.8rem; font-weight: 600; line-height: 1.4; margin-top: 0.45rem; opacity: 0.85; }
+  .hp-band-value { font-family: var(--modern); font-weight: 600; font-size: 1.85rem; line-height: 1; letter-spacing: -0.02em; }
+  .hp-band-label { font-family: var(--modern); font-size: 0.84rem; font-weight: 500; line-height: 1.4; margin-top: 0.45rem; opacity: 0.85; }
 
   /* ── SECTIONS ── */
   .hp-section { max-width: 1240px; margin: 0 auto; padding: 6rem 2rem 0; }
   .hp-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2.25rem; }
   .hp-kicker { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #2563B0; margin-bottom: 0.6rem; }
-  .hp-title { font-family: var(--serif); font-weight: 400; font-size: clamp(1.9rem, 3.4vw, 2.6rem); line-height: 1.08; letter-spacing: -0.005em; color: var(--ink); }
+  .hp-title { font-family: var(--modern); font-weight: 600; font-size: clamp(1.85rem, 3.4vw, 2.5rem); line-height: 1.08; letter-spacing: -0.025em; color: var(--ink); }
   .hp-more { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--gold); padding-bottom: 0.25rem; }
   .hp-more:hover { color: #2563B0; }
 
@@ -149,7 +150,7 @@
   .hp-feature:hover .hp-feature-img img { transform: scale(1.03); }
   .hp-feature-body { padding: 2.5rem 2.25rem; display: flex; flex-direction: column; justify-content: center; }
   .hp-feature-body .label { color: var(--gold); }
-  .hp-feature-title { font-family: var(--serif); font-weight: 400; font-size: clamp(1.55rem, 2.5vw, 2.05rem); line-height: 1.12; letter-spacing: 0; margin: 0.9rem 0 1rem; }
+  .hp-feature-title { font-family: var(--modern); font-weight: 600; font-size: clamp(1.5rem, 2.5vw, 2rem); line-height: 1.12; letter-spacing: -0.02em; margin: 0.9rem 0 1rem; }
   .hp-feature-desc { color: rgba(255,255,255,0.7); line-height: 1.65; font-size: 0.98rem; margin-bottom: 1.5rem; }
   .hp-read { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
 
@@ -177,14 +178,14 @@
     font-size: 1.5rem; font-weight: 900; line-height: 0.95;
   }
   .hp-tile-body { padding: 1.2rem 1.2rem 1.4rem; display: flex; flex-direction: column; gap: 0.6rem; flex: 1; }
-  .hp-tile-title { font-family: var(--serif); font-weight: 400; font-size: 1.15rem; line-height: 1.25; }
+  .hp-tile-title { font-family: var(--modern); font-weight: 600; font-size: 1.08rem; line-height: 1.3; letter-spacing: -0.01em; }
   .hp-tile-date { font-size: 0.75rem; color: #7A7A80; margin-top: auto; }
 
   /* Pillars */
   .hp-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
   .hp-pillar { background: var(--white); border: 1px solid #E6E3DA; border-top: 4px solid var(--gold); border-radius: 4px; padding: 2rem 1.75rem; }
   .hp-pillar-num { font-family: var(--display); font-weight: 900; font-size: 0.9rem; letter-spacing: 0.1em; color: #2563B0; }
-  .hp-pillar h3 { font-family: var(--serif); font-weight: 400; font-size: 1.5rem; line-height: 1.15; color: var(--ink); margin: 0.5rem 0 0.9rem; }
+  .hp-pillar h3 { font-family: var(--modern); font-weight: 600; font-size: 1.4rem; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin: 0.5rem 0 0.9rem; }
   .hp-pillar p { color: #4A4A52; line-height: 1.7; font-size: 0.96rem; margin-bottom: 1.1rem; }
   .hp-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
   .hp-chip { font-size: 0.74rem; font-weight: 600; padding: 0.3rem 0.6rem; border-radius: 2px; background: #F1EEE5; color: var(--ink); }
