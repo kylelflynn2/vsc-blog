@@ -770,10 +770,6 @@
 
             <p>The underlying numbers point to the same problem the eye test does: Chicago cannot keep the puck out of its own net, and it does not generate enough shots to make up for it. Here is what the data shows, with sources.</p>
 
-            <p>The player and team cards in this proposal come from HockeyStats.com. Each player number is a percentile ranking among players at the same position, based on three-year weighted data, so 90% means better than 90% of the league. Projected WAR (wins above replacement) is the headline number.</p>
-
-            <p>HockeyStats’ team card tells the same story for this season. At 5-on-5, Chicago is scoring 1.91 goals per 60 minutes and allowing 3.38, a 36% goal share, and its expected goals are 1.96 for and 2.96 against per 60, a 40% share. The model projects Chicago for 74 points and gives it a 0% chance of making the playoffs, which is one more reason to treat this as a development year.</p>
-
             <h3>Defense is the biggest gap</h3>
 
             <p>Over the last 21 games of 2025-26 and the first two of this season, Chicago produced 40.1 expected goals for and allowed 66.9, an expected-goals share of 37.9%, the worst in the NHL over that stretch, the Sun-Times reported using Natural Stat Trick. The team was outscored 66-43 at 5-on-5 in those games. For comparison, the share was 43.8% over the first 61 games of 2025-26, so the drop followed the March trades. This season, Chicago is allowing 4.00 goals per game, 31st in the NHL through Nov. 21, per StatMuse.</p>
@@ -1270,7 +1266,9 @@
             <div>
                 <div class="hk-view-kicker">HockeyStats</div>
                 <h2 id="cardsTitle">Player Cards</h2>
-                <p class="hk-view-sub">Every card referenced in the proposal. Each number is a percentile ranking among players at the same position, based on three-year weighted data; projected WAR is the headline number. Click a card to enlarge it.</p>
+                <p class="hk-view-sub">Every card referenced in the proposal. Each number is a percentile ranking among players at the same position, based on three-year weighted data; projected WAR is the headline number.</p>
+                <p class="hk-view-sub">HockeyStats’ team card states that at 5-on-5, Chicago is scoring 1.91 goals per 60 minutes and allowing 3.38, a 36% goal share, and its expected goals are 1.96 for and 2.96 against per 60, a 40% share. The model projects Chicago for 74 points and gives it a 0% chance of making the playoffs, which is one more reason to treat this as a development year.</p>
+                <p class="hk-view-sub">Click a card to enlarge it.</p>
             </div>
             <div class="hk-filters" role="group" aria-label="Filter cards">
                 <button type="button" class="hk-filter" data-filter="all" aria-pressed="true">All</button>
@@ -1342,19 +1340,6 @@
                 <button type="button" class="hk-filter" data-dfilter="chi" aria-pressed="false">Chicago picks</button>
             </div>
         </div>
-
-        {% set chi = mock.picks|selectattr('abbr', 'equalto', 'CHI')|list %}
-        {% if chi %}
-        <div class="hk-draft-summary" aria-label="Chicago's picks">
-            {% for p in chi %}
-            <div class="hk-draft-chip">
-                <div class="n">{{ p.pick }}</div>
-                <div class="who">{{ p.player }}</div>
-                <div class="meta">{{ p.pos }} · {{ p.club }}{% if p.via %} · via {{ p.via_abbr }}{% endif %}</div>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
 
         {% for rnd in [1, 2] %}
         {% set rows = mock.picks|selectattr('round', 'equalto', rnd)|list %}
