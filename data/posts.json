@@ -3,7 +3,7 @@
     "id": "7",
     "title": "2027 Milwaukee Brewers Offseason Report",
     "description": "The CBA expires Dec. 1 and a lockout is expected. How the World Series champions replace 7.8 projected wins with $22.6 million to spend, built in Excel and SQL.",
-    "date": "November 17, 2026",
+    "date": "November 21, 2026",
     "project_url": "/projects/brewers-offseason-2027",
     "github_url": null,
     "tags": [
@@ -73,23 +73,5 @@
     "image": "/static/img/yankee_stadium.jpg",
     "league": "MLB",
     "team": "Yankees"
-  },
-  {
-    "id": "2",
-    "title": "Rebuilding the 2026 Chicago White Sox",
-    "description": "A WAR-based valuation model for rebuilding the 2026 Chicago White Sox. Combines $/WAR surplus valuation, a Gaussian revenue-maximization curve, playing-time reallocation, and a wOBA-weighted optimal lineup using The Book's leverage heuristic.",
-    "date": "May 28, 2026",
-    "project_url": "/projects/whitesox-2026",
-    "github_url": null,
-    "tags": [
-      "Baseball Analytics",
-      "WAR",
-      "Sabermetrics",
-      "Python"
-    ],
-    "category": "baseball",
-    "image": "/static/img/whitesox_stadium.jpg",
-    "league": "MLB",
-    "team": "White Sox"
   }
 ]

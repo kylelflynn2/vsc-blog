@@ -7,8 +7,6 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_file
 
-import whitesox_analysis
-
 app = Flask(__name__)
 app.jinja_env.globals['enumerate'] = enumerate
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-only-insecure-key')
@@ -299,21 +297,6 @@ def blackhawks_fix_2026():
 def yankees_baseball_operations():
     """Yankees Baseball Operations Portfolio — 2026-27 analysis."""
     return render_template('projects/yankees_baseball_ops.html')
-
-
-@app.route('/projects/whitesox-2026')
-def whitesox_2026():
-    """Rebuilding the 2026 Chicago White Sox — WAR-based valuation model."""
-    vals = whitesox_analysis.build_valuations()
-    return render_template(
-        'projects/whitesox_2026.html',
-        valuations=vals,
-        summary=whitesox_analysis.valuation_summary(vals),
-        revenue=whitesox_analysis.revenue_model(vals),
-        playing_time=whitesox_analysis.playing_time_analysis(vals),
-        saber_lineup=whitesox_analysis.sabermetric_lineup(),
-        injured=whitesox_analysis.injured_list(),
-    )
 
 
 @app.route('/resume')
