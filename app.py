@@ -290,7 +290,8 @@ def brewers_offseason_2027():
 def blackhawks_fix_2026():
     """How to Fix the Chicago Blackhawks — hockey operations analysis."""
     related = [p for p in sorted_posts() if p.get('id') != '6'][:3]
-    return render_template('projects/blackhawks_fix_2026.html', related=related)
+    mock = load_json(os.path.join(DATA_FOLDER, 'mock_draft_2027.json'), {'picks': []})
+    return render_template('projects/blackhawks_fix_2026.html', related=related, mock=mock)
 
 
 @app.route('/projects/yankees-baseball-operations')
