@@ -283,6 +283,18 @@
     .hk-gal-cap b { color: var(--hk-ink); }
     .hk-gal-cap span { color: var(--hk-muted); }
     .hk-gal-src { margin-top: 2.5rem; font-size: 0.78rem; color: var(--hk-muted); }
+    .hk-guide { margin-top: 2rem; background: #fff; border: 1px solid var(--hk-line); border-top: 4px solid var(--hk-red); border-radius: 4px; padding: 1.75rem 1.75rem 1.5rem; }
+    .hk-guide-title { font-family: var(--hk-display); font-weight: 800; text-transform: uppercase; font-size: 1.6rem; color: var(--hk-ink); margin-bottom: 0.75rem; }
+    .hk-guide p { font-size: 0.95rem; line-height: 1.7; color: var(--hk-text); margin: 0 0 1.5rem; max-width: 80ch; }
+    .hk-guide-cols { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; }
+    .hk-guide h4 { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--hk-red); margin: 0 0 0.75rem; }
+    .hk-guide dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 0.55rem 1rem; font-size: 0.88rem; line-height: 1.5; }
+    .hk-guide dt { font-weight: 700; color: var(--hk-ink); }
+    .hk-guide dd { margin: 0; color: var(--hk-text); }
+    .hk-guide ul { margin: 0; padding-left: 1.1rem; font-size: 0.88rem; line-height: 1.5; color: var(--hk-text); }
+    .hk-guide li { margin-bottom: 0.55rem; }
+    @media (max-width: 900px) { .hk-guide-cols { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { .hk-guide { padding: 1.25rem; } .hk-guide dl { grid-template-columns: 1fr; gap: 0.15rem; } .hk-guide dd { margin-bottom: 0.6rem; } }
 
     .hk-lightbox { border: 0; padding: 0; background: transparent; max-width: min(1100px, 94vw); }
     .hk-lightbox::backdrop { background: rgba(11,11,12,0.86); }
@@ -1283,6 +1295,36 @@
         {% endfor %}
 
         <p class="hk-gal-src">Source: HockeyStats.com, viewed Nov. 22, 2026. Cap data from PuckPedia, as shown on each card.</p>
+
+        <div class="hk-guide">
+            <div class="hk-guide-title">How to read the cards</div>
+            <p>The player cards come from HockeyStats.com, built by JFresh Hockey. Every number is a percentile: it shows how a player ranks against others at the same position, so 90% means he’s better than 90% of the league’s forwards (or defensemen, or goalies). Box colors follow the same scale, with blue for strong and red for weak. The numbers use three years of data weighted toward the most recent seasons, which is why a young player’s card can lag behind how he looks this year.</p>
+            <div class="hk-guide-cols">
+                <div>
+                    <h4>What skater cards track</h4>
+                    <dl>
+                        <dt>Projected WAR</dt><dd>The headline number. It estimates how many wins a player adds compared with a replacement-level call-up.</dd>
+                        <dt>EV Offence and EV Defence</dt><dd>His impact on creating and preventing chances at even strength.</dd>
+                        <dt>PP and PK</dt><dd>His impact on the power play and penalty kill.</dd>
+                        <dt>Finishing</dt><dd>How much he scores above what his shot quality would predict.</dd>
+                        <dt>Goals and 1st Assists</dt><dd>His scoring and primary-assist rates.</dd>
+                        <dt>Penalties</dt><dd>Whether he draws more penalties than he takes.</dd>
+                        <dt>Competition and Teammates</dt><dd>How strong the opponents and linemates he plays with are. This is context, not skill.</dd>
+                        <dt>Charts on the right</dt><dd>How his WAR, and his offense compared with his defense, have trended season by season.</dd>
+                    </dl>
+                </div>
+                <div>
+                    <h4>What goalie cards track</h4>
+                    <ul>
+                        <li>Even-strength and penalty-kill play.</li>
+                        <li>Saves on high-, medium- and low-danger shots.</li>
+                        <li>How often he has quality, excellent or bad starts.</li>
+                        <li>Rebound control and consistency.</li>
+                        <li>A chart comparing his actual save percentage with the expected one.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </section>
 </div>
 
