@@ -222,6 +222,8 @@
         font-family: var(--hk-sans); font-size: 0.8rem; line-height: 1.5; color: var(--hk-muted);
         margin-top: 0.7rem; padding-left: 0.75rem; border-left: 2px solid var(--hk-red);
     }
+    .hk-cards.core .hk-cards-grid { gap: 1.25rem; }
+    .hk-cards.core img { border: 3px solid var(--hk-red); border-radius: 8px; }
     @media (max-width: 720px) { .hk-cards-grid.two { grid-template-columns: 1fr; } }
 
     /* Lineup card */
@@ -429,17 +431,17 @@
 <div class="hk-layout">
 
     <nav class="hk-toc" aria-label="In this story">
-        <div class="hk-toc-title">In this story</div>
+        <div class="hk-toc-title">In This Story</div>
         <ol>
-            <li><a href="#executive-summary"><span>01</span>Executive summary</a></li>
+            <li><a href="#executive-summary"><span>01</span>Executive Summary</a></li>
             <li><a href="#introduction"><span>02</span>Introduction</a></li>
-            <li><a href="#how-we-got-here"><span>03</span>How we got here</a></li>
-            <li><a href="#where-we-are-now"><span>04</span>Where we are now</a></li>
-            <li><a href="#development-year"><span>05</span>A development year</a></li>
-            <li><a href="#analytics"><span>06</span>What the analytics say</a></li>
-            <li><a href="#how-do-we-get-there"><span>07</span>How do we get there?</a></li>
-            <li><a href="#the-moves"><span>08</span>The moves</a></li>
-            <li><a href="#the-offseason"><span>09</span>The offseason</a></li>
+            <li><a href="#how-we-got-here"><span>03</span>How We Got Here</a></li>
+            <li><a href="#where-we-are-now"><span>04</span>Where We Are Now</a></li>
+            <li><a href="#development-year"><span>05</span>A Development Year</a></li>
+            <li><a href="#analytics"><span>06</span>What the Analytics Say</a></li>
+            <li><a href="#how-do-we-get-there"><span>07</span>How Do We Get There?</a></li>
+            <li><a href="#the-moves"><span>08</span>The Moves</a></li>
+            <li><a href="#the-offseason"><span>09</span>The Offseason</a></li>
             <li><a href="#conclusion"><span>10</span>Conclusion</a></li>
         </ol>
     </nav>
@@ -535,12 +537,14 @@
 
             <p>Stats are through Nov. 19 (22 games) and do not include Saturday’s win in Calgary, except Rinzel’s, which includes his goal and two assists in Calgary, per CBS Sports. The rest are from StatsCrew and Hockey-Reference, which match. Ages are as of Nov. 21, from Hockey-Reference birth dates. Levshunov’s ice-time note is from the Sun-Times (Oct. 29).</p>
 
-            <figure class="hk-cards">
-                <div class="hk-cards-grid two">
+            <figure class="hk-cards core">
+                <div class="hk-cards-grid">
                     <img src="{{ url_for('static', filename='img/blackhawks/cards/bedard.png') }}" alt="HockeyStats player card for Connor Bedard" loading="lazy">
                     <img src="{{ url_for('static', filename='img/blackhawks/cards/kantserov.png') }}" alt="HockeyStats player card for Roman Kantserov" loading="lazy">
                     <img src="{{ url_for('static', filename='img/blackhawks/cards/frondell.png') }}" alt="HockeyStats player card for Anton Frondell" loading="lazy">
                     <img src="{{ url_for('static', filename='img/blackhawks/cards/levshunov.png') }}" alt="HockeyStats player card for Artyom Levshunov" loading="lazy">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/rinzel.png') }}" alt="HockeyStats player card for Sam Rinzel" loading="lazy">
+                    <img src="{{ url_for('static', filename='img/blackhawks/cards/nazar.png') }}" alt="HockeyStats player card for Frank Nazar" loading="lazy">
                 </div>
                 <figcaption>Source: HockeyStats.com (JFresh Hockey), viewed Nov. 22.</figcaption>
             </figure>
