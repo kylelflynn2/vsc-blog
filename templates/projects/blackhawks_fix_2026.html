@@ -288,6 +288,18 @@
     .hk-gal-cap span { color: var(--hk-muted); }
     .hk-gal-src { margin-top: 2.5rem; font-size: 0.78rem; color: var(--hk-muted); }
     .hk-cards-analytics { max-width: 760px; margin-top: 4rem; padding-top: 2.5rem; border-top: 2px solid var(--hk-ink); }
+    .hk-sql { max-width: 980px; margin-top: 4.5rem; padding-top: 2.5rem; border-top: 2px solid var(--hk-ink); }
+    .hk-sql-title { font-family: var(--hk-display); font-weight: 800; text-transform: uppercase; font-size: clamp(2rem, 4vw, 2.8rem); line-height: 0.95; color: var(--hk-ink); margin: 0.4rem 0 0; }
+    .hk-sql-item { margin-top: 2.75rem; }
+    .hk-sql-item h3 { font-family: var(--hk-display); font-weight: 700; text-transform: uppercase; font-size: 1.5rem; color: var(--hk-ink); margin: 0 0 0.4rem; }
+    .hk-sql-item > p { font-size: 0.92rem; line-height: 1.6; color: var(--hk-text); margin: 0 0 1rem; max-width: 75ch; }
+    .hk-sql-fig { margin: 0 0 1.25rem; }
+    .hk-sql-fig img { border: 1px solid var(--hk-line) !important; border-radius: 6px !important; }
+    .hk-sql-proof { max-width: 760px; }
+    .hk-sql-fig figcaption { font-size: 0.78rem; color: var(--hk-muted); margin-top: 0.5rem; padding-left: 0.7rem; border-left: 2px solid var(--hk-red); }
+    .hk-sql-take { background: #fff; border: 1px solid var(--hk-line); border-left: 4px solid var(--hk-red); border-radius: 3px; padding: 0.9rem 1.15rem; }
+    .hk-sql-take b { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--hk-red); }
+    .hk-sql-take p { font-size: 0.95rem; line-height: 1.6; margin: 0.35rem 0 0; }
     .hk-guide { margin-top: 2rem; background: #fff; border: 1px solid var(--hk-line); border-top: 4px solid var(--hk-red); border-radius: 4px; padding: 1.75rem 1.75rem 1.5rem; }
     .hk-guide-title { font-family: var(--hk-display); font-weight: 800; text-transform: uppercase; font-size: 1.6rem; color: var(--hk-ink); margin-bottom: 0.75rem; }
     .hk-guide p { font-size: 0.95rem; line-height: 1.7; color: var(--hk-text); margin: 0 0 1.5rem; max-width: 80ch; }
@@ -1318,6 +1330,30 @@
             </div>
         </section>
         </div>
+
+        <section class="hk-sql" aria-labelledby="sqlTitle">
+            <div class="hk-view-kicker">SQL analysis · PostgreSQL on Neon</div>
+            <h2 id="sqlTitle" class="hk-sql-title">Querying the Card Data</h2>
+            <p class="hk-view-sub">The HockeyStats card values, cap hits and the 2027-28 cap projection were loaded into a PostgreSQL database (Neon) with tables for players, skater cards, goalie cards and the cap projection. Each exhibit below shows the query and its result, followed by a screenshot of the same query running in the Neon SQL editor. Click any image to enlarge it.</p>
+
+            <div class="hk-sql-item">
+                <h3>Query 03 · Byfield or Pettersson?</h3>
+                <p>Projected WAR percentile per $1 million of cap hit for the two center targets.</p>
+                <figure class="hk-sql-fig"><button type="button" class="hk-gal-btn hk-sql-btn" data-full="{{ url_for('static', filename='img/blackhawks/sql/q03_byfield_pettersson.png') }}" aria-label="Enlarge SQL query 03 comparing Quinton Byfield and Elias Pettersson by projected WAR per $1M of cap hit, with results"><img src="{{ url_for('static', filename='img/blackhawks/sql/q03_byfield_pettersson.png') }}" alt="SQL query 03 comparing Quinton Byfield and Elias Pettersson by projected WAR per $1M of cap hit, with results" loading="lazy"></button><figcaption>Query and result.</figcaption></figure>
+                <figure class="hk-sql-fig hk-sql-proof"><button type="button" class="hk-gal-btn hk-sql-btn" data-full="{{ url_for('static', filename='img/blackhawks/sql/q03_neon.jpg') }}" aria-label="Enlarge Neon SQL editor running query 03, returning Byfield and Pettersson"><img src="{{ url_for('static', filename='img/blackhawks/sql/q03_neon.jpg') }}" alt="Neon SQL editor running query 03, returning Byfield and Pettersson" loading="lazy"></button><figcaption>The same query run in the Neon SQL editor (56 ms, 2 rows).</figcaption></figure>
+                <div class="hk-sql-take"><b>What it shows</b><p>Nearly the same projected WAR, but Byfield delivers 13.3 per $1M against Pettersson’s 7.5, is four years younger and carries half the term.</p></div>
+            </div>
+
+            <div class="hk-sql-item">
+                <h3>Query 05 · Does the 2027 plan fit under the cap?</h3>
+                <p>A running total of cap hits for the five offseason targets against Chicago’s projected 2027-28 cap space ($113.5 million projected cap minus $77.986 million committed). Current cap hits stand in for new contracts, an assumption, not a projection.</p>
+                <figure class="hk-sql-fig"><button type="button" class="hk-gal-btn hk-sql-btn" data-full="{{ url_for('static', filename='img/blackhawks/sql/q05_cap_fit.png') }}" aria-label="Enlarge SQL query 05 calculating running cap total and space left for Byfield, Carlo, McCann, Hartman and Forsberg, with results"><img src="{{ url_for('static', filename='img/blackhawks/sql/q05_cap_fit.png') }}" alt="SQL query 05 calculating running cap total and space left for Byfield, Carlo, McCann, Hartman and Forsberg, with results" loading="lazy"></button><figcaption>Query and result.</figcaption></figure>
+                <figure class="hk-sql-fig hk-sql-proof"><button type="button" class="hk-gal-btn hk-sql-btn" data-full="{{ url_for('static', filename='img/blackhawks/sql/q05_neon.jpg') }}" aria-label="Enlarge Neon SQL editor running query 05, returning five rows"><img src="{{ url_for('static', filename='img/blackhawks/sql/q05_neon.jpg') }}" alt="Neon SQL editor running query 05, returning five rows" loading="lazy"></button><figcaption>The same query run in the Neon SQL editor (129 ms, 5 rows).</figcaption></figure>
+                <div class="hk-sql-take"><b>What it shows</b><p>At current cap hits, the full plan of Byfield, Carlo, McCann, Hartman and Forsberg costs $21.7 million and still leaves $13.81 million of 2027-28 space.</p></div>
+            </div>
+
+            <p class="hk-gal-src">Sources: cap of $113.5M projected (Elliotte Friedman via Daily Faceoff); Chicago committed $77.986M (Spotrac); cap hits and card values from HockeyStats player cards, with cap data from PuckPedia, as of Nov. 22, 2026.</p>
+        </section>
     </section>
 </div>
 
