@@ -120,15 +120,15 @@
   @media (prefers-reduced-motion: reduce) { .hp-anim { animation: none; } .hp-btn:hover { transform: none; } }
 
   /* ── CREDENTIAL BAND ── */
-  .hp-band { background: var(--gold); color: var(--ink); }
+  .hp-band { background: var(--ink); color: var(--white); border-top: 1px solid rgba(255,255,255,0.08); }
   .hp-band-inner {
     max-width: 1240px; margin: 0 auto; padding: 0 2rem;
     display: grid; grid-template-columns: repeat(4, 1fr);
   }
-  .hp-band-item { padding: 1.6rem 1.5rem; border-left: 1px solid rgba(11,18,32,0.18); }
+  .hp-band-item { padding: 1.6rem 1.5rem; border-left: 1px solid rgba(255,255,255,0.12); }
   .hp-band-item:first-child { border-left: none; padding-left: 0; }
   .hp-band-value { font-family: var(--modern); font-weight: 600; font-size: 1.85rem; line-height: 1; letter-spacing: -0.02em; }
-  .hp-band-label { font-family: var(--modern); font-size: 0.84rem; font-weight: 500; line-height: 1.4; margin-top: 0.45rem; opacity: 0.85; }
+  .hp-band-label { font-family: var(--modern); font-size: 0.84rem; font-weight: 500; line-height: 1.4; margin-top: 0.45rem; color: rgba(255,255,255,0.7); }
 
   /* ── SECTIONS ── */
   .hp-section { max-width: 1240px; margin: 0 auto; padding: 6rem 2rem 0; }
@@ -222,7 +222,7 @@
     .hp-band-inner { grid-template-columns: repeat(2, 1fr); padding: 0 1.25rem; }
     .hp-band-item { padding: 1.3rem 1rem; }
     .hp-band-item:nth-child(3) { border-left: none; padding-left: 0; }
-    .hp-band-item:nth-child(n+3) { border-top: 1px solid rgba(11,18,32,0.18); }
+    .hp-band-item:nth-child(n+3) { border-top: 1px solid rgba(255,255,255,0.12); }
     .hp-band-item:nth-child(2) { padding-right: 0; }
     .hp-section { padding: 4.5rem 1.25rem 0; }
     .hp-feature { grid-template-columns: 1fr; }
