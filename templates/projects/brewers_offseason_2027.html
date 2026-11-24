@@ -167,6 +167,46 @@
     .br-sources { margin-top: 1rem; padding: 0; list-style: none; }
     .br-sources li { font-size: 0.86rem !important; line-height: 1.55 !important; color: var(--br-muted) !important; padding: 0.45rem 0; border-bottom: 1px solid #EEECE6; }
 
+    /* ── TABS ── */
+    .br-tabs { background: #fff; border-bottom: 1px solid var(--br-line); }
+    .br-tabs-inner { max-width: 1180px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 0.25rem; overflow-x: auto; }
+    .br-tab {
+        display: inline-block; padding: 1.1rem 1.1rem 1rem; text-decoration: none; white-space: nowrap;
+        font-family: var(--br-sans); font-size: 0.8rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+        color: var(--br-muted); border-bottom: 3px solid transparent; transition: color .2s, border-color .2s;
+    }
+    .br-tab:hover { color: var(--br-navy); }
+    .br-tab[aria-selected="true"] { color: var(--br-navy); border-bottom-color: var(--br-gold); }
+    .br-panel[hidden] { display: none !important; }
+
+    /* ── ANALYTICS ── */
+    .br-an { max-width: 1040px; margin: 0 auto; padding: 3.25rem 2rem 4rem; font-family: var(--br-sans); color: var(--br-text); }
+    .br-an-head { border-top: 3px solid var(--br-navy); padding-top: 1rem; margin-bottom: 1.75rem; }
+    .br-an-kicker { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--br-gold-dk); }
+    .br-an-head h2 { font-family: var(--br-head); font-weight: 900; text-transform: uppercase; font-size: clamp(1.6rem, 3.4vw, 2.2rem); color: var(--br-navy); margin: 0.4rem 0 0.8rem; }
+    .br-an-head p, .br-an-sec > p { font-size: 0.98rem; line-height: 1.72; max-width: 78ch; }
+    .br-an-kpis { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--br-navy); border-radius: 4px; overflow: hidden; margin-bottom: 3rem; }
+    .br-an-kpis div { padding: 1.1rem 1.25rem; border-left: 1px solid rgba(255,255,255,0.1); }
+    .br-an-kpis div:first-child { border-left: none; }
+    .br-an-kpis b { display: block; font-family: var(--br-head); font-weight: 900; font-size: 1.6rem; color: var(--br-gold); line-height: 1; }
+    .br-an-kpis span { display: block; font-size: 0.76rem; color: rgba(255,255,255,0.7); margin-top: 0.4rem; }
+    .br-an-sec { margin-top: 3.25rem; padding-top: 1.5rem; border-top: 1px solid var(--br-line); scroll-margin-top: 84px; }
+    .br-an-num { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--br-navy); background: var(--br-gold); display: inline-block; padding: 0.25rem 0.5rem; border-radius: 2px; }
+    .br-an-sec h3 { font-family: var(--br-head); font-weight: 800; font-size: clamp(1.15rem, 2.2vw, 1.45rem); line-height: 1.25; color: var(--br-navy); margin: 0.7rem 0 0.9rem; }
+    .br-an-fig { margin: 1.5rem 0; }
+    .br-an-zoom { display: block; width: 100%; padding: 0; border: 1px solid var(--br-line); border-radius: 6px; background: #fff; cursor: zoom-in; overflow: hidden; box-shadow: 0 6px 18px rgba(18,40,75,0.07); }
+    .br-an-zoom img { display: block; width: 100%; height: auto; }
+    .br-an-zoom:hover { border-color: var(--br-navy); }
+    .br-an-fig figcaption { font-size: 0.78rem; color: var(--br-muted); margin-top: 0.55rem; padding-left: 0.7rem; border-left: 2px solid var(--br-gold); }
+    .br-an-take { background: #fff; border: 1px solid var(--br-line); border-left: 4px solid var(--br-gold); border-radius: 3px; padding: 1rem 1.25rem; margin-top: 1.5rem; }
+    .br-an-take b { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--br-navy); }
+    .br-an-take p { font-size: 0.95rem; line-height: 1.65; margin: 0.4rem 0 0; }
+    .br-lightbox { border: 0; padding: 0; background: transparent; max-width: min(1400px, 96vw); }
+    .br-lightbox::backdrop { background: rgba(12,28,54,0.88); }
+    .br-lightbox img { display: block; width: 100%; height: auto; border-radius: 6px; background: #fff; }
+    .br-lightbox-close { position: absolute; top: 0.5rem; right: 0.5rem; width: 38px; height: 38px; border-radius: 50%; border: 0; cursor: pointer; background: rgba(255,255,255,0.95); color: var(--br-navy); font-size: 1.35rem; line-height: 1; }
+    @media (max-width: 900px) { .br-an-kpis { grid-template-columns: repeat(2, 1fr); } .br-an-kpis div:nth-child(3) { border-left: none; } .br-an-kpis div:nth-child(n+3) { border-top: 1px solid rgba(255,255,255,0.1); } .br-an { padding: 2.5rem 1.25rem 3rem; } .br-tabs-inner { padding: 0 1.25rem; } }
+
     @media (max-width: 900px) {
         .br-mast-inner { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 1.25rem 2.5rem; }
         .br-kpis-inner { grid-template-columns: repeat(2, 1fr); padding: 0 1.25rem; }
@@ -213,7 +253,15 @@
     </div>
 </section>
 
-<article class="br-body">
+<nav class="br-tabs" aria-label="Report views">
+    <div class="br-tabs-inner" role="tablist">
+        <a class="br-tab" role="tab" href="#report" data-panel="panel-article" aria-controls="panel-article" aria-selected="true">Article</a>
+        <a class="br-tab" role="tab" href="#analytics" data-panel="panel-analytics" aria-controls="panel-analytics" aria-selected="false">Analytics</a>
+    </div>
+</nav>
+
+<div class="br-panel" id="panel-article" role="tabpanel">
+<article class="br-body" id="report">
 
     <p>Baseball may soon come to a halt. The collective bargaining agreement between MLB and the MLB Players Association expires on Dec. 1 at 11:59 p.m. ET, and the league is widely expected to lock out the players as soon as it does. A lockout would freeze all transactions, including free agent signings and trades. Any move a team wants to make this winter has to happen before then.</p>
 
@@ -630,4 +678,139 @@
     </section>
 
 </article>
+</div>
+
+<!-- ANALYTICS -->
+<div class="br-panel" id="panel-analytics" role="tabpanel" hidden>
+<section class="br-an">
+
+    <header class="br-an-head">
+        <div class="br-an-kicker">Analytics · Supporting data</div>
+        <h2>The Data Behind the Plan</h2>
+        <p>The figures in the report come from an Excel workbook and a SQL database built from the same inputs (SQLite and PostgreSQL). Projected WAR is FanGraphs’ 2027 Depth Charts projection. Contract prices use the median AAV from FanGraphs’ free agent crowdsource, with ESPN’s projections and then Spotrac’s market value as fallbacks. Market value uses FanGraphs’ price per win by tier. Click any exhibit to enlarge it.</p>
+    </header>
+
+    <div class="br-an-kpis">
+        <div><b>30+</b><span>Free agents valued</span></div>
+        <div><b>$22.6M</b><span>Room under a $142M budget</span></div>
+        <div><b>7.8</b><span>2027 projected WAR lost</span></div>
+        <div><b>3</b><span>Payroll scenarios modeled</span></div>
+    </div>
+
+    <!-- 1 -->
+    <section class="br-an-sec" id="an-budget">
+        <div class="br-an-num">Exhibit 1</div>
+        <h3>Does the Plan Fit the Budget, and How Many Wins Does It Get Back?</h3>
+        <p>The query adds each scenario’s new money to the $119.4 million already owed, compares the result with the $142 million budget, and sets the wins added by new players against the 7.8 projected wins lost. “With France” swaps LaMonte Wade Jr. for Ty France, and “Peterson backup” swaps Michael Soroka for David Peterson.</p>
+
+        <figure class="br-an-fig">
+            <button type="button" class="br-an-zoom" data-full="{{ url_for('static', filename='img/brewers/analytics/sql_plan_budget.png') }}" aria-label="Enlarge SQL query and results">
+                <img src="{{ url_for('static', filename='img/brewers/analytics/sql_plan_budget.png') }}" alt="SQL query comparing the core plan, the France upgrade and the Peterson backup against the 2027 budget and wins lost, with results" loading="lazy">
+            </button>
+            <figcaption>SQL: payroll and wins by scenario.</figcaption>
+        </figure>
+
+        <div class="br-table-wrap">
+            <div class="br-table-cap"><span>Result</span><span>$M · fWAR</span></div>
+            <table class="br-table">
+                <thead><tr><th>Scenario</th><th class="num">New money</th><th class="num">Payroll after</th><th class="num">vs. budget</th><th class="num">Wins lost</th><th class="num">Wins added</th><th class="num">Gap</th></tr></thead>
+                <tbody>
+                    <tr class="key"><td>Core plan</td><td class="num">21.5</td><td class="num">140.9</td><td class="num pos">1.1 under</td><td class="num">7.8</td><td class="num">2.5</td><td class="num">5.3</td></tr>
+                    <tr><td>With France</td><td class="num">33.5</td><td class="num">152.9</td><td class="num neg">10.9 over</td><td class="num">7.8</td><td class="num">3.8</td><td class="num">4.0</td></tr>
+                    <tr><td>Peterson backup</td><td class="num">14.5</td><td class="num">133.9</td><td class="num pos">8.1 under</td><td class="num">7.8</td><td class="num">2.7</td><td class="num">5.1</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <figure class="br-an-fig">
+            <button type="button" class="br-an-zoom" data-full="{{ url_for('static', filename='img/brewers/analytics/excel_my_targets.png') }}" aria-label="Enlarge Excel targets sheet">
+                <img src="{{ url_for('static', filename='img/brewers/analytics/excel_my_targets.png') }}" alt="Excel sheet listing the targets with need filled, how acquired, 2027 projected WAR, new 2027 salary and years, plus the scenario summary" loading="lazy">
+            </button>
+            <figcaption>Excel: the target list and scenario summary, matching the SQL output.</figcaption>
+        </figure>
+
+        <div class="br-an-take">
+            <b>Takeaway</b>
+            <p>The core plan of Soroka, Ginkel and Wade fits, at $1.1 million under budget, and adds 2.5 projected wins. France adds about 1.3 more wins but requires ownership to go $10.9 million over. No version recovers all 7.8 wins at this budget. The remaining 4.0 to 5.3 has to come from the internal rotation and from Milwaukee beating its projections.</p>
+        </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="br-an-sec" id="an-value">
+        <div class="br-an-num">Exhibit 2</div>
+        <h3>Projected Value vs. What He Costs</h3>
+        <p>Market value is a player’s projected 2027 fWAR multiplied by what teams pay per win at his tier: $7.37 million under 1 WAR, $8.60 million from 1 to 2 WAR and $11.76 million at 2+ WAR. Surplus is market value minus salary, so a positive number means the team gets more than it pays for. ERA minus FIP flags pitchers whose results were dragged down by luck or defense.</p>
+
+        <figure class="br-an-fig">
+            <button type="button" class="br-an-zoom" data-full="{{ url_for('static', filename='img/brewers/analytics/sql_target_values.png') }}" aria-label="Enlarge SQL value query and results">
+                <img src="{{ url_for('static', filename='img/brewers/analytics/sql_target_values.png') }}" alt="SQL view joining targets to price per win to compute market value and surplus, with results sorted by surplus" loading="lazy">
+            </button>
+            <figcaption>SQL: market value and surplus by player, sorted by surplus (first 8 of 21 rows).</figcaption>
+        </figure>
+
+        <figure class="br-an-fig">
+            <button type="button" class="br-an-zoom" data-full="{{ url_for('static', filename='img/brewers/analytics/excel_starting_pitchers.png') }}" aria-label="Enlarge starting pitcher board">
+                <img src="{{ url_for('static', filename='img/brewers/analytics/excel_starting_pitchers.png') }}" alt="Excel starting pitcher board with innings, ERA, FIP, ERA minus FIP, WAR, projected AAV, years, market value, surplus and decision" loading="lazy">
+            </button>
+            <figcaption>Excel: starting pitcher board with ERA–FIP, projected price, market value, surplus and decision.</figcaption>
+        </figure>
+
+        <div class="br-an-take">
+            <b>Takeaway</b>
+            <p>David Peterson carries the largest surplus of the realistic starters (+$12.5 million), with a 3.96 FIP well below his 4.79 ERA. Michael Soroka costs about $2.5 million more than his projection is worth, but his 3.19 FIP backs up his 3.41 ERA and 2.7 WAR, which is why he is the first choice and Peterson the backup. Kevin Ginkel is a small positive at +$0.9 million, and Ty France is almost exactly fair value at +$0.04 million.</p>
+        </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="br-an-sec" id="an-market">
+        <div class="br-an-num">Exhibit 3</div>
+        <h3>Pricing the Free Agent Market</h3>
+        <p>Every 2027 free agent was priced before any player was valued. The sheet records each player’s status, ESPN’s and Spotrac’s AAV and the FanGraphs crowdsource AAV, then the price used and the source it came from, so every surplus figure can be traced back to its input.</p>
+
+        <figure class="br-an-fig">
+            <button type="button" class="br-an-zoom" data-full="{{ url_for('static', filename='img/brewers/analytics/excel_free_agents.png') }}" aria-label="Enlarge free agent pricing sheet">
+                <img src="{{ url_for('static', filename='img/brewers/analytics/excel_free_agents.png') }}" alt="Excel 2027 free agents sheet with rank, position, age, 2026 team, status, ESPN AAV, Spotrac AAV, price used, price source and crowdsource AAV" loading="lazy">
+            </button>
+            <figcaption>Excel: 2027 free agent pricing sheet, one of four tabs in the workbook (Departures + Payroll, 2027 Free Agents, Free Agent Targets, Trade Watch).</figcaption>
+        </figure>
+    </section>
+
+</section>
+</div>
+
+<dialog class="br-lightbox" id="brLightbox" aria-label="Enlarged exhibit">
+    <button type="button" class="br-lightbox-close" aria-label="Close">×</button>
+    <img src="" alt="">
+</dialog>
+
+<script>
+(function () {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.br-tab'));
+    var bar = document.querySelector('.br-tabs');
+    function show(id, scroll) {
+        ['panel-article', 'panel-analytics'].forEach(function (p) { var el = document.getElementById(p); if (el) el.hidden = (p !== id); });
+        tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.panel === id ? 'true' : 'false'); });
+        if (scroll && bar) window.scrollTo(0, Math.max(bar.getBoundingClientRect().top + window.pageYOffset - 70, 0));
+    }
+    function route(scroll) {
+        var h = window.location.hash;
+        if (h === '#analytics' || (h && h.indexOf('#an-') === 0)) { show('panel-analytics', scroll); return; }
+        show('panel-article', false);
+        if (h && h !== '#report') { var t = document.getElementById(h.slice(1)); if (t) t.scrollIntoView(); }
+        else if (h === '#report' && scroll) show('panel-article', true);
+    }
+    window.addEventListener('hashchange', function () { route(true); });
+    route(false);
+
+    var box = document.getElementById('brLightbox');
+    if (box && typeof box.showModal === 'function') {
+        var img = box.querySelector('img');
+        document.querySelectorAll('.br-an-zoom').forEach(function (b) {
+            b.addEventListener('click', function () { img.src = b.dataset.full; img.alt = b.querySelector('img').alt; box.showModal(); });
+        });
+        box.querySelector('.br-lightbox-close').addEventListener('click', function () { box.close(); });
+        box.addEventListener('click', function (e) { if (e.target === box) box.close(); });
+    }
+}());
+</script>
 {% endblock %}
