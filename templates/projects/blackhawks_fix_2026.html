@@ -446,6 +446,7 @@
     .hk-team { background: #fff; border: 1px solid var(--hk-line); border-radius: 4px; padding: 1rem; font-family: var(--hk-sans); }
     .hk-team-name { font-family: var(--hk-display); font-weight: 700; font-size: 1.2rem; text-transform: uppercase; color: var(--hk-ink); line-height: 1.1; }
     .hk-team-flag { display: inline-block; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; background: var(--hk-red); padding: 0.15rem 0.35rem; border-radius: 2px; margin-top: 0.4rem; }
+    .hk-team-rec { font-size: 0.74rem; font-weight: 700; color: var(--hk-red); margin-top: 0.3rem; }
     .hk-team p { font-family: var(--hk-sans) !important; font-size: 0.84rem !important; line-height: 1.5 !important; color: var(--hk-muted) !important; margin: 0.5rem 0 0 !important; }
 
     /* Free-agent board */
@@ -898,7 +899,7 @@
                 <figcaption>Connor Bedard. Early in 2025-26 he was on a pace of roughly 116 points over 82 games.</figcaption>
             </figure>
 
-            <p>Quinton Byfield is the center I would pursue this offseason. Los Angeles is 7-12 and near the bottom of the Western Conference, and it looks like a team that could be heading toward a rebuild. Byfield is 24, 6-foot-5 and 230 pounds, per Hockey-Reference, and plays a two-way game. His Corsi this season is 62.9% (+15.2 relative) in 18 games, after 53.4% last season, when he had 24 goals and 49 points. He fits Chicago’s timeline, he does not have a no-movement clause, and his contract runs through 2028-29 at $6.25 million a year, according to PuckPedia. His HockeyStats card backs it up: an 84% projected WAR, 87% even-strength offense, 68% defense and 87th-percentile competition as a first-line center.</p>
+            <p>Quinton Byfield is the center I would pursue this offseason. Los Angeles is 7-12 and near the bottom of the Western Conference, has the highest average age in the NHL at 31.02, and looks like a team that could be heading toward a rebuild. Byfield is 24, 6-foot-5 and 230 pounds, per Hockey-Reference, and plays a two-way game. His Corsi this season is 62.9% (+15.2 relative) in 18 games, after 53.4% last season, when he had 24 goals and 49 points. He fits Chicago’s timeline, he does not have a no-movement clause, and his contract runs through 2028-29 at $6.25 million a year, according to PuckPedia. His HockeyStats card backs it up: an 84% projected WAR, 87% even-strength offense, 68% defense and 87th-percentile competition as a first-line center.</p>
 
             <figure class="hk-figure">
                 <img src="{{ url_for('static', filename='img/blackhawks/byfield.png') }}" alt="Quinton Byfield of the Los Angeles Kings, wearing number 55 in the white road jersey, carrying the puck" loading="lazy" style="object-position: 45% 35%;">
@@ -947,15 +948,13 @@
             <p>Chicago should also be calling on young players who fit its timeline and play for bad or rebuilding teams, or for teams that are looking to retool in the near future. Teams that fit the profile, based on The Hockey News’ October Sour Rankings and Bleacher Report’s October trade block, include:</p>
 
             <div class="hk-teams">
-                <div class="hk-team"><div class="hk-team-name">Nashville</div><span class="hk-team-flag">Was on trade block</span><p>Acquired Shane Wright (22) from Seattle for Matthew Wood on Nov. 1, according to The Hockey News. Wright was on Bleacher Report’s trade block before the deal. If the Predators begin to lose, he becomes a name to monitor.</p></div>
-                <div class="hk-team"><div class="hk-team-name">NY Rangers</div><span class="hk-team-flag">On trade block</span><p>A retooling club, with Alexis Lafrenière (24) also on the trade block board.</p></div>
-                <div class="hk-team"><div class="hk-team-name">Vancouver</div><p>Embracing a rebuild, with Marco Rossi, Zeev Buium and Liam Ohgren.</p></div>
-                <div class="hk-team"><div class="hk-team-name">Calgary</div><p>Building for the future, with Zayne Parekh and Matt Coronato.</p></div>
-                <div class="hk-team"><div class="hk-team-name">Detroit</div><p>May have to restart its rebuild after the Dylan Larkin trade request and the Simon Edvinsson dispute.</p></div>
-                <div class="hk-team"><div class="hk-team-name">Columbus</div><p>Traded Kirill Marchenko and is getting younger.</p></div>
+                <div class="hk-team"><div class="hk-team-name">Nashville</div><div class="hk-team-rec">12-6-5 · 4th in the Central, first wild card</div><p>Average age of 28.98, with stars like Steven Stamkos, Ryan O’Reilly, Filip Forsberg and Roman Josi all near the end of their careers.</p></div>
+                <div class="hk-team"><div class="hk-team-name">Pittsburgh</div><div class="hk-team-rec">7-14-2 · Last in the Metropolitan</div><span class="hk-team-flag">Selling veterans</span><p>Kyle Dubas is listening on veterans, including Erik Karlsson (36), Bryan Rust (34) and Rickard Rakell (33), according to Bleacher Report’s trade block board. Pittsburgh Hockey Now argues a full rebuild is now unavoidable, with young pieces such as Rutger McGroarty, Ville Koivunen and Ben Kindel still developing.</p></div>
+                <div class="hk-team"><div class="hk-team-name">Vancouver</div><div class="hk-team-rec">6-19-1 · Last in the Pacific and last in the West</div><p>Embracing a rebuild, with Marco Rossi, Zeev Buium and Liam Ohgren.</p></div>
+                <div class="hk-team"><div class="hk-team-name">Calgary</div><div class="hk-team-rec">10-13-2 · 5th in the Pacific</div><p>Building for the future, with Zayne Parekh and Matt Coronato.</p></div>
+                <div class="hk-team"><div class="hk-team-name">Detroit</div><div class="hk-team-rec">8-12-3 · 7th in the Atlantic</div><p>May have to restart its rebuild after the Dylan Larkin trade request and the Simon Edvinsson dispute.</p></div>
+                <div class="hk-team"><div class="hk-team-name">Columbus</div><div class="hk-team-rec">9-13-0 · 7th in the Metropolitan</div><p>Traded Kirill Marchenko and is getting younger.</p></div>
             </div>
-
-            <p>Only Wright, who has since been traded, and Lafrenière were reported on the trade block. The others are names to ask about, not players reported as available.</p>
 
             <h3>Free agency: experience and physicality</h3>
 
